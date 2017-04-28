@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="2.5" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd">
+	<!-- spring配置路径 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:spring/applicationContext-*.xml</param-value>
+	</context-param>
+	
+	<!-- 日志管理文件 -->
+	<context-param>
+		<param-name>logbackConfigLocation</param-name>
+		<param-value>classpath:xml/logback.xml</param-value>
+	</context-param>
+	
+	<!-- logback加载监听器 -->
+    <listener>
+        <listener-class>ch.qos.logback.ext.spring.web.LogbackConfigListener</listener-class>
+    </listener>
+    
+	<!-- 启动Spring -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+	<listener>
+		<listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+	</listener>
+	
+   	<!-- kisso 初始化，也可以选择 spring 注入初始化查看 resources/spring/servlet-context.xml 
+	<context-param>
+		<param-name>kissoConfigLocation</param-name>
+		<param-value>classpath:properties/sso.properties</param-value>
+	</context-param>
+    <listener>
+        <listener-class>com.baomidou.kisso.web.KissoConfigListener</listener-class>
+    </listener>
+    -->
+    
+	<!-- SSOFilter 过滤器是一种权限拦截方式，演示咱们使用  spring 的拦截器、加注解、跳过权限拦截。
+	<filter>
+		<filter-name>SSOFilter</filter-name>
+		<filter-class>com.baomidou.kisso.web.filter.SSOFilter</filter-class>
+		<init-param>
+			<param-name>over.url</param-name>
+			<param-value>/login;/verify;/static/</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>SSOFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	-->
+
+	<!-- 字符编码格式过滤器 -->
+	<filter>
+		<filter-name>charsetFilter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>charsetFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<servlet>
+		<servlet-name>springServlet</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<init-param>
+			<param-name>contextConfigLocation</param-name>
+			<param-value>classpath:spring/servlet-context.xml</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>springServlet</servlet-name>
+		<url-pattern>/*</url-pattern>
+		<!-- 这种配置只接受 *.html的请求
+		<url-pattern>*.html</url-pattern>
+		 -->
+	</servlet-mapping>
+	
+	<error-page>
+		<error-code>404</error-code>
+		<location>/404.html</location>
+	</error-page>
+
+	<!-- 欢迎界面 -->
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+</web-app>
