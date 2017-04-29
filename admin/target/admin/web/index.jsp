@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>简单实用国产jQuery UI框架 - DWZ富客户端框架(J-UI.com)</title>
+    <title>燕儿坞</title>
 
     <link href="dwz/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
     <link href="dwz/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
@@ -16,9 +16,9 @@
 
     <!--[if lt IE 9]>
     <script src="dwz/js/speedup.js" type="text/javascript"></script>
-    <script src="dez/js/jquery-1.11.3.min.js" type="text/javascript"></script><![endif]-->
+    <script src="dwz/js/jquery-1.11.3.min.js" type="text/javascript"></script><![endif]-->
     <!--[if gte IE 9]><!-->
-    <script src="dez/js/jquery-2.1.4.min.js" type="text/javascript"></script><!--<![endif]-->
+    <script src="dwz/js/jquery-2.1.4.min.js" type="text/javascript"></script><!--<![endif]-->
 
     <script src="dwz/js/jquery.cookie.js" type="text/javascript"></script>
     <script src="dwz/js/jquery.validate.js" type="text/javascript"></script>
@@ -78,7 +78,7 @@
 
     <script type="text/javascript">
         $(function () {
-            DWZ.init("dwz.frag.xml", {
+            DWZ.init("dwz/dwz.frag.xml", {
 //		loginUrl:"login_dialog.html", loginTitle:"登录",	// 弹出登录对话框
                 loginUrl: "login.html",	// 跳到登录页面
                 statusCode: {ok: 200, error: 300, timeout: 301}, //【可选】
@@ -93,7 +93,7 @@
                 debug: false,	// 调试模式 【true|false】
                 callback: function () {
                     initEnv();
-                    $("#themeList").theme({themeBase: "themes"}); // themeBase 相对于index页面的主题base路径
+                    $("#themeList").theme({themeBase: "dwz/themes"}); // themeBase 相对于index页面的主题base路径
                 }
             });
         });
@@ -116,9 +116,7 @@
                         <li><a href="sidebar_2.html">杭州</a></li>
                     </ul>
                 </li>
-                <li><a href="donation.html" target="dialog" height="400" title="捐赠 & DWZ学习视频">捐赠</a></li>
                 <li><a href="changepwd.html" target="dialog" width="600">设置</a></li>
-                <li><a href="http://www.cnblogs.com/dwzjs" target="_blank">博客</a></li>
                 <li><a href="http://weibo.com/dwzui" target="_blank">微博</a></li>
                 <li><a href="login.html">退出</a></li>
             </ul>
@@ -168,25 +166,11 @@
                     <ul class="tree treeFolder">
                         <li><a href="tabsPage.html" target="navTab">主框架面板</a>
                             <ul>
-                                <li><a href="main.html" target="navTab" rel="main">我的主页</a></li>
-                                <li><a href="demo/row-col.html" target="navTab" rel="row-col">栅格系统(Bootstrap)</a></li>
-                                <li><a href="http://www.baidu.com" target="navTab" rel="page1">页面一(外部链接)</a></li>
-                                <li><a href="demo/baidu_map_iframe.html" target="navTab" rel="bmap" external="true"
-                                       title="需要设置external属性为true">地图(external iframe方式)</a></li>
-                                <li><a href="demo/baidu_map.html" target="navTab" rel="bmap">地图(直接嵌入方式)</a></li>
-                                <li><a href="demo_page1.html" target="navTab" rel="page1" fresh="false">替换页面一</a></li>
-                                <li><a href="demo_page2.html" target="navTab" rel="page2">页面二</a></li>
-                                <li><a href="demo_page4.html" target="navTab" rel="page3" title="页面三（自定义标签名）">页面三</a>
-                                </li>
-                                <li><a href="demo_page4.html" target="navTab" rel="page4" fresh="false">测试页面(fresh="false")</a>
-                                </li>
-                                <li><a href="w_editor.html" target="navTab">表单提交会话超时</a></li>
-                                <li><a href="demo/common/ajaxTimeout.html" target="navTab">navTab会话超时</a></li>
-                                <li><a href="demo/common/ajaxTimeout.html" target="dialog">dialog会话超时</a></li>
-                                <li><a href="index_menu.html" target="_blank">横向导航条</a></li>
+                                <li><a href="user/list.html" target="navTab" rel="user-list">用户管理</a></li>
+                                <li><a href="power/list.html" target="navTab" rel="power-list">权限管理</a></li>
                             </ul>
                         </li>
-
+                        <!--
                         <li><a>常用组件</a>
                             <ul>
                                 <li><a href="w_panel.html" target="navTab" rel="w_panel">面板</a></li>
@@ -243,6 +227,7 @@
                             </ul>
                         </li>
                         <li><a href="dwz.frag.xml" target="navTab" external="true">dwz.frag.xml</a></li>
+                        -->
                     </ul>
                 </div>
                 <div class="accordionHeader">

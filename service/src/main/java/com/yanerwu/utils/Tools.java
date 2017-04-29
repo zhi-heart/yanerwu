@@ -1,7 +1,8 @@
 package com.yanerwu.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.util.*;
@@ -14,7 +15,7 @@ import java.util.regex.Pattern;
  * @Date: 2017/4/27 17:26
  */
 public class Tools {
-    private static final Logger logger = Logger.getLogger(Tools.class);
+    private static final Logger logger = LogManager.getLogger(Tools.class);
     private static String SPACE = "   ";
 
     public static final Set<String> blackSet = new HashSet();

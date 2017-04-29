@@ -6,7 +6,8 @@ import com.yanerwu.annotation.Table;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.*;
 import org.apache.commons.dbutils.handlers.*;
-import org.apache.log4j.Logger;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
@@ -22,7 +23,7 @@ public class DbUtilsTemplate {
 
     private BasicDataSource dataSource;
     private QueryRunner queryRunner;
-    private static final Logger logger = Logger.getLogger(DbUtilsTemplate.class);
+    private static final Logger logger = LogManager.getLogger(DbUtilsTemplate.class);
 
     public void setDataSource(BasicDataSource dataSource) {
         this.dataSource = dataSource;
