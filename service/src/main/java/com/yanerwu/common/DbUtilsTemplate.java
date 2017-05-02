@@ -6,6 +6,7 @@ import com.yanerwu.annotation.Table;
 import org.apache.commons.dbcp.BasicDataSource;
 import org.apache.commons.dbutils.*;
 import org.apache.commons.dbutils.handlers.*;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -21,13 +22,23 @@ import java.util.Map;
  */
 public class DbUtilsTemplate {
 
+    private static final Logger logger = LogManager.getLogger(DbUtilsTemplate.class);
+    /**
+     * 操作数据库类别-插入
+     */
+    private static final String ANNOTATION_TABLE_SELECT = "SELECT";
+    /**
+     * 操作数据库类别-插入
+     */
+    private static final String ANNOTATION_TABLE_INSERT = "INSERT";
+    /**
+     * 操作数据库类别-修改
+     */
+    private static final String ANNOTATION_TABLE_UPDATE = "UPDATE";
+    private static final String FIELD_KEY_MAP = "FIELD_KEY_MAP";
+    private static final String FIELD_ID_MAP = "FIELD_ID_MAP";
     private BasicDataSource dataSource;
     private QueryRunner queryRunner;
-    private static final Logger logger = LogManager.getLogger(DbUtilsTemplate.class);
-
-    public void setDataSource(BasicDataSource dataSource) {
-        this.dataSource = dataSource;
-    }
 
     /**
      * 执行sql语句
@@ -438,21 +449,291 @@ public class DbUtilsTemplate {
         return dataSource;
     }
 
-    /**
-     * page
-     *
-     * @param page
-     * @param sql
-     * @return
-     */
-    @SuppressWarnings("rawtypes")
-    public Page findPage(Page page, String sql) {
-        return this.findPage(page, sql, null);
+    public void setDataSource(BasicDataSource dataSource) {
+        this.dataSource = dataSource;
     }
 
+    /**
+     * 获取表名
+     *
+     * @param info
+     * @return
+     */
+    private <T> String getTableName(T info) {
+        Class<? extends Object> cls = info.getClass();
+        String tableName = null;
+        Table table = cls.getAnnotation(Table.class);
+        if (null != table) {
+            tableName = table.name();
+        } else {
+            throw new RuntimeException("未找到注解类@table");
+        }
+        return tableName;
+    }
+
+    /**
+     * 根据对象删除
+     *
+     * @param info
+     */
+    public <T> int delete(T info) {
+        String tableName = this.getTableName(info);
+        Map<String, Object> delMap = new LinkedHashMap();
+        Field[] fields = info.getClass().getDeclaredFields();
+        // 提取主键
+        for (Field f : fields) {
+            if (f.getAnnotations().length > 0) {
+                Column column = f.getAnnotation(Column.class);
+                if (null != column) {
+                    try {
+                        f.setAccessible(true);// 修改访问权限
+                        Id id = f.getAnnotation(Id.class);
+                        if (null != id) {
+                            delMap.put(column.name(), f.get(info));
+                        }
+                    } catch (IllegalArgumentException e) {
+                        logger.error("", e);
+                    } catch (IllegalAccessException e) {
+                        logger.error("", e);
+                    }
+                }
+            }
+        }
+        // 拼装sql
+        List<Object> params = new ArrayList();
+        StringBuffer delStr = new StringBuffer();
+        for (String k : delMap.keySet()) {
+            delStr.append(String.format(" and %s=?", k));
+            params.add(delMap.get(k));
+        }
+        String sql = String.format("delete from %s where 1=1 %s", tableName, delStr);
+        return this.update(sql, params.toArray());
+    }
+
+    /**
+     * 根据对象修改
+     *
+     * @param info
+     */
+    public <T> int update(T info) {
+        String tableName = this.getTableName(info);
+
+        // 提取属性
+        Map<String, Map<String, Object>> fieldMap = this.getField(info, ANNOTATION_TABLE_UPDATE);
+        Map<String, Object> idMap = fieldMap.get(FIELD_ID_MAP);
+        Map<String, Object> updMap = fieldMap.get(FIELD_KEY_MAP);
+
+        // 开始拼接sql
+        List<Object> params = new ArrayList();
+        StringBuffer updStr = new StringBuffer();
+        StringBuffer keyStr = new StringBuffer();
+        // 处理set
+        for (String k : updMap.keySet()) {
+            updStr.append(String.format(" %s=?,", k));
+            params.add(updMap.get(k));
+        }
+        updStr.delete(updStr.length() - 1, updStr.length());
+        // 处理主键where
+        for (String k : idMap.keySet()) {
+            keyStr.append(String.format(" and %s=?", k));
+            params.add(idMap.get(k));
+        }
+        // 拼接sql
+        String sql = String.format("update %s set %s where 1=1 %s", tableName, updStr, keyStr);
+        return this.update(sql, params.toArray());
+    }
+
+    /**
+     * 批量保存对象
+     *
+     * @param ts
+     */
+    public <T> List<Object> insert(List<T> ts) {
+        if (null == ts || ts.size() < 1) {
+            return null;
+        }
+
+        Object[][] objs = new Object[ts.size()][];
+        String sql = null;
+
+        for (int i = 0; i < ts.size(); i++) {
+            T t = ts.get(i);
+
+            String tableName = this.getTableName(t);
+
+            // 提取属性
+            Map<String, Object> insMap = this.getField(t, ANNOTATION_TABLE_INSERT).get(FIELD_KEY_MAP);
+
+            // 开始拼接sql
+            List<Object> params = new ArrayList();
+            StringBuffer key = new StringBuffer();
+            StringBuffer value = new StringBuffer();
+            for (String k : insMap.keySet()) {
+                // 拼接要插入的值 加`可以防止mysql关键字异常
+                key.append(String.format("`%s`,", k));
+                // 拼接value
+                value.append("?,");
+                params.add(insMap.get(k));
+            }
+            key.delete(key.length() - 1, key.length());
+            value.delete(value.length() - 1, value.length());
+            sql = String.format("insert into %s(%s) values(%s)", tableName, key, value);
+            objs[i] = params.toArray();
+        }
+        return this.insert(sql, objs);
+
+    }
+
+    /**
+     * 保存对象
+     *
+     * @param info
+     */
+    public <T> Object insert(T info) {
+        List<T> infos = new ArrayList();
+        infos.add(info);
+        return this.insert(infos).get(0);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T> T getById(T t) {
+        Map<String, Object> idMap = getField(t, ANNOTATION_TABLE_SELECT).get(FIELD_ID_MAP);
+        RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
+
+        // 开始拼接sql
+        List<Object> params = new ArrayList();
+        StringBuffer keyStr = new StringBuffer();
+        // 处理主键where
+        for (String k : idMap.keySet()) {
+            keyStr.append(String.format(" and %s=?", k));
+            params.add(idMap.get(k));
+        }
+        // 拼接sql
+        String sql = String.format("select * from %s where 1=1 %s", getTableName(t), keyStr);
+        List<? extends Object> list = this.find(t.getClass(), sql, params.toArray(), processor);
+        if (list.size() > 0) {
+            return (T) list.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    /**
+     * 获取属性
+     *
+     * @param t
+     * @param type
+     * @return
+     */
+    private <T> Map<String, Map<String, Object>> getField(T t, String type) {
+        Map<String, Map<String, Object>> fieldMap = new LinkedHashMap();
+        Map<String, Object> keyMap = new LinkedHashMap();
+        Map<String, Object> idMap = new LinkedHashMap();
+
+        Class<? extends Object> cls = t.getClass();
+
+        // 提取属性
+        Field[] fields = cls.getDeclaredFields();
+        for (Field f : fields) {
+            if (f.getAnnotations().length > 0) {
+                Column column = f.getAnnotation(Column.class);
+                if (null != column) {
+                    try {
+                        f.setAccessible(true);// 修改访问权限
+                        Id id = f.getAnnotation(Id.class);
+                        if (null != id) {
+                            //主键
+                            idMap.put(column.name(), f.get(t));
+                        } else {
+                            //非主键
+                            switch (type) {
+                                case ANNOTATION_TABLE_SELECT:
+                                    //判断是字段是否需要插入
+                                    if (column.insertable()) {
+                                        //获取属性值
+                                        keyMap.put(column.name(), f.get(t));
+                                    }
+                                    break;
+                                case ANNOTATION_TABLE_INSERT:
+                                    //时间传入空字符串异常  暂时将  字段名带 time,date的 如果字符串为'' 则改为null,暂时没想到好方法1
+                                    if (StringUtils.isBlank(String.valueOf(f.get(t)))) {
+                                        continue;
+                                    }
+                                    //判断是字段是否需要插入
+                                    if (column.insertable()) {
+                                        //获取属性值
+                                        keyMap.put(column.name(), f.get(t));
+                                    }
+                                    break;
+                                case ANNOTATION_TABLE_UPDATE:
+                                    //时间传入空字符串异常  暂时将  字段名带 time,date的 如果字符串为'' 则改为null,暂时没想到好方法1
+                                    if (StringUtils.isBlank(String.valueOf(f.get(t)))) {
+                                        continue;
+                                    }
+                                    //判断字段是否需要修改
+                                    if (column.updatable()) {
+                                        keyMap.put(column.name(), f.get(t));
+                                    }
+                                    break;
+                                default:
+                                    keyMap.put(column.name(), f.get(t));
+                                    break;
+                            }
+                        }
+                    } catch (IllegalArgumentException e) {
+                        logger.error("", e);
+                    } catch (IllegalAccessException e) {
+                        logger.error("", e);
+                    }
+                }
+            }
+        }
+        fieldMap.put(FIELD_KEY_MAP, keyMap);
+        fieldMap.put(FIELD_ID_MAP, idMap);
+        return fieldMap;
+    }
+
+    /**
+     * 插入数据获取主键
+     *
+     * @param sql
+     * @param params
+     * @return
+     */
+    public Object insert(String sql, Object[] params) {
+        Object batchResult = null;
+        queryRunner = new QueryRunner(dataSource);
+        try {
+            Object[][] objs = new Object[1][];
+            objs[0] = params;
+            Object[] insertBatch = queryRunner.insertBatch(sql, new ScalarHandler<Object[]>(), objs);
+            batchResult = insertBatch[0];
+        } catch (SQLException e) {
+            logger.error("", e);
+        }
+        return batchResult;
+    }
+
+    /**
+     * 插入数据获取主键
+     *
+     * @param sql
+     * @param params
+     * @return
+     */
+    public List<Object> insert(String sql, Object[][] params) {
+        List<Object> batchResult = null;
+        queryRunner = new QueryRunner(dataSource);
+        try {
+            batchResult = queryRunner.insertBatch(sql, new BeanListHandler<Object>(Object.class), params);
+        } catch (SQLException e) {
+            logger.error("", e);
+        }
+        return batchResult;
+    }
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    public <T> Page<T> findPage(Page<T> page, String sql, Object[] params, Class<? extends BaseEntity> cls) {
+    public <T> Page<T> findPage(Page<T> page, String sql, Object[] params, Class cls) {
 
         String totalSql = String.format("select count(1) count from (%s) t", sql);
         try {
@@ -485,304 +766,6 @@ public class DbUtilsTemplate {
         }
         return page;
 
-    }
-
-    /**
-     * page
-     *
-     * @param page
-     * @param sql
-     * @return
-     */
-    @SuppressWarnings({"unchecked", "rawtypes"})
-    public Page findPage(Page page, String sql, Object[] objs) {
-        String totalSql = String.format("select count(1) count from (%s) t", sql);
-        try {
-            Long total = (Long) findBy(totalSql, "count");
-            // 设置总条数
-            page.setTotalCount(total);
-            if (total > 0) {
-                // 一共有多少页
-                page.setPageNumShown(total / page.getNumPerPage() + 1);
-                // 设置当前页数
-                page.setCurrentPage(page.getPageNum());
-                String limit = String.format("limit %s,%s", page.getNumPerPage() * (page.getPageNum() - 1), page.getNumPerPage());
-                sql = String.format("%s %s", sql, limit);
-                page.setResult(find(sql, objs, null));
-            } else {
-                //如果总条数为0,给一个空的list
-                page.setResult(new ArrayList());
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-        return page;
-    }
-
-    /**
-     * 获取表名
-     *
-     * @param info
-     * @return
-     */
-    private <T> String getTableName(T info) {
-        Class<? extends Object> cls = info.getClass();
-        String tableName = null;
-        Table table = cls.getAnnotation(Table.class);
-        if (null != table) {
-            tableName = table.name();
-        } else {
-            throw new RuntimeException("未找到注解类@table");
-        }
-        return tableName;
-    }
-
-    /**
-     * 根据对象删除
-     *
-     * @param info
-     */
-    public <T> int delete(T info) {
-        String tableName = this.getTableName(info);
-        Map<String, Object> delMap = new LinkedHashMap();
-        Field[] fields = info.getClass().getDeclaredFields();
-        //提取主键
-        for (Field f : fields) {
-            if (f.getAnnotations().length > 0) {
-                Column column = f.getAnnotation(Column.class);
-                if (null != column) {
-                    try {
-                        f.setAccessible(true);// 修改访问权限
-                        Id id = f.getAnnotation(Id.class);
-                        if (null != id) {
-                            delMap.put(column.name(), f.get(info));
-                        }
-                    } catch (IllegalArgumentException e) {
-                        logger.error("", e);
-                    } catch (IllegalAccessException e) {
-                        logger.error("", e);
-                    }
-                }
-            }
-        }
-        //拼装sql
-        List<Object> params = new ArrayList();
-        StringBuffer delStr = new StringBuffer();
-        for (String k : delMap.keySet()) {
-            delStr.append(String.format(" and %s=?", k));
-            params.add(delMap.get(k));
-        }
-        String sql = String.format("delete from %s where 1=1 %s", tableName, delStr);
-        return this.update(sql, params.toArray());
-    }
-
-    /**
-     * 根据对象修改
-     *
-     * @param info
-     */
-    public <T> int update(T info) {
-        Class<? extends Object> cls = info.getClass();
-        String tableName = this.getTableName(info);
-
-        // 提取属性
-        Map<String, Object> updMap = new LinkedHashMap();
-        Map<String, Object> keyMap = new LinkedHashMap();
-        Field[] fields = cls.getDeclaredFields();
-        for (Field f : fields) {
-            if (f.getAnnotations().length > 0) {
-                Column column = f.getAnnotation(Column.class);
-                if (null != column) {
-                    try {
-                        f.setAccessible(true);// 修改访问权限
-                        Id id = f.getAnnotation(Id.class);
-                        if (null != id) {
-                            keyMap.put(column.name(), f.get(info));
-                        } else if (column.updatable()) {
-                            updMap.put(column.name(), f.get(info));
-                        }
-                    } catch (IllegalArgumentException e) {
-                        logger.error("", e);
-                    } catch (IllegalAccessException e) {
-                        logger.error("", e);
-                    }
-                }
-            }
-        }
-        // 开始拼接sql
-        List<Object> params = new ArrayList();
-        StringBuffer updStr = new StringBuffer();
-        StringBuffer keyStr = new StringBuffer();
-        //处理set
-        for (String k : updMap.keySet()) {
-            updStr.append(String.format(" %s=?,", k));
-            params.add(updMap.get(k));
-        }
-        updStr.delete(updStr.length() - 1, updStr.length());
-        //处理主键where
-        for (String k : keyMap.keySet()) {
-            keyStr.append(String.format(" and %s=?", k));
-            params.add(keyMap.get(k));
-        }
-        //拼接sql
-        String sql = String.format("update %s set %s where 1=1 %s", tableName, updStr, keyStr);
-        return this.update(sql, params.toArray());
-    }
-
-    /**
-     * 保存对象
-     *
-     * @param info
-     */
-    public <T> int save(T info) {
-        Class<? extends Object> cls = info.getClass();
-
-        String tableName = this.getTableName(info);
-
-        //提取属性
-        Map<String, Object> insMap = new LinkedHashMap();
-        Field[] fields = cls.getDeclaredFields();
-        for (Field f : fields) {
-            if (f.getAnnotations().length > 0) {
-                Column column = f.getAnnotation(Column.class);
-                if (null != column) {
-                    try {
-                        f.setAccessible(true);//修改访问权限
-                        if (column.insertable()) {
-                            insMap.put(column.name(), f.get(info));
-                        }
-                    } catch (IllegalArgumentException e) {
-                        logger.error("", e);
-                    } catch (IllegalAccessException e) {
-                        logger.error("", e);
-                    }
-                }
-            }
-        }
-        //开始拼接sql
-        List<Object> params = new ArrayList();
-        StringBuffer key = new StringBuffer();
-        StringBuffer value = new StringBuffer();
-        for (String k : insMap.keySet()) {
-            //拼接要插入的值
-            //加`可以防止关键字异常
-            key.append(String.format("`%s`,", k));
-            //拼接value
-            value.append("?,");
-            params.add(insMap.get(k));
-        }
-        key.delete(key.length() - 1, key.length());
-        value.delete(value.length() - 1, value.length());
-        String sql = String.format("insert into %s(%s) values(%s)", tableName, key, value);
-        return this.update(sql, params.toArray());
-    }
-
-    @SuppressWarnings("unchecked")
-    public <T> T getById(T info) {
-        Class<? extends Object> cls = info.getClass();
-        String tableName = this.getTableName(info);
-
-        // 提取属性
-        Map<String, Object> keyMap = new LinkedHashMap();
-        Field[] fields = cls.getDeclaredFields();
-        for (Field f : fields) {
-            if (f.getAnnotations().length > 0) {
-                Column column = f.getAnnotation(Column.class);
-                if (null != column) {
-                    try {
-                        f.setAccessible(true);// 修改访问权限
-                        Id id = f.getAnnotation(Id.class);
-                        if (null != id) {
-                            keyMap.put(column.name(), f.get(info));
-                        }
-                    } catch (IllegalArgumentException e) {
-                        logger.error("", e);
-                    } catch (IllegalAccessException e) {
-                        logger.error("", e);
-                    }
-                }
-            }
-        }
-        // 开始拼接sql
-        List<Object> params = new ArrayList();
-        StringBuffer keyStr = new StringBuffer();
-        //处理主键where
-        for (String k : keyMap.keySet()) {
-            keyStr.append(String.format(" and %s=?", k));
-            params.add(keyMap.get(k));
-        }
-        //拼接sql
-        String sql = String.format("select * from %s where 1=1 %s", tableName, keyStr);
-        BeanProcessor bean = new GenerousBeanProcessor();
-        RowProcessor processor = new BasicRowProcessor(bean);
-        List<? extends Object> list = this.find(info.getClass(), sql, params.toArray(), processor);
-        if (list.size() > 0) {
-            return (T) list.get(0);
-        } else {
-            return info;
-        }
-    }
-
-    /**
-     * 插入数据获取主键
-     *
-     * @param sql
-     * @param params
-     * @return
-     */
-    public Object insert(String sql, Object[] params) {
-        Object id = null;
-        queryRunner = new QueryRunner(dataSource);
-        try {
-            id = queryRunner.insert(sql, new ScalarHandler<Integer>(), params);
-        } catch (SQLException e) {
-            logger.error("", e);
-        }
-        return id;
-    }
-
-    public <T> Object insert(T info) {
-        Class<? extends Object> cls = info.getClass();
-
-        String tableName = this.getTableName(info);
-
-        //提取属性
-        Map<String, Object> insMap = new LinkedHashMap();
-        Field[] fields = cls.getDeclaredFields();
-        for (Field f : fields) {
-            if (f.getAnnotations().length > 0) {
-                Column column = f.getAnnotation(Column.class);
-                if (null != column) {
-                    try {
-                        f.setAccessible(true);//修改访问权限
-                        if (column.insertable()) {
-                            insMap.put(column.name(), f.get(info));
-                        }
-                    } catch (IllegalArgumentException e) {
-                        logger.error("", e);
-                    } catch (IllegalAccessException e) {
-                        logger.error("", e);
-                    }
-                }
-            }
-        }
-        //开始拼接sql
-        List<Object> params = new ArrayList();
-        StringBuffer key = new StringBuffer();
-        StringBuffer value = new StringBuffer();
-        for (String k : insMap.keySet()) {
-            //拼接要插入的值
-            //加`可以防止关键字异常
-            key.append(String.format("`%s`,", k));
-            //拼接value
-            value.append("?,");
-            params.add(insMap.get(k));
-        }
-        key.delete(key.length() - 1, key.length());
-        value.delete(value.length() - 1, value.length());
-        String sql = String.format("insert into %s(%s) values(%s)", tableName, key, value);
-
-        return this.insert(sql, params.toArray());
     }
 
 }

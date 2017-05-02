@@ -4,7 +4,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>燕儿坞</title>
+    <title>哇哦</title>
 
     <link href="dwz/themes/default/style.css" rel="stylesheet" type="text/css" media="screen"/>
     <link href="dwz/themes/css/core.css" rel="stylesheet" type="text/css" media="screen"/>
@@ -166,8 +166,8 @@
                     <ul class="tree treeFolder">
                         <li><a href="tabsPage.html" target="navTab">主框架面板</a>
                             <ul>
-                                <li><a href="user/list.html" target="navTab" rel="user-list">用户管理</a></li>
-                                <li><a href="power/list.html" target="navTab" rel="power-list">权限管理</a></li>
+                                <li><a href="Uuser/list.html" target="navTab" rel="user-list">用户管理</a></li>
+                                <li><a href="Upower/list.html" target="navTab" rel="power-list">权限管理</a></li>
                             </ul>
                         </li>
                         <!--

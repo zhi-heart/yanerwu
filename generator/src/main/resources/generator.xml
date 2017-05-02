@@ -40,7 +40,7 @@
 	<entry key="java_typemapping.java.sql.Clob">String</entry>
 	
 	<!-- Mysql -->
-	<entry key="jdbc_url">jdbc:mysql://106.14.171.91:3306/yanerwu</entry>
+	<entry key="jdbc_url">jdbc:mysql://106.14.171.91:3306/yanerwu?useUnicode=true&amp;characterEncoding=UTF-8&amp;useInformationSchema=true</entry>
 	<entry key="jdbc_driver">com.mysql.jdbc.Driver</entry>
 
 	<!-- Oracle		jdbc:oracle:oci:@tnsname_devdb

@@ -1,9 +1,0 @@
-import ${basepackage}.entity.*;
-import ${basepackage}.service.*;
-import ${basepackage}.vo.query.*;
-
-/**
- * @author Zuz
- * @version 1.0
- * @since 1.0
- */

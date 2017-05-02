@@ -33,6 +33,10 @@ public class Page<T> implements Serializable, Iterable<T> {
      */
     private long pageNum = 1;
 
+    private String orderField;
+
+    private String orderDirection;
+
 
     public long getTotalCount() {
         return totalCount;
@@ -80,6 +84,22 @@ public class Page<T> implements Serializable, Iterable<T> {
 
     public void setPageNum(long pageNum) {
         this.pageNum = pageNum;
+    }
+
+    public String getOrderField() {
+        return orderField;
+    }
+
+    public void setOrderField(String orderField) {
+        this.orderField = orderField;
+    }
+
+    public String getOrderDirection() {
+        return orderDirection;
+    }
+
+    public void setOrderDirection(String orderDirection) {
+        this.orderDirection = orderDirection;
     }
 
     @SuppressWarnings("unchecked")
