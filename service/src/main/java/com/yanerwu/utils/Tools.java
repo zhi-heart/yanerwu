@@ -1,11 +1,13 @@
 package com.yanerwu.utils;
 
+import com.baomidou.kisso.SSOConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.*;
 import java.lang.reflect.Array;
+import java.net.URLDecoder;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -130,6 +132,68 @@ public class Tools {
      */
     public static boolean isNotEmpty(Object c) throws IllegalArgumentException{
         return !isEmpty(c);
+    }
+
+    /**
+     * <p>
+     * URLDecoder 解码地址
+     * </p>
+     *
+     * @param url
+     *            解码地址
+     * @return
+     */
+    public static String decodeURL(String url,String encoding) {
+        if (url == null) {
+            return null;
+        }
+        String retUrl = url;
+
+        try {
+            for (int i = 0; i < 3; i++) {
+                retUrl = URLDecoder.decode(retUrl, encoding);
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return retUrl;
+    }
+
+    /**
+     * url 参数值获取
+     * @param url
+     * @param name
+     * @return
+     */
+    public static String getUrlParamsByName(String url,String name){
+        String retStr = "";
+        if(StringUtils.isNotBlank(url)&&url.contains("?")){
+            Map<String, String> map = new HashMap<>();
+            String[] paramsArrays = url.split("\\?")[1].split("&");
+            for (String pstr:paramsArrays) {
+                String[] s = pstr.split("=");
+                map.put(s[0], decodeURL(s[1], SSOConfig.getSSOEncoding()));
+            }
+            retStr = map.get(name);
+        }
+        return retStr;
+    }
+
+    public static String listToStr(List<?> list,String s){
+        StringBuffer sb = new StringBuffer();
+        try {
+            for (Object l:list) {
+                sb.append(sb);
+                sb.append(",");
+            }
+            if(list.size()>0){
+                sb.delete(sb.length() - 1, sb.length());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return sb.toString();
     }
 
 }

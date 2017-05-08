@@ -1,6 +1,8 @@
 package com.yanerwu.action;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.kisso.annotation.Action;
+import com.baomidou.kisso.annotation.Login;
 import com.yanerwu.common.Page;
 import com.yanerwu.entity.Uuser;
 import com.yanerwu.service.LogService;
@@ -42,6 +44,7 @@ public class UuserAction extends BaseAction {
      *
      * @return
      */
+    @Login(action = Action.Skip)
     @RequestMapping(value = "/list.html")
     public String list(Uuser uuser, Page page) {
         attribute();
@@ -55,6 +58,7 @@ public class UuserAction extends BaseAction {
      *
      * @param uuser
      */
+    @Login(action = Action.Skip)
     @ResponseBody
     @RequestMapping(value = "/add.html", method = RequestMethod.POST)
     public String save(Uuser uuser) {
@@ -79,6 +83,7 @@ public class UuserAction extends BaseAction {
      *
      * @return
      */
+    @Login(action = Action.Skip)
     @RequestMapping(value = "/info.html", method = RequestMethod.GET)
     public String infoShow(Uuser uuser) {
         uuser = uuserService.getById(uuser);
@@ -89,6 +94,7 @@ public class UuserAction extends BaseAction {
     /**
      * 保存更新
      */
+    @Login(action = Action.Skip)
     @ResponseBody
     @RequestMapping(value = "/info.html", method = RequestMethod.POST)
     public String infoEdit(Uuser uuser) {
@@ -117,6 +123,7 @@ public class UuserAction extends BaseAction {
     /**
      * 删除对象
      */
+    @Login(action = Action.Skip)
     @ResponseBody
     @RequestMapping(value = "/delete.html", method = RequestMethod.POST)
     public String delete(Integer[] items) {

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+        xsi:schemaLocation="
+	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
+	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
+	"
+        xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:task="http://www.springframework.org/schema/task">
+
+    <!-- 用于使用@ResponseBody后返回中文避免乱码 必须放在<mvc:annotation-driven>之前 -->
+    <bean
+            class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean
+                        class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/plain;charset=UTF-8</value>
+                            <value>text/html;charset=UTF-8</value>
+                            <value>applicaiton/javascript;charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                            <value>application/x-www-form-urlencoded;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <task:annotation-driven/>
+
+    <mvc:annotation-driven/>
+    <context:annotation-config/>
+    <context:component-scan base-package="com.yanerwu"/>
+
+
+    <!-- 多视图,InternalResourceViewResolver必须放在最后,因为他总会返回一个视图,后面将不再执行 -->
+    <bean id="jspViewResolver"
+          class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/web/"/>
+        <property name="cache">
+            <value>true</value>
+        </property>
+        <property name="suffix">
+            <value>.jsp</value>
+        </property>
+        <property name="order" value="99"/>
+    </bean>
+
+
+    <!-- ES配置
+    <context:property-placeholder location="classpath:elasticsearch.properties" ignore-unresolvable="true"/>
+
+    <bean id="yanerwuhHelper" class="com.yanerwu.common.es.ElasticSearchHelper" scope="singleton">
+        <constructor-arg index="0" value="${elasticsearch.cluster.name}"/>
+        <constructor-arg index="1" value="${elasticsearch.cluster.nodes}"/>
+    </bean>
+    -->
+</beans>

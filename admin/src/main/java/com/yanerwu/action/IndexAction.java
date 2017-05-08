@@ -1,5 +1,7 @@
 package com.yanerwu.action;
 
+import com.baomidou.kisso.annotation.Action;
+import com.baomidou.kisso.annotation.Login;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,7 @@ public class IndexAction extends BaseAction{
         return "index";
     }
 
+    @Login(action = Action.Skip)
     @RequestMapping("/aaa.html")
     public String aaa() {
         log.info(String.format("ip:%s",request.getRemoteAddr()));
