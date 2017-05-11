@@ -53,12 +53,12 @@
     </bean>
 
 
-    <!-- ES配置
+    <!-- ES配置 -->
     <context:property-placeholder location="classpath:elasticsearch.properties" ignore-unresolvable="true"/>
 
     <bean id="yanerwuhHelper" class="com.yanerwu.common.es.ElasticSearchHelper" scope="singleton">
         <constructor-arg index="0" value="${elasticsearch.cluster.name}"/>
         <constructor-arg index="1" value="${elasticsearch.cluster.nodes}"/>
     </bean>
-    -->
+
 </beans>

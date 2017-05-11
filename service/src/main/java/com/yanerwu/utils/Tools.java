@@ -1,6 +1,5 @@
 package com.yanerwu.utils;
 
-import com.baomidou.kisso.SSOConfig;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -173,7 +172,7 @@ public class Tools {
             String[] paramsArrays = url.split("\\?")[1].split("&");
             for (String pstr:paramsArrays) {
                 String[] s = pstr.split("=");
-                map.put(s[0], decodeURL(s[1], SSOConfig.getSSOEncoding()));
+                map.put(s[0], decodeURL(s[1], "utf-8"));
             }
             retStr = map.get(name);
         }

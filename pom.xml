@@ -7,15 +7,16 @@
     <artifactId>yanerwu</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
+    <name>yanerwu</name>
+
     <modules>
         <module>sso</module>
         <module>service</module>
         <module>admin</module>
         <module>collect</module>
         <module>generator</module>
+        <module>spark</module>
     </modules>
-    <name>yanerwu</name>
-
 
     <properties>
         <spring.version>4.2.5.RELEASE</spring.version>
@@ -120,7 +121,7 @@
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>1.2.15</version>
+                <version>1.2.6</version>
             </dependency>
             <!-- kisso end -->
 
@@ -128,7 +129,7 @@
             <dependency>
                 <groupId>org.elasticsearch.client</groupId>
                 <artifactId>transport</artifactId>
-                <version>5.1.1</version>
+                <version>5.1.2</version>
             </dependency>
             <dependency>
                 <groupId>org.apache.logging.log4j</groupId>
@@ -146,12 +147,6 @@
                 <groupId>log4j</groupId>
                 <artifactId>log4j</artifactId>
                 <version>1.2.16</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>fastjson</artifactId>
-                <version>1.2.31</version>
             </dependency>
 
             <dependency>

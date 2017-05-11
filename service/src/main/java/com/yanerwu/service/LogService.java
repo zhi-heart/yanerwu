@@ -2,7 +2,6 @@ package com.yanerwu.service;
 
 import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.entity.Log;
-import com.yanerwu.entity.Uuser;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -9,7 +9,7 @@
     </listener>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:/springmvc-*.xml</param-value>
+        <param-value>classpath:/springmvc-jdbc.xml</param-value>
     </context-param>
     <filter>
         <filter-name>encodingFilter</filter-name>

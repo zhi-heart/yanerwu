@@ -1,6 +1,8 @@
 package com.yanerwu.common.es;
 
 import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.elasticsearch.action.bulk.BulkItemResponse;
@@ -27,6 +29,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+
 /**
  * @Author: Zuz
  * @Description:
@@ -46,7 +49,10 @@ public class ElasticSearchHelper {
      */
     public ElasticSearchHelper(String clusterName, String clusterNodes) throws UnknownHostException {
         synchronized (TransportClient.class) {
-            Settings settings = Settings.builder().put("cluster.name", clusterName).put("client.transport.sniff", true).build();
+            Settings settings = Settings.builder()
+                    .put("cluster.name", clusterName)
+                    .put("client.transport.sniff", true)
+                    .build();
             if (client == null && clusterNodes != null) {
                 String[] nodes = clusterNodes.split(",");
                 ArrayList<InetSocketTransportAddress> list = new ArrayList();
@@ -128,8 +134,16 @@ public class ElasticSearchHelper {
      * @return
      */
     private void setSource(IndexRequestBuilder builder, Object bean) {
-        byte[] data = JSON.toJSONBytes(bean);
-        builder.setSource(data);
+        if (bean instanceof String) {
+            builder.setSource(String.valueOf(bean));
+        }else{
+            ObjectMapper mapper = new ObjectMapper();
+            try {
+                builder.setSource(mapper.writeValueAsBytes(bean));
+            } catch (JsonProcessingException e) {
+                log.error("", e);
+            }
+        }
     }
 
     /**
@@ -345,9 +359,7 @@ public class ElasticSearchHelper {
     	helper.delete(Keys.INDEX_TAGS,Keys.TYPE_SELECT_TAGS,"1bec60e3d39a485d8d4921041e5b57f1");*/
 
 
-        TransportClient client = new PreBuiltTransportClient(Settings.EMPTY)
-                .addTransportAddress(new InetSocketTransportAddress(InetAddress.getByName("106.14.171.91"), 9300));
-        client.close();
+        ElasticSearchHelper helper = new ElasticSearchHelper("yanerwu", "106.14.171.91:9300");
 
     }
 }
