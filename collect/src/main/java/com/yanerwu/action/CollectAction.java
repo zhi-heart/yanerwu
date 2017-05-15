@@ -1,17 +1,20 @@
 package com.yanerwu.action;
 
+import com.yanerwu.Cache;
 import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.pipeline.YsdqPipeline;
 import com.yanerwu.processor.YsdqProcessor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import us.codecraft.webmagic.Spider;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,7 +25,7 @@ import java.util.List;
 @Controller
 public class CollectAction {
 
-    private Logger log = LogManager.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private DbUtilsTemplate yanerwuTemplate;
@@ -50,4 +53,5 @@ public class CollectAction {
     public String index() {
         return "index";
     }
+
 }

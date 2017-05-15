@@ -3,9 +3,9 @@ package com.yanerwu.processor;
 import com.yanerwu.Cache;
 import com.yanerwu.common.BaseProcessor;
 import com.yanerwu.entity.MvList;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
@@ -22,7 +22,7 @@ import java.util.UUID;
  */
 public class YsdqProcessor extends BaseProcessor implements PageProcessor {
 
-    private Logger log = LogManager.getLogger(getClass());
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Override
     public void process(Page page) {
@@ -38,7 +38,6 @@ public class YsdqProcessor extends BaseProcessor implements PageProcessor {
             m.setDownloadUrl(page.getHtml().regex("downlist\".*unescape\\(\"(.*)\\\"\\)").get());
 
             page.putField("m", m);
-            log.info(m);
         }else{
             List<String> infoStrList = page.getHtml().xpath("//div[@class=info]").all();
             List<MvList> mvs = new ArrayList<>();

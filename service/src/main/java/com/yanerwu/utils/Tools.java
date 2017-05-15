@@ -195,4 +195,12 @@ public class Tools {
         return sb.toString();
     }
 
+    public static String replaceToNull(String str,String ... repStr){
+        String result=str;
+        for (String r : repStr) {
+            result.replace(r, "");
+        }
+        return str;
+    }
+
 }

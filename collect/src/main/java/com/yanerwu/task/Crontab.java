@@ -11,8 +11,8 @@ import com.yanerwu.processor.YsdqProcessor;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -32,13 +32,15 @@ import java.util.Map;
  */
 @Component
 public class Crontab {
-    private Logger log = LogManager.getLogger(getClass());
+
+    protected Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
     private DbUtilsTemplate yanerwuTemplate;
     @Autowired
     private ElasticSearchHelper elasticSearchHelper;
 
+    @PostConstruct
     @Scheduled(cron = "0 0 * * * ?")
     public void synoym() {
         String sql = "select * from mv_list order by id desc limit 0,100";
@@ -52,24 +54,23 @@ public class Crontab {
         for (MvList m : mvLists) {
             map.put(String.valueOf(m.getId()), JSON.toJSONString(m, filter));
         }
-
         elasticSearchHelper.bulkIndex("movie", "base", map);
-
     }
 
-    @PostConstruct
+
+    //    @PostConstruct
     public void init() {
         String urlStr = "http://www.yingshidaquan.cc/vod-show-id-1-order-addtime-p-%s.html";
         List<String> urls = new ArrayList<>();
-//        for (int i = 1; i <=1098 ; i++) {
-        for (int i = 1; i <= 1; i++) {
+        for (int i = 1; i <= 3; i++) {
             urls.add(String.format(urlStr, i));
         }
-        new Spider(new YsdqProcessor())
+
+        Spider.create(new YsdqProcessor())
                 .addUrl(urls.toArray(new String[urls.size()]))
                 .addPipeline(new YsdqPipeline(yanerwuTemplate))
                 .setScheduler(new FileCacheQueueScheduler("/Users/Zuz/Desktop"))
-                .thread(1)
+                .thread(5)
                 .run();
     }
 }

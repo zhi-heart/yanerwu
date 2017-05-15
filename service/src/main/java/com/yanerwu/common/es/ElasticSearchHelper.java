@@ -51,7 +51,7 @@ public class ElasticSearchHelper {
         synchronized (TransportClient.class) {
             Settings settings = Settings.builder()
                     .put("cluster.name", clusterName)
-                    .put("client.transport.sniff", true)
+                    .put("client.transport.sniff", false)
                     .build();
             if (client == null && clusterNodes != null) {
                 String[] nodes = clusterNodes.split(",");
