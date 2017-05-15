@@ -2,6 +2,7 @@ package com.yanerwu.action;
 
 import com.yanerwu.Cache;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -14,6 +15,7 @@ import java.util.Date;
  * @Date 2017/5/15 15:10
  * @Description
  */
+@Controller
 public class OpenAction {
 
     @Autowired
