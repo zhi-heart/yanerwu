@@ -168,6 +168,7 @@
                             <ul>
                                 <li><a href="Uuser/list.html" target="navTab" rel="user-list">用户管理</a></li>
                                 <li><a href="Upower/list.html" target="navTab" rel="power-list">权限管理</a></li>
+                                <li><a href="movie-search.html" target="navTab" rel="movie-search">哇哦</a></li>
                             </ul>
                         </li>
                         <!--

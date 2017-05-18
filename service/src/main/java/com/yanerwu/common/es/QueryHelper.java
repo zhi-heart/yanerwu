@@ -21,50 +21,38 @@ import java.util.Map;
 public abstract class QueryHelper {
     protected int maxHits;
     private boolean levelQuery = false;
+
     public abstract void query(SearchRequestBuilder builder, int size);
 
     public Pagination doResult(SearchResponse response) {
         SearchHits hits = response.getHits();
-        List<JSONObject> pglist = new ArrayList();
-        List<JSONObject> toplist = new ArrayList();
+        List<JSONObject> list = new ArrayList<>();
 
-        List<JSONObject> list;
-        for(SearchHit hit : hits){
-            list = pglist;
-            if (levelQuery && hit.getHighlightFields().get("keyword") != null){
-                list = toplist;
-            }
+        for (SearchHit hit : hits) {
             list.add(getRecord(hit));
         }
-        Pagination pagination = new Pagination((int)hits.getTotalHits());
+        Pagination pagination = new Pagination((int) hits.getTotalHits());
 
-        if (toplist.size()>1){
-            pagination.setMaxElements(toplist.size());
-            pglist = toplist;
-            toplist = null;
-
-        }
-        pagination.setList(pglist);
-
+        pagination.setList(list);
         return pagination;
     }
 
-    public JSONObject getRecord(SearchHit hit){
+    public JSONObject getRecord(SearchHit hit) {
 
-        JSONObject obj ;
+        JSONObject obj;
         Map<String, HighlightField> highlightFieldMap = hit.getHighlightFields();
 
         String sourceAsString = hit.getSourceAsString();
         if (sourceAsString != null) {
             obj = JSON.parseObject(sourceAsString);
-        }else{
+        } else {
             obj = new JSONObject();
             for (SearchHitField field : hit.fields().values()) {
                 obj.put(field.name(), field.value());
             }
         }
         Collection<HighlightField> values = highlightFieldMap.values();
-        if (highlightFieldMap.size() > 0){
+        if (highlightFieldMap.size() > 0) {
             for (HighlightField field : highlightFieldMap.values()) {
                 obj.put(field.name(), StringUtils.join(field.getFragments()));
             }

@@ -11,7 +11,7 @@ import org.apache.spark.sql.types.StructType;
  * @Description
  */
 public class Constants {
-    public static StructType REPAY_BIDDER_STRUCT_TYPE = new StructType(new StructField[]{
+    public static StructType READ_REPAY_BIDDER_CSV_STRUCT_TYPE = new StructType(new StructField[]{
             new StructField("loan_id", DataTypes.StringType, false, Metadata.empty()),
             new StructField("bidder", DataTypes.StringType, false, Metadata.empty()),
             new StructField("success_date", DataTypes.DateType, false, Metadata.empty()),

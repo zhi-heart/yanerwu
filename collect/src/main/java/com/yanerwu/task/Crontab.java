@@ -43,7 +43,7 @@ public class Crontab {
     @PostConstruct
     @Scheduled(cron = "0 0 * * * ?")
     public void synoym() {
-        String sql = "select * from mv_list order by id desc limit 0,100";
+        String sql = "select * from mv_list order by id desc limit 0,1000";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         List<MvList> mvLists = yanerwuTemplate.find(MvList.class, sql, processor);
 
@@ -72,5 +72,9 @@ public class Crontab {
                 .setScheduler(new FileCacheQueueScheduler("/Users/Zuz/Desktop"))
                 .thread(5)
                 .run();
+    }
+
+    public static void main(String[] args) {
+        System.out.println("尼古拉斯·凯奇,汤米·里·琼斯,肖恩·扬,塞克·克杂特".replaceAll("\\pP|\\pS", ""));
     }
 }

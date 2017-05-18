@@ -304,7 +304,8 @@ public class ElasticSearchHelper {
         builder.setFrom((page - 1) * pagesize);
         builder.setSize(pagesize);
         SearchResponse response = builder.get();
-        System.out.println(builder);
+
+
         Pagination pagination = queryHelper.doResult(response);
         pagination.setCurrentPage(page);
         pagination.setPageSize(pagesize);
