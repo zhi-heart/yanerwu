@@ -19,7 +19,7 @@
 	<entry key="tableRemovePrefixes"></entry>
 	
 	<entry key="jdbc_username">root</entry>
-	<entry key="jdbc_password">Acedia919!</entry>
+	<entry key="jdbc_password">wdzj2015</entry>
 		
 	<!-- oracle需要指定jdbc.schema,并且可能要大写，其它数据库忽略此项配置  
 	<entry key="jdbc.schema"></entry>
@@ -40,7 +40,7 @@
 	<entry key="java_typemapping.java.sql.Clob">String</entry>
 	
 	<!-- Mysql -->
-	<entry key="jdbc_url">jdbc:mysql://106.14.171.91:3306/yanerwu?useUnicode=true&amp;characterEncoding=UTF-8&amp;useInformationSchema=true</entry>
+	<entry key="jdbc_url">jdbc:mysql://192.168.23.94:3306/monitor?useUnicode=true&amp;characterEncoding=UTF-8&amp;useInformationSchema=true</entry>
 	<entry key="jdbc_driver">com.mysql.jdbc.Driver</entry>
 
 	<!-- Oracle		jdbc:oracle:oci:@tnsname_devdb

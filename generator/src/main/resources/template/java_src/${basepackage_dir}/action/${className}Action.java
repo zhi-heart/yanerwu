@@ -74,8 +74,8 @@ public class ${className}Action extends BaseAction{
 	@RequestMapping(value = "/info.html", method = RequestMethod.POST)
 	public String infoEdit(${className} ${classNameLower}) {
 		try {
-            if(Tools.isEmpty(upower.getId())){
-                upowerService.save(upower);
+            if(Tools.isEmpty(${classNameLower}.getId())){
+                ${classNameLower}Service.save(upower);
             }else{
                 <#list table.columns as column>
                 <#if column.pk>
@@ -103,7 +103,7 @@ public class ${className}Action extends BaseAction{
 	<#if column.pk>
 	/**删除对象*/
     @ResponseBody
-	@RequestMapping(value = "/${table.sqlName}/delete.html", method = RequestMethod.POST)
+	@RequestMapping(value = "/delete.html", method = RequestMethod.POST)
 	public String delete(${column.javaType} [] items) {
 		try {
 			for(int i = 0; i < items.length; i++) {

@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author Zuz
  * @version 1.0
- * @Description 权限管理
+ * @Description Upower
  */@Service
 public class UpowerService{
 
@@ -27,14 +27,10 @@ public class UpowerService{
 
 	public Page findPage(Upower query,Page page) {
 		List<Object> params=new ArrayList<>();
-        StringBuilder sql2 = new StringBuilder("select * from yanerwu.u_power t where 1=1 ");
+        StringBuilder sql2 = new StringBuilder("select * from movie.u_power t where 1=1 ");
         if(Tools.isNotEmpty(query.getId())) {
             sql2.append(" and  t.id = ? ");
             params.add(query.getId());
-        }
-        if(Tools.isNotEmpty(query.getPowerId())) {
-            sql2.append(" and  t.power_id = ? ");
-            params.add(query.getPowerId());
         }
         if(Tools.isNotEmpty(query.getName())) {
             sql2.append(" and  t.name = ? ");

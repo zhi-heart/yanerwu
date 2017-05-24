@@ -1,0 +1,9 @@
+{
+  "@class" : "org.jasig.cas.services.RegexRegisteredService",
+  "id" : 10000002,
+  "name" : "wdzj-admin",
+  "serviceId" : "^http.*",
+  "evaluationOrder" : 0
+}
+
+

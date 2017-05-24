@@ -4,6 +4,57 @@
          id="WebApp_ID" version="2.5">
 
     <display-name>admin</display-name>
+
+    <!-- cas start -->
+    <listener>
+        <listener-class>org.jasig.cas.client.session.SingleSignOutHttpSessionListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>CAS Single Sign Out Filter</filter-name>
+        <filter-class>org.jasig.cas.client.session.SingleSignOutFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CAS Single Sign Out Filter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CAS Validation Filter</filter-name>
+        <filter-class>com.yanerwu.utils.cas.Cas20ProxyReceivingTicketValidationFilter</filter-class>
+        <init-param>
+            <param-name>useSession</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>redirectAfterValidation</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>CAS Validation Filter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CAS Filter</filter-name>
+        <filter-class>com.yanerwu.utils.cas.AuthenticationFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CAS Filter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+
+    <filter>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <filter-class>org.jasig.cas.client.util.HttpServletRequestWrapperFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>CAS HttpServletRequest Wrapper Filter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
+    <!-- cas end -->
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -40,9 +91,11 @@
         <servlet-name>springmvc</servlet-name>
         <url-pattern>*.html</url-pattern>
     </servlet-mapping>
-    <!--
-    <welcome-file-list>
-        <welcome-file>index.html</welcome-file>
-    </welcome-file-list>
-    -->
+    <!-- 权限自定义标签 -->
+    <jsp-config>
+        <taglib>
+            <taglib-uri>/WEB-INF/tld/util</taglib-uri>
+            <taglib-location>/WEB-INF/tld/util.tld</taglib-location>
+        </taglib>
+    </jsp-config>
 </web-app>

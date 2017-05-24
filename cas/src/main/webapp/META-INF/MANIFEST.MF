@@ -1,0 +1,14 @@
+Manifest-Version: 1.0
+Implementation-Vendor: Apereo
+Implementation-Title: Apereo CAS Web Application
+Implementation-Version: 4.1.2
+Implementation-Vendor-Id: org.jasig.cas
+Built-By: mmoayyed
+Build-Jdk: 1.7.0_79
+Specification-Vendor: Apereo
+Specification-Title: Apereo CAS Web Application
+Created-By: Apache Maven 3.3.3
+Implementation-URL: http://www.jasig.org/cas/cas-server-webapp/
+Specification-Version: 4.1.2
+Archiver-Version: Plexus Archiver
+

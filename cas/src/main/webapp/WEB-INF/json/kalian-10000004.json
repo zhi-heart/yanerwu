@@ -1,0 +1,7 @@
+{
+  "@class" : "org.jasig.cas.services.RegexRegisteredService",
+  "id" : 10000004,
+  "name" : "kalian",
+  "serviceId" : "http://localtops.etaoko.com:8086/merchant-web/login/cas",
+  "evaluationOrder" : 0
+}

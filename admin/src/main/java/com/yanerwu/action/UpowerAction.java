@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 /**
  * @author Zuz
  * @version 1.0
- * @Description 权限管理
+ * @Description Upower
  */@Component
 @RequestMapping(value = "/Upower")
 public class UpowerAction extends BaseAction{
@@ -76,7 +76,6 @@ public class UpowerAction extends BaseAction{
                 upowerService.save(upower);
             }else{
                         this.upower=upowerService.getById(upower);
-                        this.upower.setPowerId(upower.getPowerId());
                         this.upower.setName(upower.getName());
                         this.upower.setPowerPath(upower.getPowerPath());
                         this.upower.setParentUpowerId(upower.getParentUpowerId());
@@ -90,7 +89,7 @@ public class UpowerAction extends BaseAction{
 			logger.error("", e);
 		}finally {
             //记录日志
-            logService.put(request, "权限管理 > 修改", JSON.toJSONString(upower), bool ? 0 : 1);
+            logService.put(request, "Upower > 修改", JSON.toJSONString(upower), bool ? 0 : 1);
             //返回信息
             return retImessage(bool ? DWZ_STATUS_SUCCESS_CODE : DWZ_STATUS_ERROR_CODE, message, bool);
 		}
@@ -111,7 +110,7 @@ public class UpowerAction extends BaseAction{
 			logger.error("", e);
 		}finally {
             //记录日志
-            logService.put(request, "权限管理 > 删除", JSON.toJSONString(items), bool ? 0 : 1);
+            logService.put(request, "Upower > 删除", JSON.toJSONString(items), bool ? 0 : 1);
             //返回信息
             return retImessage(bool ? DWZ_STATUS_SUCCESS_CODE : DWZ_STATUS_ERROR_CODE, message, false);
 		}

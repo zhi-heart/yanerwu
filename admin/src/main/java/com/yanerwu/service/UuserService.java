@@ -16,7 +16,7 @@ import java.util.List;
 /**
  * @author Zuz
  * @version 1.0
- * @since 1.0
+ * @Description Uuser
  */
 @Service
 public class UuserService {
@@ -27,10 +27,8 @@ public class UuserService {
     private DbUtilsTemplate yanerwuTemplate;
 
     public Page findPage(Uuser query, Page page) {
-
-        List<Object> params = new ArrayList();
-
-        StringBuilder sql2 = new StringBuilder("select * from yanerwu.u_user t where 1=1 ");
+        List<Object> params = new ArrayList<>();
+        StringBuilder sql2 = new StringBuilder("select * from movie.u_user t where 1=1 ");
         if (Tools.isNotEmpty(query.getId())) {
             sql2.append(" and  t.id = ? ");
             params.add(query.getId());
@@ -64,7 +62,6 @@ public class UuserService {
             params.add(page.getOrderField());
             params.add(page.getOrderDirection());
         }
-
         return yanerwuTemplate.findPage(page, sql2.toString(), params.toArray(), Uuser.class);
     }
 
@@ -88,6 +85,7 @@ public class UuserService {
     public int delete(Uuser uuser) {
         return yanerwuTemplate.delete(uuser);
     }
+
 
     public <T> T getById(Uuser uuser) {
         return (T) yanerwuTemplate.getById(uuser);

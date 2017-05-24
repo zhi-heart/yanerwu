@@ -6,4 +6,4 @@
 <#-- jspFileBasePath 用于struts,springmvc框架的java文件引用的jsp前缀,如 /namespace/User/list.jsp的/namespace/User部分 -->
 <#assign jspFileBasePath = namespace+"/"+table.className>
 <#-- 数据库名 -->
-<#assign dataBaseName = "yanerwu">
+<#assign dataBaseName = "movie">

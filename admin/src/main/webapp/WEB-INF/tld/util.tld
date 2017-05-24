@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<taglib>
+    <tlib-version>1.0.0</tlib-version>
+    <jsp-version>2.0</jsp-version>
+    <short-name>eb</short-name>
+    <uri>http://com.wangdaizhijia.shuju/tts/taglibs</uri>
+    <description>Tool</description>
+    <tag>
+        <name>authPower</name>
+        <tag-class>com.yanerwu.tag.AuthPowerTag</tag-class>
+        <body-content>jsp</body-content>
+        <attribute>
+            <name>powerPath</name>
+            <required>true</required>
+            <!-- 支持动态传入 -->
+            <rtexprvalue>true</rtexprvalue>
+            <description>this is the power path</description>
+        </attribute>
+        <attribute>
+            <name>includePower</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+            <description>YES or NO default YES</description>
+        </attribute>
+    </tag>
+</taglib>
