@@ -19,7 +19,6 @@ import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
-import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -40,7 +39,10 @@ public class Crontab {
     @Autowired
     private ElasticSearchHelper elasticSearchHelper;
 
-    @PostConstruct
+    public static void main(String[] args) {
+        System.out.println("尼古拉斯·凯奇,汤米·里·琼斯,肖恩·扬,塞克·克杂特".replaceAll("\\pP|\\pS", ""));
+    }
+
     @Scheduled(cron = "0 0 * * * ?")
     public void synoym() {
         String sql = "select * from mv_list order by id desc limit 0,1000";
@@ -57,7 +59,6 @@ public class Crontab {
         elasticSearchHelper.bulkIndex("movie", "base", map);
     }
 
-
     //    @PostConstruct
     public void init() {
         String urlStr = "http://www.yingshidaquan.cc/vod-show-id-1-order-addtime-p-%s.html";
@@ -72,9 +73,5 @@ public class Crontab {
                 .setScheduler(new FileCacheQueueScheduler("/Users/Zuz/Desktop"))
                 .thread(5)
                 .run();
-    }
-
-    public static void main(String[] args) {
-        System.out.println("尼古拉斯·凯奇,汤米·里·琼斯,肖恩·扬,塞克·克杂特".replaceAll("\\pP|\\pS", ""));
     }
 }
