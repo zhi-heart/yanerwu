@@ -16,12 +16,17 @@
         <module>generator</module>
         <module>spark</module>
         <module>cas</module>
+        <module>test</module>
     </modules>
 
     <properties>
         <spring.version>4.1.8.RELEASE</spring.version>
         <aspectjweaver.version>1.8.9</aspectjweaver.version>
-
+        <!-- build properties -->
+        <source.jdk.version>1.8</source.jdk.version>
+        <target.jdk.version>1.8</target.jdk.version>
+        <package.environment>dev</package.environment>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
@@ -146,12 +151,41 @@
                 <version>0.6.1</version>
             </dependency>
             <!-- webmagic end -->
-
         </dependencies>
     </dependencyManagement>
 
+    <profiles>
+        <profile>
+            <id>test</id>
+            <properties>
+                <package.environment>test</package.environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>beta</id>
+            <properties>
+                <package.environment>beta</package.environment>
+            </properties>
+        </profile>
+        <profile>
+            <id>prod</id>
+            <properties>
+                <package.environment>prod</package.environment>
+            </properties>
+        </profile>
+    </profiles>
+
     <build>
         <finalName>yuqing</finalName>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>**</include>
+                </includes>
+            </resource>
+        </resources>
         <pluginManagement>
             <plugins>
                 <!-- 指定编码 -->
@@ -160,17 +194,17 @@
                     <artifactId>maven-resources-plugin</artifactId>
                     <version>2.4.3</version>
                     <configuration>
-                        <encoding>UTF-8</encoding>
+                        <encoding>${project.build.sourceEncoding}</encoding>
                     </configuration>
                 </plugin>
 
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
-                    <version>3.0</version>
+                    <version>3.2</version>
                     <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
+                        <source>${source.jdk.version}</source>
+                        <target>${target.jdk.version}</target>
                     </configuration>
                 </plugin>
             </plugins>

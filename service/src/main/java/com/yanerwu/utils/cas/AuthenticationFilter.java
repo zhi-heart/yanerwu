@@ -66,7 +66,7 @@ public class AuthenticationFilter extends AbstractCasFilter {
             log.trace("Loaded renew parameter: " + this.renew);
             setGateway(parseBoolean(getPropertyFromInitParams(filterConfig, "gateway", "false")));
             log.trace("Loaded gateway parameter: " + this.gateway);
-            super.setServerName(sys.getString("server.name"));
+            super.setServerName(sys.getString("local.server.name"));
             
             setExclusions(sys.getString("exclusions"));
             if((exclusions != null) && exclusions.trim().length() > 0) {

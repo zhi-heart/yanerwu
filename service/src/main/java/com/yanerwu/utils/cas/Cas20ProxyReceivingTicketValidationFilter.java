@@ -72,7 +72,7 @@ public class Cas20ProxyReceivingTicketValidationFilter extends AbstractTicketVal
     }
 
     public void init() {
-    	super.setServerName(ResourceBundle.getBundle("cas").getString("server.name"));
+    	super.setServerName(ResourceBundle.getBundle("cas").getString("local.server.name"));
         super.init();
         CommonUtils.assertNotNull(this.proxyGrantingTicketStorage, "proxyGrantingTicketStorage cannot be null.");
 

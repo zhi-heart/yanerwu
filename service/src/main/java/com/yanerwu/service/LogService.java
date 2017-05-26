@@ -18,20 +18,20 @@ public class LogService {
 //    @Autowired
 //    LoginService loginService;
     private Logger logger = LogManager.getLogger(getClass());
-    @Autowired
-    private DbUtilsTemplate monitorOfflineTemplate;
+//    @Autowired
+//    private DbUtilsTemplate monitorOfflineTemplate;
 
     public boolean put(Log l) {
-        String sql = "insert into shuju_operation_log (project, type, info, status) values (?,?,?,?,?)";
-        int result = monitorOfflineTemplate.update(sql, new Object[]{
-                l.getProject(),
-                l.getType(),
-                l.getInfo(),
-                l.getStatus()
-        });
-        if (result < 0) {
-            return false;
-        }
+//        String sql = "insert into shuju_operation_log (project, type, info, status) values (?,?,?,?,?)";
+//        int result = monitorOfflineTemplate.update(sql, new Object[]{
+//                l.getProject(),
+//                l.getType(),
+//                l.getInfo(),
+//                l.getStatus()
+//        });
+//        if (result < 0) {
+//            return false;
+//        }
         return true;
     }
 

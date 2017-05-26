@@ -33,9 +33,9 @@
 
     <profiles>
         <profile>
-            <id>test</id>
+            <id>prod</id>
             <properties>
-                <package.environment>test</package.environment>
+                <package.environment>prod</package.environment>
             </properties>
         </profile>
     </profiles>
@@ -51,12 +51,22 @@
                 </includes>
             </resource>
         </resources>
+
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${source.jdk.version}</source>
+                    <target>${target.jdk.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
             <!-- 防止乱码 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
-                <version>2.4.3</version>
                 <configuration>
                     <encoding>${project.build.sourceEncoding}</encoding>
                 </configuration>
