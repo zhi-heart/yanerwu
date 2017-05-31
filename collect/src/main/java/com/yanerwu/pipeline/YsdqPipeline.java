@@ -33,8 +33,8 @@ public class YsdqPipeline implements Pipeline {
             String insertSql = "insert into es_word (text, type) values (?,?)";
 
             for (String n : nameStr.split("/")) {
-                n = n.replaceAll("\\pP|\\pS", "");
-                if(!Cache.movieWordSet.contains(n)){
+//                n = n.replaceAll("\\pP|\\pS", "");
+                if (!Cache.movieWordSet.contains(n)) {
                     yanerwuTemplate.update(insertSql, new Object[]{
                             n,
                             1
@@ -44,8 +44,8 @@ public class YsdqPipeline implements Pipeline {
             }
 
             for (String a : m.getActor().split(",")) {
-                a = a.replaceAll("\\pP|\\pS", "");
-                if(!Cache.movieWordSet.contains(a)) {
+//                a = a.replaceAll("\\pP|\\pS", "");
+                if (!Cache.movieWordSet.contains(a)) {
                     yanerwuTemplate.update(insertSql, new Object[]{
                             a,
                             2

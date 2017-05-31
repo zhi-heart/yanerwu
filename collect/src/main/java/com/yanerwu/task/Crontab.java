@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
-import us.codecraft.webmagic.scheduler.FileCacheQueueScheduler;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +42,8 @@ public class Crontab {
         System.out.println("尼古拉斯·凯奇,汤米·里·琼斯,肖恩·扬,塞克·克杂特".replaceAll("\\pP|\\pS", ""));
     }
 
-    @Scheduled(cron = "0 0 * * * ?")
+    //    @Scheduled(cron = "0 0 * * * ?")
+//    @Scheduled(fixedDelay = 1000 * 60 *30)
     public void synoym() {
         String sql = "select * from mv_list order by id desc limit 0,1000";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
@@ -59,18 +59,18 @@ public class Crontab {
         elasticSearchHelper.bulkIndex("movie", "base", map);
     }
 
-    //    @PostConstruct
-    public void init() {
+    @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
+    public void collectMovie() {
         String urlStr = "http://www.yingshidaquan.cc/vod-show-id-1-order-addtime-p-%s.html";
         List<String> urls = new ArrayList<>();
-        for (int i = 1; i <= 3; i++) {
+        for (int i = 1; i <= 1105; i++) {
             urls.add(String.format(urlStr, i));
         }
 
         Spider.create(new YsdqProcessor())
                 .addUrl(urls.toArray(new String[urls.size()]))
                 .addPipeline(new YsdqPipeline(yanerwuTemplate))
-                .setScheduler(new FileCacheQueueScheduler("/Users/Zuz/Desktop"))
+//                .setScheduler(new FileCacheQueueScheduler("/Users/Zuz/Desktop"))
                 .thread(5)
                 .run();
     }
