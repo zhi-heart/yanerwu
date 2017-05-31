@@ -20,6 +20,10 @@ public class YsdqPipeline implements Pipeline {
         this.yanerwuTemplate = yanerwuTemplate;
     }
 
+    public static void main(String[] args) {
+        System.out.println("杨光的快乐生活(电影版)".replaceAll("(\\(.*\\))", ""));
+    }
+
     @Override
     public void process(ResultItems resultItems, Task task) {
         MvList m = resultItems.get("m");
@@ -27,13 +31,13 @@ public class YsdqPipeline implements Pipeline {
             String sql = "delete from mv_list where original_url = ?";
             yanerwuTemplate.update(sql, m.getOriginalUrl());
             yanerwuTemplate.insert(m);
-            String nameStr = m.getName()
-                    .replaceAll("(\\[.*\\])", "");//干掉[]
+            String nameStr = m.getName();
 
             String insertSql = "insert into es_word (text, type) values (?,?)";
 
-            for (String n : nameStr.split("/")) {
+            for (String n : nameStr.replace("：", "/").split("/")) {
 //                n = n.replaceAll("\\pP|\\pS", "");
+                n = n.trim();
                 if (!Cache.movieWordSet.contains(n)) {
                     yanerwuTemplate.update(insertSql, new Object[]{
                             n,

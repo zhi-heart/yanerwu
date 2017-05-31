@@ -29,7 +29,7 @@ public class YsdqProcessor extends BaseProcessor implements PageProcessor {
         String currentUrl = page.getUrl().toString();
 
         //详情页
-        if(currentUrl.contains("http://www.yingshidaquan.cc/html/")){
+        if (currentUrl.contains("http://www.yingshidaquan.cc/html/")) {
             MvList m = Cache.map.get(currentUrl);
 
             page.getHtml().xpath("//div[@class='pic']/img/@src").get();
@@ -38,7 +38,7 @@ public class YsdqProcessor extends BaseProcessor implements PageProcessor {
             m.setDownloadUrl(page.getHtml().regex("downlist\".*unescape\\(\"(.*)\\\"\\)").get());
 
             page.putField("m", m);
-        }else{
+        } else {
             List<String> infoStrList = page.getHtml().xpath("//div[@class=info]").all();
             List<MvList> mvs = new ArrayList<>();
             for (String infoStr : infoStrList) {
@@ -47,11 +47,15 @@ public class YsdqProcessor extends BaseProcessor implements PageProcessor {
                 Html html = new Html(Jsoup.parse(infoStr));
 
                 m.setOriginalUrl(html.xpath("//h2/a/@href").get());
-                m.setName(html.xpath("//h2/a/@title").get());
-                m.setActor(html.xpath("//p[1]/text()").get().replace("主演：",""));
-                m.setUpdTime(String.format("2017-%s",html.xpath("//p[2]/text()").get().replace("更新：","")));
-                m.setStatus(html.xpath("//p[3]/text()").get().replace("状态：",""));
-                m.setType(html.xpath("//p[4]/text()").get().replace("类型：",""));
+                m.setName(
+                        html.xpath("//h2/a/@title").get()
+                                .replaceAll("(\\[.*\\])", "")//干掉[]
+                                .replaceAll("(\\(.*\\))", "")//干掉()
+                );
+                m.setActor(html.xpath("//p[1]/text()").get().replace("主演：", ""));
+                m.setUpdTime(String.format("2017-%s", html.xpath("//p[2]/text()").get().replace("更新：", "")));
+                m.setStatus(html.xpath("//p[3]/text()").get().replace("状态：", ""));
+                m.setType(html.xpath("//p[4]/text()").get().replace("类型：", ""));
                 m.setUuid(UUID.randomUUID().toString());
                 mvs.add(m);
 
