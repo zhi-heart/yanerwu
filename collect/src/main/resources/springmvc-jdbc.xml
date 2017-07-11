@@ -38,4 +38,26 @@
 	        <property name="dataSource" ref="yanerwuDataSource" />
 	</bean>
 
+    <!-- book-->
+    <bean id="bookDataSource" class="com.yanerwu.common.DataSource" destroy-method="close">
+        <property name="driverClassName" value="${database.driverClassName}" />
+        <property name="url" value="${book.url}" />
+        <property name="username" value="${book.username}" />
+        <property name="password" value="${book.password}" />
+        <property name="initialSize" value="2" />
+        <property name="maxActive" value="100" />
+        <property name="maxWait" value="100" />
+        <property name="maxIdle" value="100" />
+        <property name="minIdle" value="0" />
+        <property name="removeAbandoned" value="true" />
+        <property name="removeAbandonedTimeout" value="60" />
+        <property name="logAbandoned" value="true" />
+        <property name="validationQuery" value="select 1 from dual" />
+        <property name="testOnBorrow" value="true" />
+    </bean>
+    <!-- 下面定义了DbUtils的一个模板操作Bean -->
+    <bean id="bookTemplate" class="com.yanerwu.common.DbUtilsTemplate">
+        <property name="dataSource" ref="bookDataSource" />
+    </bean>
+
 </beans>

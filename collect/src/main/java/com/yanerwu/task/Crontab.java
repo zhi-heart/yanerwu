@@ -14,7 +14,6 @@ import org.apache.commons.dbutils.RowProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 
@@ -59,7 +58,7 @@ public class Crontab {
         elasticSearchHelper.bulkIndex("movie", "base", map);
     }
 
-    @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
+//    @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
     public void collectMovie() {
         String urlStr = "http://www.yingshidaquan.cc/vod-show-id-1-order-addtime-p-%s.html";
         List<String> urls = new ArrayList<>();

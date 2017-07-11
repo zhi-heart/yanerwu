@@ -1,9 +1,9 @@
 package com.yanerwu.action;
 
-import com.yanerwu.Cache;
 import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.pipeline.YsdqPipeline;
 import com.yanerwu.processor.YsdqProcessor;
+import com.yanerwu.service.BiqugeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,9 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import us.codecraft.webmagic.Spider;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 /**
@@ -29,13 +27,17 @@ public class CollectAction {
 
     @Autowired
     private DbUtilsTemplate yanerwuTemplate;
+    @Autowired
+    private DbUtilsTemplate bookTemplate;
+    @Autowired
+    private BiqugeService biqugeService;
 
     @ResponseBody
     @RequestMapping("/collect.html")
     public String collect() {
         String urlStr = "http://www.yingshidaquan.cc/vod-show-id-1-order-addtime-p-%s.html";
         List<String> urls = new ArrayList<>();
-        for (int i = 1; i <=1098 ; i++) {
+        for (int i = 1; i <= 1098; i++) {
 //        for (int i = 1; i <= 1; i++) {
             urls.add(String.format(urlStr, i));
         }
@@ -46,6 +48,13 @@ public class CollectAction {
                 .thread(10)
                 .run();
         return "true";
+    }
+
+    @ResponseBody
+    @RequestMapping("/book.html")
+    public String book(String name) {
+        biqugeService.biqugeDetailByName(name);
+        return name;
     }
 
     @ResponseBody

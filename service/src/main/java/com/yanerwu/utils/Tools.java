@@ -3,13 +3,14 @@ package com.yanerwu.utils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import sun.misc.BASE64Encoder;
 
 import java.io.*;
 import java.lang.reflect.Array;
 import java.net.URLDecoder;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @Author: Zuz
@@ -95,29 +96,30 @@ public class Tools {
 
     /**
      * 可以用于判断 Map,Collection,String,Array是否为空
+     *
      * @param o
      * @return
      */
-    public static boolean isEmpty(Object o)  {
-        if(o == null) return true;
+    public static boolean isEmpty(Object o) {
+        if (o == null) return true;
 
-        if(o instanceof String) {
-            if(((String)o).length() == 0){
+        if (o instanceof String) {
+            if (((String) o).length() == 0) {
                 return true;
             }
-        } else if(o instanceof Collection) {
-            if(((Collection)o).isEmpty()){
+        } else if (o instanceof Collection) {
+            if (((Collection) o).isEmpty()) {
                 return true;
             }
-        } else if(o.getClass().isArray()) {
-            if(Array.getLength(o) == 0){
+        } else if (o.getClass().isArray()) {
+            if (Array.getLength(o) == 0) {
                 return true;
             }
-        } else if(o instanceof Map) {
-            if(((Map)o).isEmpty()){
+        } else if (o instanceof Map) {
+            if (((Map) o).isEmpty()) {
                 return true;
             }
-        }else {
+        } else {
             return false;
         }
 
@@ -126,10 +128,11 @@ public class Tools {
 
     /**
      * 可以用于判断 Map,Collection,String,Array是否不为空
+     *
      * @param c
      * @return
      */
-    public static boolean isNotEmpty(Object c) throws IllegalArgumentException{
+    public static boolean isNotEmpty(Object c) throws IllegalArgumentException {
         return !isEmpty(c);
     }
 
@@ -138,11 +141,10 @@ public class Tools {
      * URLDecoder 解码地址
      * </p>
      *
-     * @param url
-     *            解码地址
+     * @param url 解码地址
      * @return
      */
-    public static String decodeURL(String url,String encoding) {
+    public static String decodeURL(String url, String encoding) {
         if (url == null) {
             return null;
         }
@@ -161,16 +163,17 @@ public class Tools {
 
     /**
      * url 参数值获取
+     *
      * @param url
      * @param name
      * @return
      */
-    public static String getUrlParamsByName(String url,String name){
+    public static String getUrlParamsByName(String url, String name) {
         String retStr = "";
-        if(StringUtils.isNotBlank(url)&&url.contains("?")){
+        if (StringUtils.isNotBlank(url) && url.contains("?")) {
             Map<String, String> map = new HashMap<>();
             String[] paramsArrays = url.split("\\?")[1].split("&");
-            for (String pstr:paramsArrays) {
+            for (String pstr : paramsArrays) {
                 String[] s = pstr.split("=");
                 map.put(s[0], decodeURL(s[1], "utf-8"));
             }
@@ -179,14 +182,14 @@ public class Tools {
         return retStr;
     }
 
-    public static String listToStr(List<?> list,String s){
+    public static String listToStr(List<?> list, String s) {
         StringBuffer sb = new StringBuffer();
         try {
-            for (Object l:list) {
+            for (Object l : list) {
                 sb.append(sb);
                 sb.append(",");
             }
-            if(list.size()>0){
+            if (list.size() > 0) {
                 sb.delete(sb.length() - 1, sb.length());
             }
         } catch (Exception e) {
@@ -195,12 +198,35 @@ public class Tools {
         return sb.toString();
     }
 
-    public static String replaceToNull(String str,String ... repStr){
-        String result=str;
+    public static String replaceToNull(String str, String... repStr) {
+        String result = str;
         for (String r : repStr) {
             result.replace(r, "");
         }
         return str;
     }
 
+    /**
+     * 利用MD5进行加密
+     *
+     * @param str 待加密的字符串
+     * @return 加密后的字符串
+     * @throws NoSuchAlgorithmException     没有这种产生消息摘要的算法
+     * @throws UnsupportedEncodingException
+     */
+    public static String encoderMd5(String str) {
+        String newstr=str;
+        try{
+            MessageDigest md5 = MessageDigest.getInstance("MD5");
+            BASE64Encoder base64en = new BASE64Encoder();
+            newstr = base64en.encode(md5.digest(str.getBytes("utf-8")));
+        }catch (Exception e) {
+            e.printStackTrace();
+        }
+        return newstr;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(encoderMd5("aaaa"));
+    }
 }

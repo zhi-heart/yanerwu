@@ -13,9 +13,9 @@ public class BaseProcessor {
                 .setSleepTime(1000) // 睡眠1秒
                 .setTimeOut(1000 * 60) // 60秒超时
                 .setRetryTimes(3) // 失败重试3次,仅只网络访问
-                .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8") //
+                .addHeader("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8") //
                 .addHeader("Cache-Control", "max-age=0") //
-                .addHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.3; Win64; x64; rv:47.0) Gecko/20100101 Firefox/47.0")
+                .addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/59.0.3071.115 Safari/537.36")
                 .setCharset("UTF-8");
     }
 }

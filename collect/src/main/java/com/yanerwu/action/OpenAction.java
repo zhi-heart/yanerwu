@@ -1,7 +1,6 @@
 package com.yanerwu.action;
 
 import com.yanerwu.Cache;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -18,12 +17,12 @@ import java.util.Date;
 @Controller
 public class OpenAction {
 
-    @Autowired
-    protected HttpServletResponse response;
+//    @Autowired
+//    protected HttpServletResponse response;
 
     @ResponseBody
     @RequestMapping("/open/movie-word.html")
-    public String movieWord() {
+    public String movieWord(HttpServletResponse response) {
         StringBuffer sb = new StringBuffer();
         for (String s : Cache.movieWordSet) {
             sb.append(s.trim());

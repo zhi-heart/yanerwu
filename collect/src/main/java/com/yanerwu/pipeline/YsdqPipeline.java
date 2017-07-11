@@ -47,7 +47,7 @@ public class YsdqPipeline implements Pipeline {
                 }
             }
 
-            for (String a : m.getActor().replace(" ",",").split(",")) {
+            for (String a : m.getActor().replace(" ", ",").split(",")) {
 //                a = a.replaceAll("\\pP|\\pS", "");
                 if (!Cache.movieWordSet.contains(a)) {
                     yanerwuTemplate.update(insertSql, new Object[]{
