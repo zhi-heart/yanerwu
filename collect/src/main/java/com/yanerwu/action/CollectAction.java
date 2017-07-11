@@ -4,6 +4,7 @@ import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.pipeline.YsdqPipeline;
 import com.yanerwu.processor.YsdqProcessor;
 import com.yanerwu.service.BiqugeService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,11 @@ public class CollectAction {
     @ResponseBody
     @RequestMapping("/book.html")
     public String book(String name) {
-        biqugeService.biqugeDetailByName(name);
+        if (StringUtils.isBlank(name)) {
+            biqugeService.biqugeDetailByName();
+        }else{
+            biqugeService.biqugeDetailByName(name);
+        }
         return name;
     }
 
