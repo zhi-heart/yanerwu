@@ -76,7 +76,7 @@ public class BiqugeService {
     }
 
     public void biqugeDetailByName() {
-        String sql = "SELECT * FROM book_summary WHERE biquge_url IS NOT NULL AND biquge_url != '' AND update_time < date_sub(now(), INTERVAL 3 HOUR) LIMIT 10 ";
+        String sql = "SELECT * FROM book_summary WHERE biquge_url IS NOT NULL AND biquge_url != '' AND update_time < date_sub(now(), INTERVAL 3 HOUR) LIMIT 999 ";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         List<BookSummary> bookSummarys = bookTemplate.find(BookSummary.class, sql, processor);
         biqugeDetailByName(bookSummarys);
