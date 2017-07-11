@@ -68,6 +68,7 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
                 b.setTitle(title);
                 b.setTitleMd5(titleMd5);
                 b.setNo(i);
+                b.setSourceUrl(biqugeUrls.get(i));
                 b.setUpdateTime(DateUtils.getNowTime());
                 bds.add(b);
 

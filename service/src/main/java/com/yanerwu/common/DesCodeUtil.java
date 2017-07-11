@@ -1,13 +1,13 @@
 package com.yanerwu.common;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.net.URLEncoder;
-import java.security.SecureRandom;
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.DESKeySpec;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
+import java.security.SecureRandom;
 
 public class DesCodeUtil {
 	private static final String PASSWORD_CRYPT_KEY = "_DleNetLoanYincAn__";

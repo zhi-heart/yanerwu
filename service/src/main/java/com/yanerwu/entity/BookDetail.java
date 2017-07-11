@@ -49,6 +49,9 @@ public class BookDetail extends BaseEntity implements java.io.Serializable{
     /**内容*/
 	@Column(name="content")
 	private String content;
+    /**章节链接*/
+    @Column(name="source_url")
+    private String sourceUrl;
     /**更新时间*/
 	@Column(name="update_time")
 	private String updateTime;
@@ -98,7 +101,16 @@ public class BookDetail extends BaseEntity implements java.io.Serializable{
 	public String getContent() {
 		return this.content;
 	}
-	public void setUpdateTime(String value) {
+
+    public String getSourceUrl() {
+        return sourceUrl;
+    }
+
+    public void setSourceUrl(String sourceUrl) {
+        this.sourceUrl = sourceUrl;
+    }
+
+    public void setUpdateTime(String value) {
 		this.updateTime = value;
 	}
 

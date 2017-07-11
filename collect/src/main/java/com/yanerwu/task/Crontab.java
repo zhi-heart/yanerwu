@@ -8,6 +8,7 @@ import com.yanerwu.common.es.ElasticSearchHelper;
 import com.yanerwu.entity.MvList;
 import com.yanerwu.pipeline.YsdqPipeline;
 import com.yanerwu.processor.YsdqProcessor;
+import com.yanerwu.service.BiqugeService;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
@@ -31,7 +32,8 @@ import java.util.Map;
 public class Crontab {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
-
+    @Autowired
+    BiqugeService biqugeService;
     @Autowired
     private DbUtilsTemplate yanerwuTemplate;
     @Autowired
@@ -58,7 +60,7 @@ public class Crontab {
         elasticSearchHelper.bulkIndex("movie", "base", map);
     }
 
-//    @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
+    //    @Scheduled(fixedDelay = 1000 * 60 * 60 * 24)
     public void collectMovie() {
         String urlStr = "http://www.yingshidaquan.cc/vod-show-id-1-order-addtime-p-%s.html";
         List<String> urls = new ArrayList<>();
@@ -72,5 +74,10 @@ public class Crontab {
 //                .setScheduler(new FileCacheQueueScheduler("/Users/Zuz/Desktop"))
                 .thread(5)
                 .run();
+    }
+
+//    @Scheduled(cron = "0 0 6-24/2 * * ?")
+    public void collectBiquge() {
+        biqugeService.biqugeDetailByName();
     }
 }

@@ -28,13 +28,12 @@ import java.util.concurrent.Executors;
  */
 @Service
 public class BiqugeService {
-    static ExecutorService exec = Executors.newFixedThreadPool(3);
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private DbUtilsTemplate bookTemplate;
-
     public void biqugeDetailByName(List<BookSummary> bookSummarys) {
         List<String> bookList = new ArrayList<>();
+        ExecutorService exec = Executors.newFixedThreadPool(3);
         for (BookSummary bs : bookSummarys) {
             if (StringUtils.isBlank(bs.getBiqugeUrl())) {
                 continue;
