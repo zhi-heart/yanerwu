@@ -15,7 +15,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import us.codecraft.webmagic.Spider;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /**
  * @Author Zuz
@@ -24,31 +28,45 @@ import java.util.List;
  */
 @Service
 public class BiqugeService {
+    static ExecutorService exec = Executors.newFixedThreadPool(3);
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
     private DbUtilsTemplate bookTemplate;
 
     public void biqugeDetailByName(List<BookSummary> bookSummarys) {
+        List<String> bookList = new ArrayList<>();
         for (BookSummary bs : bookSummarys) {
             if (StringUtils.isBlank(bs.getBiqugeUrl())) {
                 continue;
             }
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    long l = System.currentTimeMillis();
-                    MDC.put("book", bs.getName());
-                    Spider.create(new BiqugeProcessor(bs, bookTemplate))
-                            .addUrl(bs.getBiqugeUrl())
-                            .thread(5)
-                            .run();
-                    bs.setUpdateTime(DateUtils.getNowTime());
-                    bookTemplate.update(bs);
-                    logger.info("[{}]采集完毕,耗时{}秒", bs.getName(), (System.currentTimeMillis() - l) / 1000);
-                }
-            }).start();
+            bookList.add(bs.getName());
+            exec.execute(
+                    () -> {
+                        long l = System.currentTimeMillis();
+                        MDC.put("book", bs.getName());
+                        Spider.create(new BiqugeProcessor(bs, bookTemplate))
+                                .addUrl(bs.getBiqugeUrl())
+                                .thread(5)
+                                .run();
+                        bs.setUpdateTime(DateUtils.getNowTime());
+                        bookTemplate.update(bs);
+                        logger.info("[{}]采集完毕,耗时{}秒", bs.getName(), (System.currentTimeMillis() - l) / 1000);
+                    }
+            );
         }
+        exec.shutdown();
+        while (true) {
+            if (exec.isTerminated()) {
+                logger.info("[{}]采集结束",Arrays.toString(bookList.toArray()));
+                break;
+            }
+            try {
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                // TODO: handle exception
+            }
+        }
+
     }
 
     public void biqugeDetailByName(String... name) {
@@ -59,7 +77,7 @@ public class BiqugeService {
     }
 
     public void biqugeDetailByName() {
-        String sql = "select * from book_summary where biquge_url is not null and biquge_url!='' limit 3 and ";
+        String sql = "SELECT * FROM book_summary WHERE biquge_url IS NOT NULL AND biquge_url != '' AND update_time < date_sub(now(), INTERVAL 3 HOUR) LIMIT 10 ";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         List<BookSummary> bookSummarys = bookTemplate.find(BookSummary.class, sql, processor);
         biqugeDetailByName(bookSummarys);

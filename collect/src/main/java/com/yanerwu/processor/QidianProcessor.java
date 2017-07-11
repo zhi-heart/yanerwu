@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.yanerwu.common.BaseProcessor;
 import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.entity.BookSummary;
+import com.yanerwu.utils.DateUtils;
 import com.yanerwu.vo.QidianVo;
 import com.yanerwu.vo.Record;
 import org.slf4j.Logger;
@@ -46,6 +47,7 @@ public class QidianProcessor extends BaseProcessor implements PageProcessor {
             b.setStatus(2);
             b.setType(r.getCat());
             b.setTypeId(r.getCatId());
+            b.setCreateTime(DateUtils.getNowTime());
             bs.add(b);
         }
         bookTemplate.insert(bs);
