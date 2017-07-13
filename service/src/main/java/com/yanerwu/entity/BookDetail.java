@@ -49,6 +49,9 @@ public class BookDetail extends BaseEntity implements java.io.Serializable{
     /**内容*/
 	@Column(name="content")
 	private String content;
+    /**内容字节*/
+    @Column(name="content_bytes")
+    private Long contentBytes;
     /**章节链接*/
     @Column(name="source_url")
     private String sourceUrl;
@@ -124,6 +127,14 @@ public class BookDetail extends BaseEntity implements java.io.Serializable{
 
     public void setTitleMd5(String titleMd5) {
         this.titleMd5 = titleMd5;
+    }
+
+    public Long getContentBytes() {
+        return contentBytes;
+    }
+
+    public void setContentBytes(Long contentBytes) {
+        this.contentBytes = contentBytes;
     }
 
     public String toString() {

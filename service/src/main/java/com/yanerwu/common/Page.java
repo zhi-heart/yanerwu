@@ -19,7 +19,7 @@ public class Page<T> implements Serializable, Iterable<T> {
     /**
      * 每页显示多少条
      */
-    private long numPerPage = 500;
+    private long numPerPage = 20;
     /**
      * 页标数字多少个
      */
