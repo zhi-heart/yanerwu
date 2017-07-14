@@ -20,7 +20,7 @@
 <body>
 
 <div class="page-group">
-    <div id="page-infinite-scroll-bottom-1" class="page page-current">
+    <div id="page-infinite-scroll-bottom-${bookId}" class="page page-current">
         <input type="hidden" id="bookId" name="bookId" value="${bookId}"/>
         <header class="bar bar-nav">
             <a class="button button-link button-nav pull-left" data-no-cache="true" href="/index.html">
@@ -62,7 +62,7 @@
 </body>
 <script>
     //无限滚动
-    $(document).on("pageInit", "#page-infinite-scroll-bottom-1", function (e, id, page) {
+    $(document).on("pageInit", "#page-infinite-scroll-bottom-${bookId}", function (e, id, page) {
         var loading = false;
         // 每页多少条
         var numPerPage = 20;
