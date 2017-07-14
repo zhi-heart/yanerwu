@@ -15,7 +15,7 @@ public class GeneratorMain {
 
         g.deleteOutRootDir();                //删除生成器的输出目录
 
-        g.generateByTable("u_user","u_power");    //通过数据库表生成文件,template为模板的根目录
+        g.generateByTable("book_summary");    //通过数据库表生成文件,template为模板的根目录
 //		g.generateByAllTable();	//自动搜索数据库中的所有表并生成文件,template为模板的根目录
 //		g.generateByClass(Blog.class,"template_clazz");
 
