@@ -23,11 +23,11 @@
     <div id="page-infinite-scroll-bottom-${bookId}" class="page page-current">
         <input type="hidden" id="bookId" name="bookId" value="${bookId}"/>
         <header class="bar bar-nav">
-            <a class="button button-link button-nav pull-left" data-no-cache="true" href="/index.html">
+            <a class="button button-link button-nav pull-left external" data-no-cache="true" href="/index.html">
                 <span class="icon icon-left"></span>
                 主页
             </a>
-            <a class="button button-link button-nav pull-right"
+            <a class="button button-link button-nav pull-right external"
                data-no-cache="true"
                href="list.html?bookId=${bookId}&orderField=no&orderDirection=asc">
                 升序
@@ -40,7 +40,7 @@
             <div class="list-block" style="margin: 0;">
                 <ul class="list-container">
                     <c:forEach var="item" items="${page.result}">
-                        <a href="info.html?id=${item.id}" class="item-link" data-no-cache="true">
+                        <a href="info.html?id=${item.id}" class="item-link external" data-no-cache="true">
                             <li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">${item.title}</div>
@@ -86,7 +86,7 @@
             }, function (dataStr) {
                 var data = $.parseJSON(dataStr);
                 for (var i in data) {
-                    html += '<a href="info.html?id=' + data[i].id + '" class="item-link" data-no-cache="true"> <li class="item-content"> <div class="item-inner"> <div class="item-title">' + data[i].title + '</div> </div> </li> </a>';
+                    html += '<a href="info.html?id=' + data[i].id + '" class="item-link external" data-no-cache="true"> <li class="item-content"> <div class="item-inner"> <div class="item-title">' + data[i].title + '</div> </div> </li> </a>';
                 }
                 // 添加新条目
                 $('.infinite-scroll .list-container').append(html);

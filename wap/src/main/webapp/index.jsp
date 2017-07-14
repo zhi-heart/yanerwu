@@ -21,7 +21,7 @@
         <form method="post" action="index.html">
             <div class="bar bar-header-secondary" style="top: 0rem;">
                 <div class="searchbar">
-                    <a class="searchbar-cancel">取消</a>
+                    <a class="searchbar-cancel external">取消</a>
 
                     <div class="search-input">
                         <label class="icon icon-search" for="search"></label>
@@ -35,7 +35,7 @@
                 <ul>
                     <c:forEach var="item" items="${page.result}">
                         <li>
-                            <a href="BookDetail/list.html?bookId=${item.id}"  class="external item-link item-content">
+                            <a href="BookDetail/list.html?bookId=${item.id}"  class="external item-link item-content external">
                                 <div class="item-media"><img
                                         src="http://qidian.qpic.cn/qdbimg/349573/${item.qidianId}/150"
                                         width="80"></div>
