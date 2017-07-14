@@ -69,7 +69,6 @@ public class BookDetailAction extends BaseAction {
             page.setOrderDirection("desc");
         }
         String result = JSON.toJSONString(bookDetailService.findPage(bookDetail, page).getResult());
-        System.out.println(bookDetail.getBookId());
         return result;
     }
 

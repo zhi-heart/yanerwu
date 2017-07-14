@@ -38,6 +38,6 @@
 </div>
 </body>
 <script>
-    $.init();
     $.config = {router: false}
+    $.init();
 </script>

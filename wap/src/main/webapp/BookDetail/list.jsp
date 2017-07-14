@@ -78,9 +78,11 @@
             var bookId = $("#bookId").val()
 
             $.post('json-list.html', {
-                bookId: '${bookId}',
+                bookId: bookId,
                 numPerPage: 20,
-                pageNum: lastIndex
+                pageNum: lastIndex,
+                orderField: orderField,
+                orderDirection: orderDirection
             }, function (dataStr) {
                 var data = $.parseJSON(dataStr);
                 for (var i in data) {
@@ -113,5 +115,6 @@
             $.refreshScroller();
         });
     });
+    $.config = {router: false}
     $.init();
 </script>

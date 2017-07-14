@@ -35,7 +35,7 @@
                 <ul>
                     <c:forEach var="item" items="${page.result}">
                         <li>
-                            <a href="BookDetail/list.html?bookId=${item.id}" data-no-cache="true" class="item-link item-content">
+                            <a href="BookDetail/list.html?bookId=${item.id}"  class="external item-link item-content">
                                 <div class="item-media"><img
                                         src="http://qidian.qpic.cn/qdbimg/349573/${item.qidianId}/150"
                                         width="80"></div>
@@ -100,6 +100,6 @@
             $.refreshScroller();
         });
     });
-    $.init();
     $.config = {router: false}
+    $.init();
 </script>
