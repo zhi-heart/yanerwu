@@ -18,24 +18,29 @@
 
 </head>
 <body>
+
 <div class="page-group">
-    <div id="page-infinite-scroll-bottom" class="page">
+    <div id="page-infinite-scroll-bottom-1" class="page page-current">
+        <input type="hidden" id="bookId" name="bookId" value="${bookId}"/>
         <header class="bar bar-nav">
-            <a class="button button-link button-nav pull-left" href="/index.html">
+            <a class="button button-link button-nav pull-left" data-no-cache="true" href="/index.html">
                 <span class="icon icon-left"></span>
                 主页
             </a>
-            <a class="button button-link button-nav pull-right" href="list.html?bookId=${bookId}&orderField=no&orderDirection=asc">
+            <a class="button button-link button-nav pull-right"
+               data-no-cache="true"
+               href="list.html?bookId=${bookId}&orderField=no&orderDirection=asc">
                 升序
                 <span class="icon icon-right"></span>
             </a>
+
             <h1 class="title">底部无限滚动</h1>
         </header>
         <div class="content infinite-scroll" data-distance="100">
             <div class="list-block" style="margin: 0;">
                 <ul class="list-container">
                     <c:forEach var="item" items="${page.result}">
-                        <a href="info.html?id=${item.id}" class="item-link">
+                        <a href="info.html?id=${item.id}" class="item-link" data-no-cache="true">
                             <li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">${item.title}</div>
@@ -52,27 +57,34 @@
             </div>
         </div>
     </div>
-
 </div>
+
 </body>
 <script>
     //无限滚动
-    $(document).on("pageInit", "#page-infinite-scroll-bottom", function (e, id, page) {
+    $(document).on("pageInit", "#page-infinite-scroll-bottom-1", function (e, id, page) {
         var loading = false;
         // 每页多少条
         var numPerPage = 20;
         // 最多可加载的条目
         var maxItems = ${page.totalCount};
         var pageNum = $('.list-container li').length;
-        var orderField="${orderField}";
-        var orderDirection="${orderDirection}";
+        var orderField = "${orderField}";
+        var orderDirection = "${orderDirection}";
 
         function addItems(number, lastIndex) {
             // 生成新条目的HTML
             var html = '';
-            $.getJSON("json-list.html?bookId=${bookId}&numPerPage=20&pageNum=" + lastIndex, function (data) {
+            var bookId = $("#bookId").val()
+
+            $.post('json-list.html', {
+                bookId: '${bookId}',
+                numPerPage: 20,
+                pageNum: lastIndex
+            }, function (dataStr) {
+                var data = $.parseJSON(dataStr);
                 for (var i in data) {
-                    html += '<li class="item-content"><div class="item-inner"><div class="item-title">' + data[i].title + '</div></div></li>';
+                    html += '<a href="info.html?id=' + data[i].id + '" class="item-link" data-no-cache="true"> <li class="item-content"> <div class="item-inner"> <div class="item-title">' + data[i].title + '</div> </div> </li> </a>';
                 }
                 // 添加新条目
                 $('.infinite-scroll .list-container').append(html);
@@ -102,5 +114,4 @@
         });
     });
     $.init();
-    $.config = {router: false}
 </script>

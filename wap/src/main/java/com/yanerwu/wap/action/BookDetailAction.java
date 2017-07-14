@@ -43,6 +43,10 @@ public class BookDetailAction extends BaseAction {
     @RequestMapping(value = "/list.html")
     public String list(BookDetail bookDetail, Page page) {
         attribute();
+        if (null == bookDetail.getBookId()) {
+            logger.error("bookId 为空");
+            return null;
+        }
         if (StringUtils.isBlank(page.getOrderDirection())) {
             page.setOrderField("no");
             page.setOrderDirection("desc");
@@ -55,11 +59,17 @@ public class BookDetailAction extends BaseAction {
     @ResponseBody
     @RequestMapping(value = "/json-list.html")
     public String jsonList(BookDetail bookDetail, Page page) {
+        String bookId = request.getParameter("bookId");
+        if (null == bookDetail.getBookId()) {
+            logger.error("bookId 为空");
+            return null;
+        }
         if (StringUtils.isBlank(page.getOrderDirection())) {
             page.setOrderField("no");
             page.setOrderDirection("desc");
         }
         String result = JSON.toJSONString(bookDetailService.findPage(bookDetail, page).getResult());
+        System.out.println(bookDetail.getBookId());
         return result;
     }
 

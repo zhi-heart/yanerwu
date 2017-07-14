@@ -34,7 +34,6 @@ public class BaseAction {
                 String inputName = (String) enumeration.nextElement();// 获取元素名
                 request.setAttribute(inputName, request.getParameter(inputName));
             }
-            System.out.println();
         }
     }
 

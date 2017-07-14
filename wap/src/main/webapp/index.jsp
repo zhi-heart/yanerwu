@@ -35,9 +35,9 @@
                 <ul>
                     <c:forEach var="item" items="${page.result}">
                         <li>
-                            <a href="BookDetail/list.html?bookId=${item.id}" class="item-link item-content">
+                            <a href="BookDetail/list.html?bookId=${item.id}" data-no-cache="true" class="item-link item-content">
                                 <div class="item-media"><img
-                                        src="http://gqianniu.alicdn.com/bao/uploaded/i4//tfscom/i3/TB10LfcHFXXXXXKXpXXXXXXXXXX_!!0-item_pic.jpg_250x250q60.jpg"
+                                        src="http://qidian.qpic.cn/qdbimg/349573/${item.qidianId}/150"
                                         width="80"></div>
                                 <div class="item-inner">
                                     <div class="item-title-row">

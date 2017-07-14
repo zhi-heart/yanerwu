@@ -19,11 +19,11 @@
 <div class="page-group">
     <div class="content">
         <header class="bar bar-nav">
-            <a class="button button-link button-nav pull-left" href="list.html">
+            <a class="button button-link button-nav pull-left" href="list.html?bookId=${entity.bookId}" data-no-cache="true">
                 <span class="icon icon-left"></span>
                 章节列表
             </a>
-            <a class="button button-link button-nav pull-right" href="info.html?bookId=${entity.bookId}&no=${entity.no + 1}">
+            <a class="button button-link button-nav pull-right" data-no-cache="true" href="info.html?bookId=${entity.bookId}&no=${entity.no + 1}">
                 下一章
                 <span class="icon icon-right"></span>
             </a>
