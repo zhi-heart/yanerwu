@@ -25,8 +25,8 @@
                 <span class="icon icon-left"></span>
                 主页
             </a>
-            <a class="button button-link button-nav pull-right" href="list.html?orderField=no&orderDirection=desc">
-                倒序
+            <a class="button button-link button-nav pull-right" href="list.html?bookId=${bookId}&orderField=no&orderDirection=asc">
+                升序
                 <span class="icon icon-right"></span>
             </a>
             <h1 class="title">底部无限滚动</h1>
@@ -70,7 +70,7 @@
         function addItems(number, lastIndex) {
             // 生成新条目的HTML
             var html = '';
-            $.getJSON("json-list.html?numPerPage=20&pageNum=" + lastIndex, function (data) {
+            $.getJSON("json-list.html?bookId=${bookId}&numPerPage=20&pageNum=" + lastIndex, function (data) {
                 for (var i in data) {
                     html += '<li class="item-content"><div class="item-inner"><div class="item-title">' + data[i].title + '</div></div></li>';
                 }

@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.yanerwu.common.Page;
 import com.yanerwu.entity.BookDetail;
 import com.yanerwu.wap.service.BookDetailService;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,6 +43,10 @@ public class BookDetailAction extends BaseAction {
     @RequestMapping(value = "/list.html")
     public String list(BookDetail bookDetail, Page page) {
         attribute();
+        if (StringUtils.isBlank(page.getOrderDirection())) {
+            page.setOrderField("no");
+            page.setOrderDirection("desc");
+        }
         page = bookDetailService.findPage(bookDetail, page);
         request.setAttribute("page", page);
         return "/BookDetail/list";
@@ -50,6 +55,10 @@ public class BookDetailAction extends BaseAction {
     @ResponseBody
     @RequestMapping(value = "/json-list.html")
     public String jsonList(BookDetail bookDetail, Page page) {
+        if (StringUtils.isBlank(page.getOrderDirection())) {
+            page.setOrderField("no");
+            page.setOrderDirection("desc");
+        }
         String result = JSON.toJSONString(bookDetailService.findPage(bookDetail, page).getResult());
         return result;
     }
