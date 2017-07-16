@@ -78,7 +78,7 @@ public class BookDetailAction extends BaseAction {
         StringBuffer content = new StringBuffer();
         bookDetail.setContent(bookDetail.getContent().replace("    ", "　　　　"));
         for (String str : bookDetail.getContent().split("　　　　")) {
-            content.append(String.format("<p class='content-padded'>%s</p>\n", str));
+            content.append(String.format("<p class='content-padded'>&nbsp&nbsp&nbsp&nbsp%s</p>\n", str));
         }
         bookDetail.setContent(content.toString());
         request.setAttribute("entity", bookDetail);

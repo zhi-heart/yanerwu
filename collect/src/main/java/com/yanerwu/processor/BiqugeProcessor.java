@@ -9,6 +9,7 @@ import com.yanerwu.utils.Tools;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -83,9 +84,10 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
             bookTemplate.insert(bds);
         } else {
             String title = page.getHtml().xpath("//*[@class='bookname']/h1/text()").get().trim();
-            String content = page.getHtml().xpath("//*[@id='content']/text()").get();
+            String content = StringUtils.trim(page.getHtml().xpath("//*[@id='content']/text()").get());
 
             String sql = "update book_detail set content=?,content_bytes=? where title_md5=?";
+            content = Tools.delHtmlText(content);
             bookTemplate.update(sql, new Object[]{
                     content,
                     content.getBytes().length,
