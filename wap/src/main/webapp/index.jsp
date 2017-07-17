@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>首页</title>
+    <title>小说</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -35,7 +35,7 @@
                 <ul>
                     <c:forEach var="item" items="${page.result}">
                         <li>
-                            <a href="BookDetail/list.html?bookId=${item.id}"  class="external item-link item-content external">
+                            <a href="BookDetail/list.html?bookId=${item.id}&bookName=${item.name}"  class="external item-link item-content external">
                                 <div class="item-media"><img
                                         src="http://qidian.qpic.cn/qdbimg/349573/${item.qidianId}/150"
                                         width="80"></div>

@@ -25,7 +25,7 @@ import java.util.List;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:springmvc-jdbc.xml", "classpath:springmvc-servlet.xml"})
 public class QidianTest {
-    static String initUrl = "http://m.qidian.com/majax/rank/yuepiaolist?_csrfToken=JPK43MhlxY871YxUMEouYxEpxIrAO7XJe9WHSRxQ&gender=male&catId=-1&yearmonth=201707";
+    static String initUrl = "http://m.qidian.com/majax/rank/yuepiaolist?_csrfToken=CVvOKdS8H4MRhI0tR2URT6V3H9gzEn1jRy760prS&gender=male&catId=-1&yearmonth=201707";
 
     @Autowired
     private DbUtilsTemplate bookTemplate;

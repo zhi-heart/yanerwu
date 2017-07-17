@@ -33,8 +33,7 @@
                 升序
                 <span class="icon icon-right"></span>
             </a>
-
-            <h1 class="title">底部无限滚动</h1>
+            <h1 class="title">${bookName}</h1>
         </header>
         <div class="content infinite-scroll" data-distance="100">
             <div class="list-block" style="margin: 0;">

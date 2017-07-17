@@ -15,6 +15,7 @@ import org.apache.commons.dbutils.RowProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import us.codecraft.webmagic.Spider;
 
@@ -76,8 +77,15 @@ public class Crontab {
                 .run();
     }
 
-//    @Scheduled(cron = "0 0 6-24/2 * * ?")
-    public void collectBiquge() {
-        biqugeService.biqugeDetailByName();
+    @Scheduled(cron = "0 0 6-23 * * ?")
+    public void collectBiqugeTop50() {
+        biqugeService.biqugeDetail(50);
     }
+
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void collectBiqugeAll() {
+        biqugeService.biqugeDetail(9999);
+    }
+
+
 }

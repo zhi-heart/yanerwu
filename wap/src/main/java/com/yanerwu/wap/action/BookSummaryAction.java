@@ -46,13 +46,12 @@ public class BookSummaryAction extends BaseAction {
     }
 
     /**
-     * 进入更新页面
+     * 进入正文
      *
      * @return
      */
     @RequestMapping(value = "/info.html", method = RequestMethod.GET)
     public String infoShow(BookSummary bookSummary) {
-
         bookSummary = bookSummaryService.getById(bookSummary);
         request.setAttribute("entity", bookSummary);
         return "BookSummary/info";

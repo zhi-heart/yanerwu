@@ -7,6 +7,9 @@ import com.yanerwu.entity.BookSummary;
 import com.yanerwu.utils.DateUtils;
 import com.yanerwu.vo.QidianVo;
 import com.yanerwu.vo.Record;
+import org.apache.commons.dbutils.BasicRowProcessor;
+import org.apache.commons.dbutils.GenerousBeanProcessor;
+import org.apache.commons.dbutils.RowProcessor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -40,6 +43,13 @@ public class QidianProcessor extends BaseProcessor implements PageProcessor {
         for (Record r : records) {
             logger.info("{}\t{}", r.getName(), r.getAuth());
             BookSummary b = new BookSummary();
+
+            String sql = "select * from book_summary where qidian_id=?";
+            RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
+            List<BookSummary> bookSummaryList = bookTemplate.find(BookSummary.class, sql, r.getId(), processor);
+            if (bookSummaryList.size() > 0) {
+                b = bookSummaryList.get(0);
+            }
             b.setName(r.getName());
             b.setSummary(r.getDesc());
             b.setAuthor(r.getAuth());
@@ -47,13 +57,36 @@ public class QidianProcessor extends BaseProcessor implements PageProcessor {
             b.setStatus(2);
             b.setType(r.getCat());
             b.setTypeId(r.getCatId());
-            b.setCreateTime(DateUtils.getNowTime());
-            bs.add(b);
+            //点击量 44.36万
+            b.setCnt(conver(r.getCnt()));
+            //rankCnt: "3.1万月票"
+            b.setRankCnt(conver(r.getRankCnt().replace("月票", "")));
+
+            if (bookSummaryList.size() > 0) {
+                bookTemplate.update(b);
+            }else {
+                b.setCreateTime(DateUtils.getNowTime());
+                bs.add(b);
+            }
         }
         bookTemplate.insert(bs);
         if (0 == qidianVo.getData().getIsLast()) {
             page.addTargetRequest(String.format("%s&pageNum=%s", page.getUrl(), qidianVo.getData().getPageNum() + 1));
         }
+    }
+
+    private Integer conver(String str) {
+        Double cnt = -1.0;
+        try {
+            if (str.contains("万")) {
+                cnt = Double.valueOf(str.replace("万", "")) * 10000;
+            } else {
+                cnt = Double.valueOf(str);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return cnt.intValue();
     }
 
     @Override

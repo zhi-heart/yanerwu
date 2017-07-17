@@ -65,7 +65,6 @@ public class BiqugeService {
                 // TODO: handle exception
             }
         }
-
     }
 
     public void biqugeDetailByName(String... name) {
@@ -75,10 +74,11 @@ public class BiqugeService {
         biqugeDetailByName(bookSummarys);
     }
 
-    public void biqugeDetailByName() {
-        String sql = "SELECT * FROM book_summary WHERE biquge_url IS NOT NULL AND biquge_url != '' AND update_time < date_sub(now(), INTERVAL 3 HOUR) LIMIT 999 ";
+    public void biqugeDetail(int limit) {
+        String sql = "SELECT * FROM book_summary WHERE biquge_url IS NOT NULL AND biquge_url != '' AND update_time < date_sub(now(), INTERVAL 3 HOUR) order by rank_cnt desc LIMIT ? ";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
-        List<BookSummary> bookSummarys = bookTemplate.find(BookSummary.class, sql, processor);
+        List<BookSummary> bookSummarys = bookTemplate.find(BookSummary.class, sql, limit,processor);
         biqugeDetailByName(bookSummarys);
     }
+
 }

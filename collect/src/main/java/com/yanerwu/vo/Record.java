@@ -20,6 +20,8 @@ public class Record {
     private String cat;
     @JSONField(name = "catId")
     private Integer catId;
+    @JSONField(name = "cnt")
+    private String cnt;
     @JSONField(name = "rankCnt")
     private String rankCnt;
 
@@ -77,5 +79,13 @@ public class Record {
 
     public void setRankCnt(String rankCnt) {
         this.rankCnt = rankCnt;
+    }
+
+    public String getCnt() {
+        return cnt;
+    }
+
+    public void setCnt(String cnt) {
+        this.cnt = cnt;
     }
 }

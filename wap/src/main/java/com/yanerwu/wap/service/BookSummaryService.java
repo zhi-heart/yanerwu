@@ -4,7 +4,6 @@ import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.common.Page;
 import com.yanerwu.entity.BookSummary;
 import com.yanerwu.utils.Tools;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -81,11 +80,7 @@ public class BookSummaryService {
             sql2.append(" and  t.update_time = ? ");
             params.add(query.getUpdateTime());
         }
-        if (StringUtils.isNotBlank(page.getOrderField())) {
-            sql2.append("order by ? ?");
-            params.add(page.getOrderField());
-            params.add(page.getOrderDirection());
-        }
+        sql2.append("order by rank_cnt desc");
         return yanerwuTemplate.findPage(page, sql2.toString(), params.toArray(), BookSummary.class);
     }
 
