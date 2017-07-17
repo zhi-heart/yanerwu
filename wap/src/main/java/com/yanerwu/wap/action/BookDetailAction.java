@@ -78,6 +78,9 @@ public class BookDetailAction extends BaseAction {
         StringBuffer content = new StringBuffer();
         bookDetail.setContent(bookDetail.getContent().replace("    ", "　　　　"));
         for (String str : bookDetail.getContent().split("　　　　")) {
+            if (StringUtils.isBlank(str)) {
+                continue;
+            }
             content.append(String.format("<p class='content-padded'>&nbsp&nbsp&nbsp&nbsp%s</p>\n", str));
         }
         bookDetail.setContent(content.toString());
