@@ -16,7 +16,6 @@
         <module>generator</module>
         <module>spark</module>
         <module>cas</module>
-        <module>test</module>
         <module>wap</module>
     </modules>
 
