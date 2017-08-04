@@ -91,7 +91,8 @@ public class Crontab {
         biqugeService.biqugeDetail(9999);
     }
 
-    @Scheduled(cron = "8 8 15 ? * 2,3,4,5,6 *")
+    @Scheduled(cron = "8 38 11 ? * 2,3,4,5,6")
+    @Scheduled(cron = "8 8 15 ? * 2,3,4,5,6")
     public void stock(){
         String result = "";
         try {
