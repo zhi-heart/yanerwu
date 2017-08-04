@@ -6,20 +6,15 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>wap</artifactId>
+    <artifactId>talent</artifactId>
     <packaging>war</packaging>
-    <name>wap Maven Webapp</name>
+    <name>talent Maven Webapp</name>
     <url>http://maven.apache.org</url>
     <dependencies>
         <dependency>
             <groupId>com.yanerwu</groupId>
             <artifactId>service</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>1.7.21</version>
         </dependency>
 
         <!-- junit -->
@@ -43,16 +38,14 @@
         <!-- junit end -->
 
         <dependency>
-            <groupId>cn.edu.hfut.dmic.webcollector</groupId>
-            <artifactId>WebCollector</artifactId>
-            <version>2.52</version>
+            <groupId>org.seleniumhq.selenium</groupId>
+            <artifactId>selenium-java</artifactId>
+            <version>3.4.0</version>
         </dependency>
 
     </dependencies>
-
-
     <build>
-        <finalName>wap</finalName>
+        <finalName>talent</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

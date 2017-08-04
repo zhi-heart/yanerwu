@@ -12,10 +12,7 @@ import org.apache.logging.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by Zuz on 2017/4/27.
@@ -655,23 +652,35 @@ public class DbUtilsTemplate {
                                     }
                                     break;
                                 case ANNOTATION_TABLE_INSERT:
-                                    //时间传入空字符串异常  暂时将  字段名带 time,date的 如果字符串为'' 则改为null,暂时没想到好方法1
-                                    if (StringUtils.isBlank(String.valueOf(f.get(t)))) {
-                                        continue;
-                                    }
                                     //判断是字段是否需要插入
                                     if (column.insertable()) {
-                                        //获取属性值
-                                        keyMap.put(column.name(), f.get(t));
+                                        String name = column.name();
+                                        //时间传入空字符串异常  暂时将  字段名带 time,date的 如果字符串为'' 则改为null,暂时没想到好方法1
+                                        if (StringUtils.isBlank(String.valueOf(f.get(t)))) {
+                                            if (name.contains("time") || name.contains("date")) {
+                                                keyMap.put(column.name(), null);
+                                            }else{
+                                                //获取属性值
+                                                keyMap.put(column.name(), f.get(t));
+                                            }
+                                        } else {
+                                            //获取属性值
+                                            keyMap.put(column.name(), f.get(t));
+                                        }
                                     }
                                     break;
                                 case ANNOTATION_TABLE_UPDATE:
+                                    String name = column.name();
                                     //时间传入空字符串异常  暂时将  字段名带 time,date的 如果字符串为'' 则改为null,暂时没想到好方法1
                                     if (StringUtils.isBlank(String.valueOf(f.get(t)))) {
-                                        continue;
-                                    }
-                                    //判断字段是否需要修改
-                                    if (column.updatable()) {
+                                        if (name.contains("time") || name.contains("date")) {
+                                            keyMap.put(column.name(), null);
+                                        }else{
+                                            //获取属性值
+                                            keyMap.put(column.name(), f.get(t));
+                                        }
+                                    } else {
+                                        //获取属性值
                                         keyMap.put(column.name(), f.get(t));
                                     }
                                     break;
@@ -725,7 +734,7 @@ public class DbUtilsTemplate {
         List<Object> batchResult = null;
         queryRunner = new QueryRunner(dataSource);
         try {
-            batchResult = queryRunner.insertBatch(sql, new BeanListHandler<Object>(Object.class), params);
+            batchResult = Arrays.asList(queryRunner.insertBatch(sql, new ArrayHandler(), params));
         } catch (SQLException e) {
             logger.error("", e);
         }

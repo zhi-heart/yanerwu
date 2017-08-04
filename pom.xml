@@ -17,6 +17,7 @@
         <module>spark</module>
         <module>cas</module>
         <module>wap</module>
+        <module>talent</module>
     </modules>
 
     <properties>

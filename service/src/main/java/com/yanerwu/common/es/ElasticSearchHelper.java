@@ -26,6 +26,7 @@ import java.io.Serializable;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -67,6 +68,18 @@ public class ElasticSearchHelper {
                         .addTransportAddresses(list.toArray(new InetSocketTransportAddress[0]));
             }
         }
+    }
+
+    public static void main(String[] args) throws UnknownHostException {
+
+        ElasticSearchHelper helper = new ElasticSearchHelper("zuozhi", "192.168.10.1:9300");
+        Map<String, Object> map = new HashMap<>();
+        map.put("id", 1);
+        map.put("status", 1);
+        map.put("type", 1);
+        map.put("title", "主站新闻标题");
+        map.put("content", "主站新闻内容");
+        helper.index(Keys.INDEX_FULL, Keys.TYPE_SELECT_BASE, "1", map);
     }
 
     /**
@@ -136,7 +149,7 @@ public class ElasticSearchHelper {
     private void setSource(IndexRequestBuilder builder, Object bean) {
         if (bean instanceof String) {
             builder.setSource(String.valueOf(bean));
-        }else{
+        } else {
             ObjectMapper mapper = new ObjectMapper();
             try {
                 builder.setSource(mapper.writeValueAsBytes(bean));
@@ -335,32 +348,5 @@ public class ElasticSearchHelper {
 
     public void setClient(TransportClient client) {
         this.client = client;
-    }
-
-    public static void main(String[] args) throws UnknownHostException {
-//        ElasticSearchHelper helper = new ElasticSearchHelper("yanerwu", "106.14.171.91:9300");
-
-//        Map<String, Object> map = new HashMap<String, Object>();
-//        map.put("id", 1);
-//        map.put("status", 1);
-//        map.put("type", 1);
-//        map.put("title", "主站新闻标题");
-//        map.put("content", "主站新闻内容");
-//        helper.index(Keys.INDEX_TAGS, Keys.TYPE_SELECT_TAGS, Tools.getUUID(), map);
-//
-//        map.put("id", 2);
-//        map.put("title", "BBS帖子标题");
-//        map.put("content", "BBS帖子内容");
-//        map.put("type", 2);
-//        helper.index(Keys.INDEX_TAGS, Keys.TYPE_SELECT_TAGS, Tools.getUUID(), map);
-
-    	/*helper.delete(Keys.INDEX_TAGS,Keys.TYPE_SELECT_TAGS,"9ac772ba5b924affa4751d3e58c7b4f0");
-        helper.delete(Keys.INDEX_TAGS,Keys.TYPE_SELECT_TAGS,"f803de332a1c4a3cb79b5847eeda3bd7");
-    	helper.delete(Keys.INDEX_TAGS,Keys.TYPE_SELECT_TAGS,"8c43e165c69c4359a243f57b23fe907e");
-    	helper.delete(Keys.INDEX_TAGS,Keys.TYPE_SELECT_TAGS,"1bec60e3d39a485d8d4921041e5b57f1");*/
-
-
-        ElasticSearchHelper helper = new ElasticSearchHelper("yanerwu", "106.14.171.91:9300");
-
     }
 }

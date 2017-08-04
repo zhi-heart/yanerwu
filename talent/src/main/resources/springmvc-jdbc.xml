@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+
+
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
+       default-lazy-init="true">
+
+
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
+
+    <!-- book-->
+    <bean id="talentDataSource" class="com.yanerwu.common.DataSource" destroy-method="close">
+        <property name="driverClassName" value="${database.driverClassName}"/>
+        <property name="url" value="${talent.url}"/>
+        <property name="username" value="${talent.username}"/>
+        <property name="password" value="${talent.password}"/>
+        <property name="initialSize" value="2"/>
+        <property name="maxActive" value="100"/>
+        <property name="maxWait" value="100"/>
+        <property name="maxIdle" value="100"/>
+        <property name="minIdle" value="0"/>
+        <property name="removeAbandoned" value="true"/>
+        <property name="removeAbandonedTimeout" value="60"/>
+        <property name="logAbandoned" value="true"/>
+        <property name="validationQuery" value="select 1 from dual"/>
+        <property name="testOnBorrow" value="true"/>
+    </bean>
+    <!-- 下面定义了DbUtils的一个模板操作Bean -->
+    <bean id="talentTemplate" class="com.yanerwu.common.DbUtilsTemplate">
+        <property name="dataSource" ref="talentDataSource"/>
+    </bean>
+
+</beans>

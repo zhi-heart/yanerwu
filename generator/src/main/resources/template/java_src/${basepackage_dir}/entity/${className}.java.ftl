@@ -39,6 +39,7 @@ public class ${className} extends BaseEntity implements java.io.Serializable{
 	<#if column.pk>
 	@Id
 	</#if>
+    <#--@JSONField(name = "${column.columnNameLower}")-->
 	@Column(name="${column}")
 	private ${column.javaType} ${column.columnNameLower};
     <#if column.isDateTimeColumn>

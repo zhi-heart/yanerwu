@@ -3,6 +3,7 @@ package com.yanerwu.wap.action;
 import com.alibaba.fastjson.JSON;
 import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.utils.DateUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,10 +28,10 @@ public class AccountAction extends BaseAction {
     private DbUtilsTemplate bookTemplate;
 
     @ResponseBody
-    @RequestMapping(value = "/get-action.html")
+    @RequestMapping(value = "/get-account.html")
     public String getAccount() {
         String result = "{\"login_name\":\"\"}";
-        String sql = "select * from yys_account where last_login_time<? order by login_name limit 1";
+        String sql = "select * from yys_account where last_login_time<? and level>=12 order by login_name desc limit 1";
         List<Map<String, Object>> acctounts = bookTemplate.find(sql, DateUtils.getBackDate(-1));
         if (acctounts.size() > 0) {
             result = JSON.toJSONString(acctounts.get(0));
@@ -41,11 +42,13 @@ public class AccountAction extends BaseAction {
 
     @ResponseBody
     @RequestMapping(value = "/ok.html")
-    public String ok(String id) {
+    public String ok(String id, String level, String dynamic) {
         logger.info("{} ok", id);
-        String sql = "update yys_account set last_login_time=? where id=?";
+        String sql = "update yys_account set last_login_time=?,level=?,dynamic=? where id=?";
         bookTemplate.update(sql, new Object[]{
                 DateUtils.getNowTime(),
+                StringUtils.isBlank(level) ? "-1" : level,
+                StringUtils.isBlank(dynamic) ? "-1" : dynamic,
                 id
         });
         return "true";

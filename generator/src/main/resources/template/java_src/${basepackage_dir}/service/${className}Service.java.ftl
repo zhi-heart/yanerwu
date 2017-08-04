@@ -1,7 +1,7 @@
 <#include "/java_copyright.include">
 <#include "/custom.include"/>
-<#assign className = table.className>   
-<#assign classNameLower = className?uncap_first> 
+<#assign className = table.className>
+<#assign classNameLower = className?uncap_first>
 package ${basepackage}.service;
 
 import ${commonPackage}.common.DbUtilsTemplate;
@@ -22,9 +22,9 @@ import java.util.List;
 public class ${className}Service{
 
     private Logger logger = LoggerFactory.getLogger(getClass());
-	
+
 	@Autowired
-	private DbUtilsTemplate yanerwuTemplate;
+	private DbUtilsTemplate ${databaseName}Template;
 
 	public Page findPage(${className} query,Page page) {
 		List<Object> params=new ArrayList<>();
@@ -39,6 +39,11 @@ public class ${className}Service{
             sql2.append(" and  t.${column} <= ? ");
             params.add(query.get${column.columnName}End());
         }
+        <#elseif column.isStringColumn>
+        if(Tools.isNotEmpty(query.get${column.columnName}())) {
+            sql2.append(" and  t.${column} like ? ");
+            params.add(String.format("%%%s%%",query.get${column.columnName}()));
+        }
         <#else>
         if(Tools.isNotEmpty(query.get${column.columnName}())) {
             sql2.append(" and  t.${column} = ? ");
@@ -50,43 +55,43 @@ public class ${className}Service{
             sql2.append("order by ? ?");
             params.add(page.getOrderField());
             params.add(page.getOrderDirection());
-        }	
-        return yanerwuTemplate.findPage(page, sql2.toString(), params.toArray(), ${className}.class);
+        }
+        return ${databaseName}Template.findPage(page, sql2.toString(), params.toArray(), ${className}.class);
 	}
-	
+
 	/**
 	 * 新增
 	 */
 	public Object save(${className} ${classNameLower}){
-        return yanerwuTemplate.insert(${classNameLower});
+        return ${databaseName}Template.insert(${classNameLower});
 	}
-	
+
 	/**
 	 * 修改
 	 */
 	public int update(${className} ${classNameLower}){
-		return yanerwuTemplate.update(${classNameLower});
+		return ${databaseName}Template.update(${classNameLower});
 	}
-	
+
 	/**
 	 * 删除
 	 */
 	public int delete(${className} ${classNameLower}){
-		return yanerwuTemplate.delete(${classNameLower});
+		return ${databaseName}Template.delete(${classNameLower});
 	}
-	
+
 	public <T> T getById(${className} ${classNameLower}){
-		return (T) yanerwuTemplate.getById(${classNameLower});
+		return (T) ${databaseName}Template.getById(${classNameLower});
 	}
-	
-	
+
+
 <#list table.columns as column>
 	<#if column.unique && !column.pk>
 	@Transactional(readOnly=true)
 	public ${className} getBy${column.columnName}(${column.javaType} v) {
 		return ${classNameLower}Dao.getBy${column.columnName}(v);
-	}	
-	
+	}
+
 	</#if>
 </#list>
 }
