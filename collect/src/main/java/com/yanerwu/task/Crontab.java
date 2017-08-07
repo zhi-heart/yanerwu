@@ -44,10 +44,6 @@ public class Crontab {
     @Autowired
     private ElasticSearchHelper elasticSearchHelper;
 
-    public static void main(String[] args) {
-        System.out.println("尼古拉斯·凯奇,汤米·里·琼斯,肖恩·扬,塞克·克杂特".replaceAll("\\pP|\\pS", ""));
-    }
-
     //    @Scheduled(cron = "0 0 * * * ?")
 //    @Scheduled(fixedDelay = 1000 * 60 *30)
     public void synoym() {
@@ -91,34 +87,36 @@ public class Crontab {
         biqugeService.biqugeDetail(9999);
     }
 
-    @Scheduled(cron = "8 38 11 ? * 2,3,4,5,6")
-    @Scheduled(cron = "8 8 15 ? * 2,3,4,5,6")
-    public void stock(){
-        String result = "";
+    @Scheduled(cron = "8 8 15 ? * 1,2,3,4,5")
+    public void stock() {
+        String subject = "", content = "";
         try {
-            double amount = 0;
+            double nowAmount = 0, lastAmount = 0;
             Pattern pattern = Pattern.compile(".*=\"(.*)\";");
             Matcher matcher = pattern.matcher(HttpClientUtil.doGet("http://hq.sinajs.cn/list=sz002230,sz300033"));
             while (matcher.find()) {
                 String[] stock = matcher.group(1).split(",");
                 String name = stock[0];
-                Double price = Double.valueOf(stock[3]);
+                Double nowPrice = Double.valueOf(stock[3]);
+                Double lastPrice = Double.valueOf(stock[2]);
+
                 switch (name) {
                     case "科大讯飞":
-                        amount += price * 3000;
+                        nowAmount += nowPrice * 3000;
+                        lastAmount += lastPrice * 3000;
                         break;
                     case "同花顺":
-                        amount += price * 1900;
+                        nowAmount += nowPrice * 1900;
+                        lastAmount += lastPrice * 1900;
                         break;
                 }
             }
-
-            result = String.format("--------------</br>%.2f&nbsp;&nbsp;&nbsp;&nbsp;%.2f%%</br>--------------<br>", amount / 10000, ((amount / 188152) - 1) * 100);
+//            result = String.format("--------------</br>%.2f&nbsp;&nbsp;&nbsp;&nbsp;%.2f%%</br>--------------<br>", amount / 10000, ((amount / 188152) - 1) * 100);
+//            result = String.format("------</br>%.2f%%%s</br>------", ((nowAmount / 188152) - 1) * 100, nowAmount >= lastAmount ? "↑" : "↓");
+            subject = String.format("%s %.2f%% %s", nowAmount >= lastAmount ? "↑" : "↓", ((nowAmount / 188152) - 1) * 100, nowAmount >= lastAmount ? "↑" : "↓");
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        String subject = "账户详情";
-        String content = result;
         String smtp = "smtp.163.com";
         String from = "zhi_heart@163.com";
         String to = "zhi_heart@aliyun.com";
