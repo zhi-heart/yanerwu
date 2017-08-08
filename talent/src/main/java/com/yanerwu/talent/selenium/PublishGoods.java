@@ -116,7 +116,7 @@ public class PublishGoods {
             Thread.sleep(2000);
 
             //提交 可能失败,重试一次
-            WebElement submit = driver.findElement(By.name("submit"));
+            WebElement submit = driver.findElement(By.xpath("//*[@id=\"ice_page_content-publish\"]/div/div[2]/div[2]/div[2]/form/div/div[6]/div[1]/button"));
             try {
                 Thread.sleep(1000);
                 submit.click();
@@ -128,8 +128,7 @@ public class PublishGoods {
             //检查发布成功
             for (int i = 0; i < 10; i++) {
                 try {
-                    String text = driver.findElement(By.xpath("//*[@id=\"ice_page_content-success\"]/div/div[2]/div[2]/div/p[1]")).getText();
-                    if ("发布成功！".equals(text)) {
+                    if (driver.getPageSource().contains("发布成功")) {
                         bool = 2;
                         break;
                     }
@@ -141,7 +140,7 @@ public class PublishGoods {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        logger.info("userId:{} gid:{} goodsId:{} title:{} time:{} status:{}",
+        logger.info("userId:{} gid:{} goodsId:{} time:{} status:{} title:{}",
                 vo.getUserId(), vo.getId(), vo.getGoodsId(), vo.getTitleSimple(), (System.currentTimeMillis() - l) / 1000, bool);
         return bool;
     }

@@ -25,10 +25,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.*;
 
 /**
@@ -287,9 +284,10 @@ public class GoodsTopService {
                                 String sql = "SELECT ug.id, ug.user_id, gt.org_price, gt.quan_price, gt.price, gt.title, gt.title_simple, " +
                                         "gt.introduce, gt.is_tmall, ug.conver_word, ug.goods_id, u.taobao_login_name, u.mail FROM " +
                                         "user_goods ug, goods_top gt,user u WHERE ug.gid = gt.id AND ug.status = 1 and u.user_id=ug.user_id " +
-                                        "and u.status=0 and u.user_id=? LIMIT 30";
+                                        "and u.status=0 and u.user_id=? LIMIT 999";
                                 RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
                                 List<PublishGoodsVO> vos = talentTemplate.find(PublishGoodsVO.class, sql, userId, processor);
+                                Collections.shuffle(vos);
                                 int i = 0;
                                 do {
                                     PublishGoodsVO vo = vos.size() > 0 ? vos.get(i) : null;
@@ -333,7 +331,7 @@ public class GoodsTopService {
                                                 break;
                                         }
                                         try {
-                                            Thread.sleep(1000);
+                                            TimeUnit.SECONDS.sleep((int) (60 * Math.random() + 1));
                                         } catch (InterruptedException e) {
                                             e.printStackTrace();
                                         }
@@ -379,6 +377,6 @@ public class GoodsTopService {
     private User getUserByUserId(Object userId) {
         String sql = "select * from user where status=0 and user_id=?";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
-        return talentTemplate.find(User.class, sql,userId, processor).get(0);
+        return talentTemplate.find(User.class, sql, userId, processor).get(0);
     }
 }

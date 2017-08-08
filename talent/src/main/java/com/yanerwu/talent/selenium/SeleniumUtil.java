@@ -1,7 +1,9 @@
 package com.yanerwu.talent.selenium;
 
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriver;
+import org.openqa.selenium.phantomjs.PhantomJSDriverService;
+import org.openqa.selenium.remote.DesiredCapabilities;
 
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
@@ -49,7 +51,24 @@ public class SeleniumUtil {
         // 创建一个 chrome 的浏览器实例
         if (!driverMap.containsKey(id)) {
             //Chrome
-            driverMap.put(id, new ChromeDriver());
+//            driverMap.put(id, new ChromeDriver());
+
+            //设置必要参数
+            DesiredCapabilities dcaps = new DesiredCapabilities();
+            //ssl证书支持
+            dcaps.setCapability("acceptSslCerts", true);
+            //截屏支持
+            dcaps.setCapability("takesScreenshot", true);
+            //css搜索支持
+            dcaps.setCapability("cssSelectorsEnabled", true);
+            //js支持
+            dcaps.setJavascriptEnabled(true);
+            //驱动支持
+            dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "/usr/local/bin/phantomjs");
+            //创建无界面浏览器对象
+            PhantomJSDriver driver = new PhantomJSDriver(dcaps);
+            driverMap.put(id, driver);
+
         }
         return driverMap.get(id);
     }
