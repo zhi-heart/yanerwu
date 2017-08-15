@@ -102,18 +102,18 @@ public class Crontab {
 
                 switch (name) {
                     case "科大讯飞":
-                        nowAmount += nowPrice * 3000;
-                        lastAmount += lastPrice * 3000;
+                        nowAmount += nowPrice * 5000;
+                        lastAmount += lastPrice * 5000;
                         break;
                     case "同花顺":
-                        nowAmount += nowPrice * 1900;
-                        lastAmount += lastPrice * 1900;
+                        nowAmount += nowPrice * 0;
+                        lastAmount += lastPrice * 0;
                         break;
                 }
             }
 //            result = String.format("--------------</br>%.2f&nbsp;&nbsp;&nbsp;&nbsp;%.2f%%</br>--------------<br>", amount / 10000, ((amount / 188152) - 1) * 100);
 //            result = String.format("------</br>%.2f%%%s</br>------", ((nowAmount / 188152) - 1) * 100, nowAmount >= lastAmount ? "↑" : "↓");
-            subject = String.format("%s %.2f%% %s", nowAmount >= lastAmount ? "↑" : "↓", ((nowAmount / 188152) - 1) * 100, nowAmount >= lastAmount ? "↑" : "↓");
+            subject = String.format("%s %.2f%% %s", nowAmount >= lastAmount ? "↑" : "↓", ((nowAmount / (37.13 * 5000)) - 1) * 100, nowAmount >= lastAmount ? "↑" : "↓");
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
