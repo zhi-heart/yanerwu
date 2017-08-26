@@ -7,21 +7,21 @@ package ${basepackage}.action;
 
 import ${commonPackage}.common.Page;
 import ${commonPackage}.common.BaseAction;
-import ${commonPackage}.common.LogUtil;
+//import ${commonPackage}.common.LogUtil;
 import ${commonPackage}.utils.Tools;
 import ${basepackage}.entity.${className};
 import ${basepackage}.service.${className}Service;
 import com.alibaba.fastjson.JSON;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Controller;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 <#include "/java_imports.include"/>
-@Component
+@Controller
 @RequestMapping(value = "/${className}")
 public class ${className}Action extends BaseAction{
 
@@ -35,8 +35,8 @@ public class ${className}Action extends BaseAction{
 
 	@Autowired
 	private ${className}Service ${classNameLower}Service;
-    @Autowired
-    private LogUtil logUtil;
+    //@Autowired
+    //private LogUtil logUtil;
 
 	private ${className} ${classNameLower}=new ${className}();
 

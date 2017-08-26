@@ -19,7 +19,8 @@ public class PublishGoodsVO {
     private String converWord;
     private String goodsId;
     private String taobaoLoginName;
-    private String mail;
+    private String mailLoginName;
+    private String mailLoginPwd;
 
     public Long getId() {
         return id;
@@ -117,11 +118,19 @@ public class PublishGoodsVO {
         this.taobaoLoginName = taobaoLoginName;
     }
 
-    public String getMail() {
-        return mail;
+    public String getMailLoginName() {
+        return mailLoginName;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setMailLoginName(String mailLoginName) {
+        this.mailLoginName = mailLoginName;
+    }
+
+    public String getMailLoginPwd() {
+        return mailLoginPwd;
+    }
+
+    public void setMailLoginPwd(String mailLoginPwd) {
+        this.mailLoginPwd = mailLoginPwd;
     }
 }

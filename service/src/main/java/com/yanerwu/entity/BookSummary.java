@@ -4,10 +4,6 @@ import com.yanerwu.annotation.Column;
 import com.yanerwu.annotation.Id;
 import com.yanerwu.annotation.Table;
 import com.yanerwu.common.BaseEntity;
-import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
-import org.apache.commons.lang3.builder.ToStringStyle;
 
 /**
  * @author Zuz
@@ -16,21 +12,6 @@ import org.apache.commons.lang3.builder.ToStringStyle;
  */
 @Table(name = "book_summary")
 public class BookSummary extends BaseEntity implements java.io.Serializable {
-    //alias
-    public static final String TABLE_ALIAS = "BookSummary";
-    public static final String ALIAS_ID = "id";
-    public static final String ALIAS_QIDIAN_ID = "qidianId";
-    public static final String ALIAS_QIDIAN_URL = "qidianUrl";
-    public static final String ALIAS_BIQUGE_ID = "biqugeId";
-    public static final String ALIAS_BIQUGE_URL = "biqugeUrl";
-    public static final String ALIAS_NAME = "name";
-    public static final String ALIAS_TYPE_ID = "typeId";
-    public static final String ALIAS_TYPE = "type";
-    public static final String ALIAS_STATUS = "status";
-    public static final String ALIAS_SUMMARY = "summary";
-    public static final String ALIAS_AUTHOR = "author";
-    public static final String ALIAS_CREATE_TIME = "createTime";
-    public static final String ALIAS_UPDATE_TIME = "updateTime";
     private static final long serialVersionUID = 5454155825314635342L;
 
     //date formats
@@ -55,13 +36,13 @@ public class BookSummary extends BaseEntity implements java.io.Serializable {
     /**
      * 笔趣阁序号
      */
-    @Column(name = "biquge_id")
-    private Integer biqugeId;
+    @Column(name = "collect_id")
+    private Integer collectId;
     /**
      * 笔趣阁链接
      */
-    @Column(name = "biquge_url")
-    private String biqugeUrl;
+    @Column(name = "collect_url")
+    private String collectUrl;
     /**
      * 书名
      */
@@ -147,20 +128,20 @@ public class BookSummary extends BaseEntity implements java.io.Serializable {
         this.qidianUrl = value;
     }
 
-    public Integer getBiqugeId() {
-        return this.biqugeId;
+    public Integer getCollectId() {
+        return this.collectId;
     }
 
-    public void setBiqugeId(Integer value) {
-        this.biqugeId = value;
+    public void setCollectId(Integer value) {
+        this.collectId = value;
     }
 
-    public String getBiqugeUrl() {
-        return this.biqugeUrl;
+    public String getCollectUrl() {
+        return this.collectUrl;
     }
 
-    public void setBiqugeUrl(String value) {
-        this.biqugeUrl = value;
+    public void setCollectUrl(String value) {
+        this.collectUrl = value;
     }
 
     public String getName() {
@@ -243,37 +224,5 @@ public class BookSummary extends BaseEntity implements java.io.Serializable {
         this.rankCnt = rankCnt;
     }
 
-    public String toString() {
-        return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
-                .append("Id", getId())
-                .append("QidianId", getQidianId())
-                .append("QidianUrl", getQidianUrl())
-                .append("BiqugeId", getBiqugeId())
-                .append("BiqugeUrl", getBiqugeUrl())
-                .append("Name", getName())
-                .append("TypeId", getTypeId())
-                .append("Type", getType())
-                .append("Status", getStatus())
-                .append("Summary", getSummary())
-                .append("Author", getAuthor())
-                .append("CreateTime", getCreateTime())
-                .append("UpdateTime", getUpdateTime())
-                .toString();
-    }
-
-    public int hashCode() {
-        return new HashCodeBuilder()
-                .append(getId())
-                .toHashCode();
-    }
-
-    public boolean equals(Object obj) {
-        if (obj instanceof BookSummary == false) return false;
-        if (this == obj) return true;
-        BookSummary other = (BookSummary) obj;
-        return new EqualsBuilder()
-                .append(getId(), other.getId())
-                .isEquals();
-    }
 }
 

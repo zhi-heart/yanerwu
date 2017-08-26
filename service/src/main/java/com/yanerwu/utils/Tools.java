@@ -11,6 +11,7 @@ import java.net.URLDecoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
@@ -283,6 +284,26 @@ public class Tools {
         } catch (Exception e) {
         }
         return textStr;
+    }
+
+    public static String getMatcher(String regex, String source) {
+        String result = "";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(source);
+        while (matcher.find()) {
+            result = matcher.group(1);
+        }
+        return result;
+    }
+
+    public static String matcherReplace(String regex, String source) {
+        String result = source;
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(source);
+        while (matcher.find()) {
+            result = result.replace(matcher.group(1), "");
+        }
+        return result;
     }
 
 }

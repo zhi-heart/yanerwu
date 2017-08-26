@@ -35,7 +35,7 @@ public class BiqugeService {
         List<String> bookList = new ArrayList<>();
         ExecutorService exec = Executors.newFixedThreadPool(3);
         for (BookSummary bs : bookSummarys) {
-            if (StringUtils.isBlank(bs.getBiqugeUrl())) {
+            if (StringUtils.isBlank(bs.getCollectUrl())) {
                 continue;
             }
             bookList.add(bs.getName());
@@ -44,7 +44,7 @@ public class BiqugeService {
                         long l = System.currentTimeMillis();
                         MDC.put("book", bs.getName());
                         Spider.create(new BiqugeProcessor(bs, bookTemplate))
-                                .addUrl(bs.getBiqugeUrl())
+                                .addUrl(bs.getCollectUrl())
                                 .thread(5)
                                 .run();
                         bs.setUpdateTime(DateUtils.getNowTime());
@@ -75,7 +75,7 @@ public class BiqugeService {
     }
 
     public void biqugeDetail(int limit) {
-        String sql = "SELECT * FROM book_summary WHERE biquge_url IS NOT NULL AND biquge_url != '' AND update_time < date_sub(now(), INTERVAL 3 HOUR) order by rank_cnt desc LIMIT ? ";
+        String sql = "SELECT * FROM book_summary WHERE collect_url IS NOT NULL AND collect_url != '' AND update_time < date_sub(now(), INTERVAL 3 HOUR) order by rank_cnt desc LIMIT ? ";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         List<BookSummary> bookSummarys = bookTemplate.find(BookSummary.class, sql, limit,processor);
         biqugeDetailByName(bookSummarys);

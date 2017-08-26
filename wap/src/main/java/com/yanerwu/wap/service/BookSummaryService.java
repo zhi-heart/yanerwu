@@ -40,13 +40,13 @@ public class BookSummaryService {
             sql2.append(" and  t.qidian_url = ? ");
             params.add(query.getQidianUrl());
         }
-        if (Tools.isNotEmpty(query.getBiqugeId())) {
+        if (Tools.isNotEmpty(query.getCollectId())) {
             sql2.append(" and  t.biquge_id = ? ");
-            params.add(query.getBiqugeId());
+            params.add(query.getCollectId());
         }
-        if (Tools.isNotEmpty(query.getBiqugeUrl())) {
-            sql2.append(" and  t.biquge_url = ? ");
-            params.add(query.getBiqugeUrl());
+        if (Tools.isNotEmpty(query.getCollectUrl())) {
+            sql2.append(" and  t.collect_url = ? ");
+            params.add(query.getCollectUrl());
         }
         if (Tools.isNotEmpty(query.getName())) {
             sql2.append(" and  t.name like ? ");

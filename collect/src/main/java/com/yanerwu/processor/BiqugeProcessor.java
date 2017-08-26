@@ -9,7 +9,6 @@ import com.yanerwu.utils.Tools;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -24,7 +23,7 @@ import java.util.Map;
 /**
  * @Author Zuz
  * @Date 2017/7/5
- * @Description 笔趣阁 http://www.biquge.com.tw/
+ * @Description 八一中文网
  */
 public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
 
@@ -41,16 +40,13 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
     public void process(Page page) {
         String currentUrl = page.getUrl().toString();
         //详情页
-        if (currentUrl.equals(bookSummary.getBiqugeUrl())) {
-            String biqugeLastChapter = page.getHtml().xpath("//*[@id='info']/p[4]/a/text()").get().trim();
-            List<String> biqugeUrls = page.getHtml().xpath("//*[@id='list']/dl/dd/a/@href").all();
-            List<String> biqugeTitles = page.getHtml().xpath("//*[@id='list']/dl/dd/a/text()").all();
+        if (currentUrl.equals(bookSummary.getCollectUrl())) {
 
-            //库里是最新章节,跳过
-//            String lastChapter = String.valueOf(bookTemplate.findBy("select title from book_detail where book_id=? order by no desc limit 1", "title", bookSummary.getId()));
-//            if (lastChapter.equals(biqugeLastChapter)) {
-//                return;
-//            }
+            String last = page.getHtml().xpath("//*[@id='info']/p[4]/a/@href").get().trim();
+            last = Tools.getMatcher("/book/.*/(.*).html", last);
+
+            List<String> collectUrls = page.getHtml().xpath("//*[@id='list']/dl/dd/a/@href").all();
+            List<String> collectTitles = page.getHtml().xpath("//*[@id='list']/dl/dd/a/text()").all();
 
             Map<String, BookDetail> bookDetailMap = new HashMap<>();
             String sql = "select id, book_id, no, title, title_md5, content_bytes from book_detail where book_id=?";
@@ -61,33 +57,35 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
             }
 
             List<BookDetail> bds = new ArrayList<>();
-            for (int i = 0; i < biqugeUrls.size(); i++) {
-                String title = biqugeTitles.get(i).trim();
+            for (int i = 0; i < collectUrls.size(); i++) {
+                String title = collectTitles.get(i).trim();
                 if (bookDetailMap.containsKey(title) && bookDetailMap.get(title).getContentBytes() > 0) {
                     continue;
                 }
 
-                if(!bookDetailMap.containsKey(title)){
+                if (!bookDetailMap.containsKey(title)) {
                     String titleMd5 = Tools.encoderMd5(title);
                     BookDetail b = new BookDetail();
                     b.setBookId(bookSummary.getId());
                     b.setTitle(title);
                     b.setTitleMd5(titleMd5);
                     b.setNo(i);
-                    b.setSourceUrl(biqugeUrls.get(i));
+                    b.setSourceUrl(collectUrls.get(i));
                     b.setUpdateTime(DateUtils.getNowTime());
                     bds.add(b);
                 }
 
-                page.addTargetRequest(biqugeUrls.get(i));
+                page.addTargetRequest(collectUrls.get(i));
             }
             bookTemplate.insert(bds);
         } else {
             String title = page.getHtml().xpath("//*[@class='bookname']/h1/text()").get().trim();
-            String content = StringUtils.trim(page.getHtml().xpath("//*[@id='content']/text()").get());
+            String content = page.getHtml().xpath("//*[@id='content']").get().replaceAll("<.*div.*>\n?", "").replace("\n", "").trim();
+
+            //广告
+            content = Tools.matcherReplace("。(.*[八,一,中,文,Ｗ,．,８,１,Ｚ,Ｗ,Ｃ,Ｏ]+.*Ｍ)", content);
 
             String sql = "update book_detail set content=?,content_bytes=? where title_md5=?";
-            content = Tools.delHtmlText(content);
             bookTemplate.update(sql, new Object[]{
                     content,
                     content.getBytes().length,
@@ -99,7 +97,7 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         Site site = super.getSite();
-        site.setCharset("utf-8");
+        site.setCharset("gbk");
         return site;
     }
 }

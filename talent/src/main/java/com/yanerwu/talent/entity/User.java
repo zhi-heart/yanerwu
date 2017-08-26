@@ -51,8 +51,10 @@ public class User extends BaseEntity implements java.io.Serializable{
     /**状态?{"0":"正常","1":"删除","2":"异常"}*/
 	@Column(name="status")
 	private Integer status;
-    @Column(name="mail")
-    private String mail;
+    @Column(name="mail_login_name")
+    private String mailLoginName;
+    @Column(name="mail_login_pwd")
+    private String mailLoginPwd;
 	//columns END
 
 	public User(){
@@ -141,12 +143,20 @@ public class User extends BaseEntity implements java.io.Serializable{
 			.isEquals();
 	}
 
-    public String getMail() {
-        return mail;
+    public String getMailLoginName() {
+        return mailLoginName;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setMailLoginName(String mailLoginName) {
+        this.mailLoginName = mailLoginName;
+    }
+
+    public String getMailLoginPwd() {
+        return mailLoginPwd;
+    }
+
+    public void setMailLoginPwd(String mailLoginPwd) {
+        this.mailLoginPwd = mailLoginPwd;
     }
 }
 

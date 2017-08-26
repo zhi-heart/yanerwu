@@ -22,7 +22,7 @@ public class Crontab {
     @Autowired
     private GoodsTopService goodsTopService;
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 5 0,9,15,20 * * ?")
     public void collect() {
         long l = System.currentTimeMillis();
 //        logger.info("开始执行collectGoodsTop");

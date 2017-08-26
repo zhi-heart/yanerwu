@@ -30,11 +30,7 @@ public class BookDetailService{
 
 	public Page findPage(BookDetail query,Page page) {
 		List<Object> params=new ArrayList<>();
-        StringBuilder sql2 = new StringBuilder("select id,title from book_detail t where 1=1 ");
-        if(Tools.isNotEmpty(query.getId())) {
-            sql2.append(" and  t.id = ? ");
-            params.add(query.getId());
-        }
+        StringBuilder sql2 = new StringBuilder("select id,title,no from book_detail t where 1=1 ");
         if(Tools.isNotEmpty(query.getBookId())) {
             sql2.append(" and  t.book_id = ? ");
             params.add(query.getBookId());
@@ -42,26 +38,6 @@ public class BookDetailService{
         if(Tools.isNotEmpty(query.getNo())) {
             sql2.append(" and  t.no = ? ");
             params.add(query.getNo());
-        }
-        if(Tools.isNotEmpty(query.getTitle())) {
-            sql2.append(" and  t.title = ? ");
-            params.add(query.getTitle());
-        }
-        if(Tools.isNotEmpty(query.getTitleMd5())) {
-            sql2.append(" and  t.title_md5 = ? ");
-            params.add(query.getTitleMd5());
-        }
-        if(Tools.isNotEmpty(query.getContent())) {
-            sql2.append(" and  t.content = ? ");
-            params.add(query.getContent());
-        }
-        if(Tools.isNotEmpty(query.getUpdateTime())) {
-            sql2.append(" and  t.update_time = ? ");
-            params.add(query.getUpdateTime());
-        }
-        if(Tools.isNotEmpty(query.getSourceUrl())) {
-            sql2.append(" and  t.source_url = ? ");
-            params.add(query.getSourceUrl());
         }
         if (StringUtils.isNotBlank(page.getOrderField())) {
             sql2.append(String.format("order by %s %s",page.getOrderField(),page.getOrderDirection()));
@@ -91,7 +67,7 @@ public class BookDetailService{
         if(bookDetails.size()==1){
             return bookDetails.get(0);
         }
-        return null;
+        return bookDetail;
     }
 	
 	

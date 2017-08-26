@@ -7,7 +7,7 @@ import com.yanerwu.entity.GoodsTop;
 import com.yanerwu.entity.TaokeConver;
 import com.yanerwu.talent.entity.User;
 import com.yanerwu.talent.entity.UserGoods;
-import com.yanerwu.talent.selenium.PublishGoods;
+import com.yanerwu.talent.selenium.PublishGoodsNew;
 import com.yanerwu.talent.selenium.SeleniumUtil;
 import com.yanerwu.talent.vo.PublishGoodsVO;
 import com.yanerwu.utils.HttpClientUtil;
@@ -282,7 +282,7 @@ public class GoodsTopService {
                             try {
                                 ExecutorService exec = Executors.newFixedThreadPool(1);
                                 String sql = "SELECT ug.id, ug.user_id, gt.org_price, gt.quan_price, gt.price, gt.title, gt.title_simple, " +
-                                        "gt.introduce, gt.is_tmall, ug.conver_word, ug.goods_id, u.taobao_login_name, u.mail FROM " +
+                                        "gt.introduce, gt.is_tmall, ug.conver_word, ug.goods_id, u.taobao_login_name, u.mail_login_name FROM " +
                                         "user_goods ug, goods_top gt,user u WHERE ug.gid = gt.id AND ug.status = 1 and u.user_id=ug.user_id " +
                                         "and u.status=0 and u.user_id=? LIMIT 999";
                                 RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
@@ -292,7 +292,7 @@ public class GoodsTopService {
                                 do {
                                     PublishGoodsVO vo = vos.size() > 0 ? vos.get(i) : null;
                                     exec.execute(() -> {
-                                        int status = PublishGoods.publish(vo, userId);
+                                        int status = PublishGoodsNew.publish(vo, userId);
                                         switch (status) {
                                             case -2:
                                                 //保持连接
@@ -301,19 +301,15 @@ public class GoodsTopService {
                                             case -1:
                                                 //掉线
                                                 try {
-                                                    String loginUrl = PublishGoods.getLonginUrl(userId);
+                                                    String loginUrl = PublishGoodsNew.getLonginUrl(userId);
                                                     logger.info("userId:{} loginUrl:{}", userId, loginUrl);
                                                     //发送邮件
                                                     User u = getUserByUserId(userId);
-                                                    if (StringUtils.isNotBlank(u.getMail())) {
+                                                    if (StringUtils.isNotBlank(u.getMailLoginName())) {
                                                         String subject = String.format("请用淘宝账号 %s 扫码二维码", u.getTaobaoLoginName());
                                                         String content = String.format("<img src='%s' />", loginUrl);
                                                         String smtp = "smtp.163.com";
-                                                        String from = "vip_chenweizhi@163.com";
-                                                        String to = u.getMail();
-                                                        String username = "vip_chenweizhi@163.com";
-                                                        String password = "qq328527654";
-                                                        Mail.sendAndCc(smtp, from, to, null, subject, content, username, password);
+                                                        Mail.sendAndCc(smtp, u.getMailLoginName(), u.getMailLoginName(), null, subject, content, u.getMailLoginName(), u.getMailLoginPwd());
                                                     }
 
                                                     TimeUnit.MINUTES.sleep(3);
@@ -330,11 +326,11 @@ public class GoodsTopService {
                                                 });
                                                 break;
                                         }
-                                        try {
-                                            TimeUnit.SECONDS.sleep((int) (60 * Math.random() + 1));
-                                        } catch (InterruptedException e) {
-                                            e.printStackTrace();
-                                        }
+//                                        try {
+//                                            TimeUnit.SECONDS.sleep((int) (60 * Math.random() + 1));
+//                                        } catch (InterruptedException e) {
+//                                            e.printStackTrace();
+//                                        }
                                     });
                                     i++;
                                 } while (i < vos.size());
@@ -369,6 +365,7 @@ public class GoodsTopService {
             execMap.put(user.getUserId(), Executors.newFixedThreadPool(1));
             SeleniumUtil seleniumUtil = SeleniumUtil.getInstance();
             WebDriver driver = seleniumUtil.getDriver(user.getUserId());
+            driver.manage().window().maximize();
 //            driver.get(Constants.PUBLISH_GOODS_URL);
 //            ((JavascriptExecutor) driver).executeScript(String.format("alert(\"请用 %s 登录!\")", user.getTaobaoLoginName()));
         }

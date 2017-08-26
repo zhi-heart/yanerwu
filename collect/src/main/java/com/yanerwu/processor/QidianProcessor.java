@@ -22,7 +22,7 @@ import java.util.List;
 /**
  * @Author Zuz
  * @Date 2017/7/7 16:23
- * @Description
+ * @Description 获取月票排行榜
  */
 public class QidianProcessor extends BaseProcessor implements PageProcessor {
 

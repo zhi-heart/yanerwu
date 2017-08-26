@@ -40,14 +40,14 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>2.44.0</version>
+            <version>3.4.0</version>
         </dependency>
 
         <!-- phantomjsdriver(selenium webdriver) -->
         <dependency>
-            <groupId>com.github.detro</groupId>
+            <groupId>com.codeborne</groupId>
             <artifactId>phantomjsdriver</artifactId>
-            <version>1.2.0</version>
+            <version>1.4.3</version>
         </dependency>
 
     </dependencies>

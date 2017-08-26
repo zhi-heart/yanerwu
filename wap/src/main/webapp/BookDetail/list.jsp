@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SUI</title>
+    <title>${bookName} - 燕儿坞</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -28,7 +28,7 @@
             </a>
             <a class="button button-link button-nav pull-right external"
                data-no-cache="true"
-               href="list.html?bookId=${bookId}&orderField=no&orderDirection=asc">
+               href="/book/${bookId}.html?orderField=no&orderDirection=asc">
                 升序
                 <span class="icon icon-right"></span>
             </a>
@@ -38,7 +38,7 @@
             <div class="list-block" style="margin: 0;">
                 <ul class="list-container">
                     <c:forEach var="item" items="${page.result}">
-                        <a href="info.html?id=${item.id}" class="item-link external" data-no-cache="true">
+                        <a href="/book/${bookId}/${item.no}.html" class="item-link external" data-no-cache="true">
                             <li class="item-content">
                                 <div class="item-inner">
                                     <div class="item-title">${item.title}</div>
@@ -84,7 +84,7 @@
             }, function (dataStr) {
                 var data = $.parseJSON(dataStr);
                 for (var i in data) {
-                    html += '<a href="info.html?id=' + data[i].id + '" class="item-link external" data-no-cache="true"> <li class="item-content"> <div class="item-inner"> <div class="item-title">' + data[i].title + '</div> </div> </li> </a>';
+                    html += '<a href="/book/'+bookId+'/'+data[i].no+'.html" class="item-link external" data-no-cache="true"> <li class="item-content"> <div class="item-inner"> <div class="item-title">' + data[i].title + '</div> </div> </li> </a>';
                 }
                 // 添加新条目
                 $('.infinite-scroll .list-container').append(html);

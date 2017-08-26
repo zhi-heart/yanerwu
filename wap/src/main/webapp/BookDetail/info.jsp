@@ -5,7 +5,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>SUI</title>
+    <title>${entity.title} - ${bookName} - 燕儿坞</title>
     <meta name="viewport" content="initial-scale=1, maximum-scale=1">
     <link rel="shortcut icon" href="/favicon.ico">
     <meta name="apple-mobile-web-app-capable" content="yes">
@@ -19,17 +19,17 @@
 <div class="page-group">
     <div class="content">
         <header class="bar bar-nav">
-            <a class="button button-link button-nav pull-left external" href="list.html?bookId=${entity.bookId}" data-no-cache="true">
+            <a class="button button-link button-nav pull-left external" href="/book/${entity.bookId}.html" data-no-cache="true">
                 <span class="icon icon-left"></span>
                 章节列表
             </a>
-            <a class="button button-link button-nav pull-right external" data-no-cache="true" href="info.html?bookId=${entity.bookId}&no=${entity.no + 1}">
+            <a class="button button-link button-nav pull-right external" data-no-cache="true" href="/book/${entity.bookId}/${entity.no + 1}.html">
                 下一章
                 <span class="icon icon-right"></span>
             </a>
             <h1 class="title">${entity.title}</h1>
         </header>
-        <div class="content infinite-scroll" data-distance="100">
+        <div class="content infinite-scroll" data-distance="100" style="margin: .5rem;">
             ${entity.content}
         </div>
     </div>
@@ -39,7 +39,6 @@
 </body>
 <script>
     $.config = {router: false}
-    $.init();
 </script>
 <script>
     var _hmt = _hmt || [];

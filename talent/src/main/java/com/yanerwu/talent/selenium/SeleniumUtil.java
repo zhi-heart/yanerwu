@@ -1,6 +1,8 @@
 package com.yanerwu.talent.selenium;
 
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.phantomjs.PhantomJSDriver;
 import org.openqa.selenium.phantomjs.PhantomJSDriverService;
 import org.openqa.selenium.remote.DesiredCapabilities;
@@ -20,7 +22,8 @@ public class SeleniumUtil {
 
     public static synchronized SeleniumUtil getInstance() {
         if (seleniumUtil == null) {
-            System.setProperty("webdriver.chrome.driver", "/Users/Zuz/Documents/chromedriver");
+//            System.setProperty("webdriver.chrome.driver", "/Users/Zuz/Documents/chromedriver");
+            System.setProperty("webdriver.chrome.driver", "c:/zuz/chromedriver.exe");
             seleniumUtil = new SeleniumUtil();
         }
         return seleniumUtil;
@@ -50,26 +53,54 @@ public class SeleniumUtil {
         }
         // 创建一个 chrome 的浏览器实例
         if (!driverMap.containsKey(id)) {
-            //Chrome
-//            driverMap.put(id, new ChromeDriver());
+            if (true) {
+                //Chrome
+                ChromeOptions options = new ChromeOptions();
+                options.setBinary("C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chrome.exe");
+                driverMap.put(id, new ChromeDriver());
+            } else {
+                //设置必要参数
+                DesiredCapabilities dcaps = new DesiredCapabilities();
+                //ssl证书支持
+                dcaps.setCapability("acceptSslCerts", true);
+                //截屏支持
+                dcaps.setCapability("takesScreenshot", true);
+                //css搜索支持
+                dcaps.setCapability("cssSelectorsEnabled", true);
+                //js支持
+                dcaps.setJavascriptEnabled(true);
+                //驱动支持
+                dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "/usr/local/bin/phantomjs");
+                //创建无界面浏览器对象
+                PhantomJSDriver driver = new PhantomJSDriver(dcaps);
+                driverMap.put(id, driver);
+            }
 
-            //设置必要参数
-            DesiredCapabilities dcaps = new DesiredCapabilities();
-            //ssl证书支持
-            dcaps.setCapability("acceptSslCerts", true);
-            //截屏支持
-            dcaps.setCapability("takesScreenshot", true);
-            //css搜索支持
-            dcaps.setCapability("cssSelectorsEnabled", true);
-            //js支持
-            dcaps.setJavascriptEnabled(true);
-            //驱动支持
-            dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "/usr/local/bin/phantomjs");
-            //创建无界面浏览器对象
-            PhantomJSDriver driver = new PhantomJSDriver(dcaps);
-            driverMap.put(id, driver);
 
         }
         return driverMap.get(id);
+    }
+
+    public static void main(String[] args) throws Exception {
+        DesiredCapabilities dcaps = new DesiredCapabilities();
+        //ssl证书支持
+        dcaps.setCapability("acceptSslCerts", true);
+        //截屏支持
+        dcaps.setCapability("takesScreenshot", true);
+        //css搜索支持
+        dcaps.setCapability("cssSelectorsEnabled", true);
+        //js支持
+        dcaps.setJavascriptEnabled(true);
+        //驱动支持
+        dcaps.setCapability(PhantomJSDriverService.PHANTOMJS_EXECUTABLE_PATH_PROPERTY, "/usr/local/bin/phantomjs");
+        //创建无界面浏览器对象
+        PhantomJSDriver driver = new PhantomJSDriver(dcaps);
+
+        driver.get("http://www.baidu.com");
+        Thread.sleep(2000);
+        System.out.println(driver.getPageSource());
+
+        System.out.println("111");
+
     }
 }
