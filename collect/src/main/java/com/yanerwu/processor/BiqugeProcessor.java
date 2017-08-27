@@ -83,7 +83,7 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
             //推送百度
             new Thread(() -> {
                 try {
-                    TimeUnit.MINUTES.sleep(10);
+                    TimeUnit.MINUTES.sleep(1);
                     StringBuffer sb = new StringBuffer();
                     for (BookDetail b : bds) {
                         String s = String.format("http://my.777kxs.com/book/%s/%s.html\n", b.getBookId(), b.getNo());
