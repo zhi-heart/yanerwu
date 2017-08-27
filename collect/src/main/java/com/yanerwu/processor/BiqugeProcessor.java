@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author Zuz
@@ -56,7 +57,7 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
                 bookDetailMap.put(bookDetail.getTitle(), bookDetail);
             }
 
-            List<BookDetail> bds = new ArrayList<>();
+            final List<BookDetail> bds = new ArrayList<>();
             for (int i = 0; i < collectUrls.size(); i++) {
                 String title = collectTitles.get(i).trim();
                 if (bookDetailMap.containsKey(title) && bookDetailMap.get(title).getContentBytes() > 0) {
@@ -78,6 +79,23 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
                 page.addTargetRequest(collectUrls.get(i));
             }
             bookTemplate.insert(bds);
+
+            //推送百度
+            new Thread(() -> {
+                try {
+                    TimeUnit.MINUTES.sleep(10);
+                    StringBuffer sb = new StringBuffer();
+                    for (BookDetail b : bds) {
+                        String s = String.format("http://my.777kxs.com/book/%s/%s.html\n", b.getBookId(), b.getNo());
+                        sb.append(s);
+                    }
+                    Tools.pushBaidu(sb.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
+
+
         } else {
             String title = page.getHtml().xpath("//*[@class='bookname']/h1/text()").get().trim();
             String content = page.getHtml().xpath("//*[@id='content']").get().replaceAll("<.*div.*>\n?", "").replace("\n", "").trim();

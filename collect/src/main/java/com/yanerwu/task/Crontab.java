@@ -28,20 +28,20 @@ public class Crontab {
     @Autowired
     private DbUtilsTemplate yanerwuTemplate;
 
-//    @Scheduled(cron = "0 0 6-23 * * ?")
-//    public void collectBiqugeTop50() {
-//        biqugeService.biqugeDetail(50);
-//    }
-//
-//    @Scheduled(cron = "0 0 1 * * ?")
-//    public void collectBiqugeAll() {
-//        biqugeService.biqugeDetail(9999);
-//    }
+    @Scheduled(cron = "0 0 6-23 * * ?")
+    public void collectBiqugeTop50() {
+        biqugeService.biqugeDetail(50);
+    }
 
-    @Scheduled(fixedDelay = 99999999999L, initialDelay = 1000 * 30)
+    @Scheduled(cron = "0 0 1 * * ?")
     public void collectBiqugeAll() {
         biqugeService.biqugeDetail(9999);
     }
+
+//    @Scheduled(fixedDelay = 99999999999L, initialDelay = 1000 * 30)
+//    public void collectBiqugeAll() {
+//        biqugeService.biqugeDetail(9999);
+//    }
 
     @Scheduled(cron = "8 8 15 ? * 1,2,3,4,5")
     public void stock() {
