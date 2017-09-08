@@ -11,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,14 +30,40 @@ public class Crontab {
     @Autowired
     private DbUtilsTemplate yanerwuTemplate;
 
+    public static void main(String[] args) {
+        List<Integer> records = Arrays.asList(new Integer[]{
+                -2909,//moer
+                206,//05
+                -1487,
+                -13181,
+                4853,
+                -5800,
+                8257,
+                -3241,
+                5943,
+                -35168,
+                -4275,
+                16594,
+                -22571,
+                -16173,
+                30245,
+                22560,
+                46854
+        });
+
+        //截止到8月份
+        Integer sum = records.stream()
+                .mapToInt(a -> a.intValue())
+                .sum();
+        System.out.println(sum);
+
+        //从
+        System.out.println(348707 - sum);
+    }
+
     @Scheduled(cron = "0 0 6-23 * * ?")
     public void collectBiqugeTop50() {
         biqugeService.biqugeDetail(50);
-    }
-
-    @Scheduled(cron = "0 0 1 * * ?")
-    public void collectBiqugeAll() {
-        biqugeService.biqugeDetail(9999);
     }
 
 //    @Scheduled(fixedDelay = 99999999999L, initialDelay = 1000 * 30)
@@ -43,8 +71,14 @@ public class Crontab {
 //        biqugeService.biqugeDetail(9999);
 //    }
 
+    @Scheduled(cron = "0 0 1 * * ?")
+    public void collectBiqugeAll() {
+        biqugeService.biqugeDetail(9999);
+    }
+
     @Scheduled(cron = "8 8 15 ? * 1,2,3,4,5")
     public void stock() {
+        double c=320000.0;
         String subject = "", content = "";
         try {
             double nowAmount = 0, lastAmount = 0;
@@ -62,17 +96,22 @@ public class Crontab {
                         lastAmount += lastPrice * 5000;
                         break;
                     case "同花顺":
-                        nowAmount += nowPrice * 0;
-                        lastAmount += lastPrice * 0;
+                        nowAmount += nowPrice * 1000;
+                        lastAmount += lastPrice * 1000;
                         break;
                 }
             }
-//            result = String.format("--------------</br>%.2f&nbsp;&nbsp;&nbsp;&nbsp;%.2f%%</br>--------------<br>", amount / 10000, ((amount / 188152) - 1) * 100);
-//            result = String.format("------</br>%.2f%%%s</br>------", ((nowAmount / 188152) - 1) * 100, nowAmount >= lastAmount ? "↑" : "↓");
-            subject = String.format("%s %.2f%% %s", nowAmount >= lastAmount ? "↑" : "↓", ((nowAmount / (37.13 * 5000)) - 1) * 100, nowAmount >= lastAmount ? "↑" : "↓");
+
+            subject = String.format("%s %.2f%% %s -> %s -> %s",
+                    nowAmount >= lastAmount ? "↑" : "↓",
+                    ((nowAmount / c) - 1) * 100,
+                    nowAmount >= lastAmount ? "↑" : "↓",
+                    (int) (nowAmount - lastAmount),
+                    (int) (nowAmount - c));
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
+        logger.info(subject);
         String smtp = "smtp.163.com";
         String from = "zhi_heart@163.com";
         String to = "zhi_heart@aliyun.com";
