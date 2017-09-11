@@ -14,6 +14,8 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -77,7 +79,7 @@ public class Crontab {
         biqugeService.biqugeDetail(9999);
     }
 
-    @Scheduled(cron = "8 8 15 ? * 1,2,3,4,5")
+    @Scheduled(cron = "0 0 15 ? * 1,2,3,4,5")
     public void stock() {
         double totalAmount = 320000.0;
         int kdxf = 256343;
@@ -131,6 +133,11 @@ public class Crontab {
                     (int) (nowAmount - lastAmount),
                     (int) (nowAmount - totalAmount));
         } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        try {
+            TimeUnit.MINUTES.sleep(new Random().nextInt(179) + 1);
+        } catch (InterruptedException e) {
             e.printStackTrace();
         }
         logger.info(subject);
