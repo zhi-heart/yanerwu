@@ -31,6 +31,10 @@
         </header>
         <div class="content infinite-scroll" data-distance="100" style="margin: .5rem;">
             ${entity.content}
+            <c:if test="${'' != entity.comment}">
+                <p style="color: #FFBD9D">精彩评论</p>
+                ${entity.comment}
+            </c:if>
         </div>
     </div>
 </div>

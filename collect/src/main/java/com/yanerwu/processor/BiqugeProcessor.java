@@ -1,25 +1,31 @@
 package com.yanerwu.processor;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.yanerwu.common.BaseProcessor;
+import com.yanerwu.common.Constants;
 import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.entity.BookDetail;
 import com.yanerwu.entity.BookSummary;
 import com.yanerwu.utils.DateUtils;
+import com.yanerwu.utils.HttpClientUtil;
 import com.yanerwu.utils.Tools;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
 import us.codecraft.webmagic.Site;
 import us.codecraft.webmagic.processor.PageProcessor;
+import us.codecraft.webmagic.selector.Html;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 /**
  * @Author Zuz
@@ -81,19 +87,19 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
             bookTemplate.insert(bds);
 
             //推送百度
-            new Thread(() -> {
-                try {
-                    TimeUnit.MINUTES.sleep(1);
-                    StringBuffer sb = new StringBuffer();
-                    for (BookDetail b : bds) {
-                        String s = String.format("http://my.777kxs.com/book/%s/%s.html\n", b.getBookId(), b.getNo());
-                        sb.append(s);
-                    }
-                    Tools.pushBaidu(sb.toString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }).start();
+//            new Thread(() -> {
+//                try {
+//                    TimeUnit.MINUTES.sleep(1);
+//                    StringBuffer sb = new StringBuffer();
+//                    for (BookDetail b : bds) {
+//                        String s = String.format("http://my.777kxs.com/book/%s/%s.html\n", b.getBookId(), b.getNo());
+//                        sb.append(s);
+//                    }
+//                    Tools.pushBaidu(sb.toString());
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }).start();
 
 
         } else {
@@ -103,10 +109,37 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
             //广告
             content = Tools.matcherReplace("。(.*[八,一,中,文,Ｗ,．,８,１,Ｚ,Ｗ,Ｃ,Ｏ]+.*Ｍ)", content);
 
-            String sql = "update book_detail set content=?,content_bytes=? where title_md5=?";
+            //追加评论
+            StringBuilder comment = new StringBuilder();
+            if (bookSummary.getRankCnt() > 20000) {
+                try {
+                    String s = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_LIST_URL, bookSummary.getQidianId(), 1));
+                    JSONArray jsonArray = JSON.parseObject(s).getJSONObject("data").getJSONArray("threadList");
+                    for (int i = 0; i < jsonArray.size(); i++) {
+                        JSONObject o = jsonArray.getJSONObject(i);
+                        String c = o.getString("content");
+                        if (c.length() >= 45) {
+                            String threadId = o.getString("threadId");
+                            String s1 = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_DETAIL_URL, bookSummary.getQidianId(), threadId));
+                            Html h = new Html(s1);
+                            String s2 = h.xpath("//*[@class='comm-content']/text()").get().trim();
+                            s2 = Tools.matcherReplace("(\\[.*\\])", s2);
+                            if (StringUtils.isNotBlank(s2)) {
+                                comment.append(String.format("<hr/><p>&nbsp;&nbsp;&nbsp;&nbsp;%s</p>", s2));
+                            }
+
+                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+
+            String sql = "update book_detail set content=?,content_bytes=?,comment=? where title_md5=?";
             bookTemplate.update(sql, new Object[]{
                     content,
                     content.getBytes().length,
+                    comment.toString(),
                     Tools.encoderMd5(title)
             });
         }
@@ -117,5 +150,22 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
         Site site = super.getSite();
         site.setCharset("gbk");
         return site;
+    }
+
+    public static void main(String[] args) {
+        String bookId="1003354631";
+        String s = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_LIST_URL, bookId, 1));
+        JSONArray jsonArray = JSON.parseObject(s).getJSONObject("data").getJSONArray("threadList");
+        for (int i = 0; i < jsonArray.size(); i++) {
+            JSONObject o = jsonArray.getJSONObject(i);
+            String c = o.getString("content");
+            if (c.length() >= 45) {
+                String threadId = o.getString("threadId");
+                String s1 = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_DETAIL_URL, bookId, threadId));
+                Html h = new Html(s1);
+                String s2 = h.xpath("//*[@class='comm-content']/text()").get().trim();
+                System.out.println(s2);
+            }
+        }
     }
 }
