@@ -49,7 +49,7 @@ public class BookDetailService{
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         List<Object> params=new ArrayList<>();
         StringBuffer sql = new StringBuffer();
-        sql.append("select id,no,title,content,book_id from book_detail t where 1=1 ");
+        sql.append("select id,no,title,content,comment,book_id from book_detail t where 1=1 ");
         if(Tools.isNotEmpty(bookDetail.getId())) {
             sql.append(" and  t.id = ? ");
             params.add(bookDetail.getId());
