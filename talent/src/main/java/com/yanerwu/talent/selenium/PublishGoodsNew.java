@@ -116,8 +116,8 @@ public class PublishGoodsNew {
             Thread.sleep(300);
 
             StringBuffer sb = new StringBuffer();
-            sb.append(String.format("领%s元独家券，券后【%s元】,包邮秒杀！", vo.getQuanPrice(), vo.getPrice()));
-            sb.append(String.format("【领券下单】%s,长按复制整段信息,重新打开☞手机淘宝☜抢购",vo.getConverWord()));
+            sb.append(String.format("领%s元券，券后【%s元】,包邮秒杀！已抢%s件！", vo.getQuanPrice(), vo.getPrice(),vo.getSalesNum()));
+            sb.append(String.format("复制这条信息%s，重新打开☞手机淘宝☜即可领券！",vo.getConverWord()));
             sb.append(String.format("【推荐理由】%s", vo.getIntroduce()));
             if (sb.length() > 135) {
                 sb.delete(135, sb.length());

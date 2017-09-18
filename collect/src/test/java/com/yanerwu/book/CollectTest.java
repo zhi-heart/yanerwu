@@ -18,7 +18,7 @@ public class CollectTest extends BaseTest{
     @Test
     public void collectBookDetail() throws Exception {
 //        biqugeService.biqugeDetail(50);
-        biqugeService.biqugeDetailByName("不朽凡人");
+        biqugeService.biqugeDetailByName("一念永恒");
     }
 
 }

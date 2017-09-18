@@ -281,7 +281,7 @@ public class GoodsTopService {
                         while (true) {
                             try {
                                 ExecutorService exec = Executors.newFixedThreadPool(1);
-                                String sql = "SELECT ug.id, ug.user_id, gt.org_price, gt.quan_price, gt.price, gt.title, gt.title_simple, " +
+                                String sql = "SELECT ug.id, ug.user_id, gt.org_price, gt.quan_price, gt.price, gt.title, gt.title_simple,gt.sales_num, " +
                                         "gt.introduce, gt.is_tmall, ug.conver_word, ug.goods_id, u.taobao_login_name, u.mail_login_name FROM " +
                                         "user_goods ug, goods_top gt,user u WHERE ug.gid = gt.id AND ug.status = 1 and u.user_id=ug.user_id " +
                                         "and u.status=0 and u.user_id=? LIMIT 999";

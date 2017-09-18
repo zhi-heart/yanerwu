@@ -197,9 +197,8 @@ public class DesCodeUtil {
 		return result;
 	}
 	public static void main(String[] args) {
-		System.out.println(encrypt("jdbc:mysql://192.168.11.212:13309/wdzj_website_2?useUnicode=true&characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull"));
 		System.out.println(encrypt("root"));
-		System.out.println(encrypt("Acedia919!"));
+		System.out.println(encrypt("123456"));
 		
 	}
 }

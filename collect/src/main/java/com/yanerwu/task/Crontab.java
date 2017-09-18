@@ -35,7 +35,7 @@ public class Crontab {
 
     public static void main(String[] args) {
         List<Integer> records = Arrays.asList(new Integer[]{
-                -2909,//moer
+                -4909,//moer
                 206,//05
                 -1487,
                 -13181,
@@ -54,14 +54,27 @@ public class Crontab {
                 46854
         });
 
+        //8月
+        int total = 285050 + 63657 + 9035;
+
         //截止到8月份
         Integer sum = records.stream()
                 .mapToInt(a -> a.intValue())
                 .sum();
-        System.out.println(sum);
 
-        //从
-        System.out.println(348707 - sum);
+        //主要负债 9.14
+        List<Integer> debts = Arrays.asList(new Integer[]{
+                50000,
+                73534,
+                48861,
+                66241,
+                8800
+        });
+        int debtSum = debts.stream()
+                .mapToInt(a -> a.intValue())
+                .sum();
+        //归总
+        System.out.println(String.format("总值:%s 成本:%s 盈利:%s 负债:%s 净值:%s", total, total - sum, sum, debtSum, total - debtSum));
     }
 
     @Scheduled(cron = "0 0 6-23 * * ?")
@@ -92,7 +105,7 @@ public class Crontab {
             Matcher matcher = pattern.matcher(HttpClientUtil.doGet("http://hq.sinajs.cn/list=sz002230,sz300033"));
             while (matcher.find()) {
                 String[] stock = matcher.group(1).split(",");
-                if(!DateUtils.getBackDate(0).equals(stock[stock.length - 3])){
+                if (!DateUtils.getBackDate(0).equals(stock[stock.length - 3])) {
                     return;
                 }
                 String name = stock[0];
@@ -146,7 +159,6 @@ public class Crontab {
         String to = "zhi_heart@aliyun.com";
         String username = "zhi_heart@163.com";
         String password = "3kNu8ZTzHFGWkE";
-        Mail.sendAndCc(smtp, from, to, null, subject, content.toString().replace(" ","&nbsp;"), username, password);
+        Mail.sendAndCc(smtp, from, to, null, subject, content.toString().replace(" ", "&nbsp;"), username, password);
     }
-
 }

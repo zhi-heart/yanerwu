@@ -110,6 +110,15 @@ public class DbUtilsTemplate {
         return find(sql, null, null);
     }
 
+    public List<String> findToList(String sql,String fieldName) {
+        List<String> list = new ArrayList<>();
+        for (Map<String, Object> m : find(sql, null, null)) {
+            list.add(String.valueOf(m.get(fieldName)));
+        }
+
+        return list;
+    }
+
     /**
      * 执行查询，将每行的结果保存到一个Map对象中，然后将所有Map对象保存到List中
      *

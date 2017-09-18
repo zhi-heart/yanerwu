@@ -21,6 +21,7 @@ public class PublishGoodsVO {
     private String taobaoLoginName;
     private String mailLoginName;
     private String mailLoginPwd;
+    private int salesNum;
 
     public Long getId() {
         return id;
@@ -132,5 +133,13 @@ public class PublishGoodsVO {
 
     public void setMailLoginPwd(String mailLoginPwd) {
         this.mailLoginPwd = mailLoginPwd;
+    }
+
+    public int getSalesNum() {
+        return salesNum;
+    }
+
+    public void setSalesNum(int salesNum) {
+        this.salesNum = salesNum;
     }
 }

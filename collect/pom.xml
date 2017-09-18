@@ -81,6 +81,8 @@
                     <source>${source.jdk.version}</source>
                     <target>${target.jdk.version}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+                    <!-- 略过测试代码的编译，不推荐 -->
+                    <skip>true</skip>
                 </configuration>
             </plugin>
 
