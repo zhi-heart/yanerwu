@@ -31,8 +31,8 @@ public class AccountAction extends BaseAction {
     @RequestMapping(value = "/get-account.html")
     public String getAccount() {
         String result = "{\"login_name\":\"\"}";
-        String sql = "select * from yys_account where last_login_time<? and level>=12 order by login_name desc limit 1";
-        List<Map<String, Object>> acctounts = bookTemplate.find(sql, DateUtils.getBackDate(-1));
+        String sql = "select * from yys_account where last_login_time<? and level>=11 order by login_name desc limit 1";
+        List<Map<String, Object>> acctounts = bookTemplate.find(sql, DateUtils.getBackDate(-0));
         if (acctounts.size() > 0) {
             result = JSON.toJSONString(acctounts.get(0));
         }
