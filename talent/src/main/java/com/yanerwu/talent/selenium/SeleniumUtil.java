@@ -22,8 +22,8 @@ public class SeleniumUtil {
 
     public static synchronized SeleniumUtil getInstance() {
         if (seleniumUtil == null) {
-//            System.setProperty("webdriver.chrome.driver", "/Users/Zuz/Documents/chromedriver");
-            System.setProperty("webdriver.chrome.driver", "c:/zuz/chromedriver.exe");
+            System.setProperty("webdriver.chrome.driver", "/Users/Zuz/Documents/chromedriver");
+//            System.setProperty("webdriver.chrome.driver", "c:/zuz/chromedriver.exe");
             seleniumUtil = new SeleniumUtil();
         }
         return seleniumUtil;
@@ -56,8 +56,9 @@ public class SeleniumUtil {
             if (true) {
                 //Chrome
                 ChromeOptions options = new ChromeOptions();
-                options.setBinary("C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chrome.exe");
-                driverMap.put(id, new ChromeDriver());
+                options.addArguments("disable-infobars", "allow-outdated-plugins");
+//                options.setBinary("C:/Users/Administrator/AppData/Local/Google/Chrome/Application/chrome.exe");
+                driverMap.put(id, new ChromeDriver(options));
             } else {
                 //设置必要参数
                 DesiredCapabilities dcaps = new DesiredCapabilities();
@@ -75,8 +76,6 @@ public class SeleniumUtil {
                 PhantomJSDriver driver = new PhantomJSDriver(dcaps);
                 driverMap.put(id, driver);
             }
-
-
         }
         return driverMap.get(id);
     }

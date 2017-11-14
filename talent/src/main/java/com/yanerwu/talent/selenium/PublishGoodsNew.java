@@ -174,13 +174,4 @@ public class PublishGoodsNew {
         }
 
     }
-
-    /**
-     * 保持链接
-     */
-    public void hold() {
-
-
-    }
-
 }

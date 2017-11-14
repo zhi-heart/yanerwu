@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+
 /**
  * @Author Zuz
  * @Date 2017/5/8 11:25
@@ -121,5 +123,17 @@ public class IndexAction extends BaseAction {
         request.setAttribute("bookName", bookSummary.getName());
 
         return "/BookDetail/info";
+    }
+
+    @RequestMapping(value = "/t.html")
+    public String t(){
+        StringBuffer sb = new StringBuffer();
+        if (null != request.getCookies()) {
+            for (Cookie c : request.getCookies()) {
+                sb.append(c.getName() + "=" + c.getValue() + "</br>");
+            }
+        }
+        request.setAttribute("result", sb);
+        return "t";
     }
 }

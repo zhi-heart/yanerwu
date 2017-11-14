@@ -55,6 +55,8 @@ public class User extends BaseEntity implements java.io.Serializable{
     private String mailLoginName;
     @Column(name="mail_login_pwd")
     private String mailLoginPwd;
+    @Column(name="pid")
+    private Long pid;
 	//columns END
 
 	public User(){
@@ -116,6 +118,14 @@ public class User extends BaseEntity implements java.io.Serializable{
 
     public void setTaobaoLoginPwd(String taobaoLoginPwd) {
         this.taobaoLoginPwd = taobaoLoginPwd;
+    }
+
+    public Long getPid() {
+        return pid;
+    }
+
+    public void setPid(Long pid) {
+        this.pid = pid;
     }
 
     public String toString() {

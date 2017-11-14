@@ -8,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-
 /**
  * @Author Zuz
  * @Date 2017/7/27 11:32
@@ -23,17 +21,18 @@ public class Crontab {
     private GoodsTopService goodsTopService;
 
     @Scheduled(cron = "0 5 0,10 * * ?")
+    @Scheduled(fixedRate = 999999)
     public void collect() {
         long l = System.currentTimeMillis();
-//        logger.info("开始执行collectGoodsTop");
-//        long l = System.currentTimeMillis();
-//        goodsTopService.collectGoodsTop(Constants.GOODS_TOP);
-//        logger.info("执行collectGoodsTop结束,耗时:{}毫秒", System.currentTimeMillis() - l);
-
-        logger.info("开始执行collectGoodsPaoliang");
+        logger.info("开始执行collectGoodsTop");
         l = System.currentTimeMillis();
-        goodsTopService.collectGoodsTop(Constants.GOODS_PAOLIANG);
-        logger.info("开始执行collectGoodsPaoliang,耗时:{}毫秒", System.currentTimeMillis() - l);
+        goodsTopService.collectGoodsTop(Constants.GOODS_TOP);
+        logger.info("执行collectGoodsTop结束,耗时:{}毫秒", System.currentTimeMillis() - l);
+
+//        logger.info("开始执行collectGoodsPaoliang");
+//        l = System.currentTimeMillis();
+//        goodsTopService.collectGoodsTop(Constants.GOODS_PAOLIANG);
+//        logger.info("开始执行collectGoodsPaoliang,耗时:{}毫秒", System.currentTimeMillis() - l);
 
         logger.info("collectConver");
         l = System.currentTimeMillis();
@@ -41,7 +40,7 @@ public class Crontab {
         logger.info("collectConver,耗时:{}毫秒", System.currentTimeMillis() - l);
     }
 
-    @PostConstruct
+//    @PostConstruct
     public void init() {
         goodsTopService.init();
         goodsTopService.publishGoods();

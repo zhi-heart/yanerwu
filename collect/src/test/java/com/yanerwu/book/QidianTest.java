@@ -1,6 +1,7 @@
 package com.yanerwu.book;
 
 import com.yanerwu.base.BaseTest;
+import com.yanerwu.common.Constants;
 import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.entity.BookSummary;
 import com.yanerwu.processor.BiqugeIdProcessor;
@@ -11,6 +12,9 @@ import org.apache.commons.dbutils.RowProcessor;
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import us.codecraft.webmagic.Spider;
+import us.codecraft.webmagic.downloader.HttpClientDownloader;
+import us.codecraft.webmagic.proxy.Proxy;
+import us.codecraft.webmagic.proxy.SimpleProxyProvider;
 
 import java.net.URLEncoder;
 import java.util.List;
@@ -20,8 +24,8 @@ import java.util.List;
  * @Date 2017/7/7 16:52
  * @Description
  */
-public class QidianTest extends BaseTest{
-    static String initUrl = "http://m.qidian.com/majax/rank/yuepiaolist?_csrfToken=CVvOKdS8H4MRhI0tR2URT6V3H9gzEn1jRy760prS&gender=male&catId=-1&yearmonth=201708";
+public class QidianTest extends BaseTest {
+    static String initUrl = "http://m.qidian.com/majax/rank/yuepiaolist?_csrfToken=CVvOKdS8H4MRhI0tR2URT6V3H9gzEn1jRy760prS&catId=-1&yearmonth=201710&gender=male";
 
     @Autowired
     private DbUtilsTemplate bookTemplate;
@@ -36,6 +40,12 @@ public class QidianTest extends BaseTest{
 
     @Test
     public void getBiqugeIdBySummary() throws Exception {
+        HttpClientDownloader httpClientDownloader = new HttpClientDownloader();
+
+        httpClientDownloader.setProxyProvider(
+                SimpleProxyProvider.from(new Proxy(Constants.BaseProxy.host, Constants.BaseProxy.port, Constants.BaseProxy.name, Constants.BaseProxy.pwd))
+        );
+
         String searchUrl = "http://zhannei.baidu.com/cse/search?s=15390153038627446418&q=%s";
         String sql = "select * from book_summary where collect_url is null limit 999";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
@@ -43,9 +53,9 @@ public class QidianTest extends BaseTest{
         for (BookSummary b : bookSummaries) {
             Spider.create(new BiqugeIdProcessor(b.getId(), b.getName(), bookTemplate))
                     .addUrl(String.format(searchUrl, URLEncoder.encode(b.getName(), "UTF-8")))
-                    .thread(3)
+                    .thread(1)
+                    .setDownloader(httpClientDownloader)
                     .run();
-            Thread.sleep(1000);
         }
     }
 

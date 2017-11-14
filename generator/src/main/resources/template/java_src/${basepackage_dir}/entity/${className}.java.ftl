@@ -54,6 +54,7 @@ public class ${className} extends BaseEntity implements java.io.Serializable{
 <@generateJavaOneToMany/>
 <@generateJavaManyToOne/>
 
+    @Override
 	public String toString() {
 		return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
 		<#list table.columns as column>
@@ -64,6 +65,7 @@ public class ${className} extends BaseEntity implements java.io.Serializable{
 			.toString();
 	}
 
+    @Override
 	public int hashCode() {
 		return new HashCodeBuilder()
 		<#list table.pkColumns as column>
@@ -74,6 +76,7 @@ public class ${className} extends BaseEntity implements java.io.Serializable{
 			.toHashCode();
 	}
 
+    @Override
 	public boolean equals(Object obj) {
 		if(obj instanceof ${className} == false) return false;
 		if(this == obj) return true;

@@ -44,7 +44,7 @@ public class BiqugeIdProcessor extends BaseProcessor implements PageProcessor {
     @Override
     public Site getSite() {
         Site site = super.getSite();
-        site.setSleepTime(1000);
+        site.setSleepTime(1);
         site.setDomain("zhannei.baidu.com");
         return site;
     }

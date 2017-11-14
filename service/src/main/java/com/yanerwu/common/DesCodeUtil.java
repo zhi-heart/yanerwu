@@ -176,7 +176,7 @@ public class DesCodeUtil {
 		} catch (UnsupportedEncodingException e) {
 			return "";
 		}
-		return result;
+        return result;
 	}
 
 	/**
@@ -198,7 +198,7 @@ public class DesCodeUtil {
 	}
 	public static void main(String[] args) {
 		System.out.println(encrypt("root"));
-		System.out.println(encrypt("123456"));
+		System.out.println(encrypt("wdzj@2015!"));
 		
 	}
 }

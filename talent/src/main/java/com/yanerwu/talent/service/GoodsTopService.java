@@ -2,7 +2,6 @@ package com.yanerwu.talent.service;
 
 import com.alibaba.fastjson.JSON;
 import com.yanerwu.common.DbUtilsTemplate;
-import com.yanerwu.common.Page;
 import com.yanerwu.entity.GoodsTop;
 import com.yanerwu.entity.TaokeConver;
 import com.yanerwu.talent.entity.User;
@@ -12,7 +11,6 @@ import com.yanerwu.talent.selenium.SeleniumUtil;
 import com.yanerwu.talent.vo.PublishGoodsVO;
 import com.yanerwu.utils.HttpClientUtil;
 import com.yanerwu.utils.Mail;
-import com.yanerwu.utils.Tools;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
@@ -41,142 +39,6 @@ public class GoodsTopService {
     @Autowired
     private DbUtilsTemplate talentTemplate;
 
-    public Page findPage(GoodsTop query, Page page) {
-        List<Object> params = new ArrayList<>();
-        StringBuilder sql2 = new StringBuilder("select * from goods_top t where 1=1 ");
-        if (Tools.isNotEmpty(query.getId())) {
-            sql2.append(" and  t.id = ? ");
-            params.add(query.getId());
-        }
-        if (Tools.isNotEmpty(query.getGoodsId())) {
-            sql2.append(" and  t.goods_id like ? ");
-            params.add(String.format("%%%s%%", query.getGoodsId()));
-        }
-        if (Tools.isNotEmpty(query.getTitle())) {
-            sql2.append(" and  t.title like ? ");
-            params.add(String.format("%%%s%%", query.getTitle()));
-        }
-        if (Tools.isNotEmpty(query.getTitleSimple())) {
-            sql2.append(" and  t.title_simple like ? ");
-            params.add(String.format("%%%s%%", query.getTitleSimple()));
-        }
-        if (Tools.isNotEmpty(query.getPic())) {
-            sql2.append(" and  t.pic like ? ");
-            params.add(String.format("%%%s%%", query.getPic()));
-        }
-        if (Tools.isNotEmpty(query.getCid())) {
-            sql2.append(" and  t.cid = ? ");
-            params.add(query.getCid());
-        }
-        if (Tools.isNotEmpty(query.getOrgPrice())) {
-            sql2.append(" and  t.org_price = ? ");
-            params.add(query.getOrgPrice());
-        }
-        if (Tools.isNotEmpty(query.getPrice())) {
-            sql2.append(" and  t.price = ? ");
-            params.add(query.getPrice());
-        }
-        if (Tools.isNotEmpty(query.getIsTmall())) {
-            sql2.append(" and  t.is_tmall = ? ");
-            params.add(query.getIsTmall());
-        }
-        if (Tools.isNotEmpty(query.getSalesNum())) {
-            sql2.append(" and  t.sales_num = ? ");
-            params.add(query.getSalesNum());
-        }
-        if (Tools.isNotEmpty(query.getDsr())) {
-            sql2.append(" and  t.dsr = ? ");
-            params.add(query.getDsr());
-        }
-        if (Tools.isNotEmpty(query.getSellerId())) {
-            sql2.append(" and  t.seller_id = ? ");
-            params.add(query.getSellerId());
-        }
-        if (Tools.isNotEmpty(query.getCommissionJihua())) {
-            sql2.append(" and  t.commission_jihua = ? ");
-            params.add(query.getCommissionJihua());
-        }
-        if (Tools.isNotEmpty(query.getCommissionQueqiao())) {
-            sql2.append(" and  t.commission_queqiao = ? ");
-            params.add(query.getCommissionQueqiao());
-        }
-        if (Tools.isNotEmpty(query.getJihuaLink())) {
-            sql2.append(" and  t.jihua_link like ? ");
-            params.add(String.format("%%%s%%", query.getJihuaLink()));
-        }
-        if (Tools.isNotEmpty(query.getJihuaShenhe())) {
-            sql2.append(" and  t.jihua_shenhe = ? ");
-            params.add(query.getJihuaShenhe());
-        }
-        if (Tools.isNotEmpty(query.getIntroduce())) {
-            sql2.append(" and  t.introduce like ? ");
-            params.add(String.format("%%%s%%", query.getIntroduce()));
-        }
-        if (Tools.isNotEmpty(query.getQuanId())) {
-            sql2.append(" and  t.quan_id like ? ");
-            params.add(String.format("%%%s%%", query.getQuanId()));
-        }
-        if (Tools.isNotEmpty(query.getQuanPrice())) {
-            sql2.append(" and  t.quan_price = ? ");
-            params.add(query.getQuanPrice());
-        }
-        if (Tools.isNotEmpty(query.getQuanTime())) {
-            sql2.append(" and  t.quan_time like ? ");
-            params.add(String.format("%%%s%%", query.getQuanTime()));
-        }
-        if (Tools.isNotEmpty(query.getQuanSurplus())) {
-            sql2.append(" and  t.quan_surplus = ? ");
-            params.add(query.getQuanSurplus());
-        }
-        if (Tools.isNotEmpty(query.getQuanReceive())) {
-            sql2.append(" and  t.quan_receive = ? ");
-            params.add(query.getQuanReceive());
-        }
-        if (Tools.isNotEmpty(query.getQuanCondition())) {
-            sql2.append(" and  t.quan_condition like ? ");
-            params.add(String.format("%%%s%%", query.getQuanCondition()));
-        }
-        if (Tools.isNotEmpty(query.getQuanMlink())) {
-            sql2.append(" and  t.quan_m_link like ? ");
-            params.add(String.format("%%%s%%", query.getQuanMlink()));
-        }
-        if (Tools.isNotEmpty(query.getQuanLink())) {
-            sql2.append(" and  t.Quan_link like ? ");
-            params.add(String.format("%%%s%%", query.getQuanLink()));
-        }
-        if (StringUtils.isNotBlank(page.getOrderField())) {
-            sql2.append("order by ? ?");
-            params.add(page.getOrderField());
-            params.add(page.getOrderDirection());
-        }
-        return talentTemplate.findPage(page, sql2.toString(), params.toArray(), GoodsTop.class);
-    }
-
-    /**
-     * 新增
-     */
-    public Object save(GoodsTop goodsTop) {
-        return talentTemplate.insert(goodsTop);
-    }
-
-    /**
-     * 修改
-     */
-    public int update(GoodsTop goodsTop) {
-        return talentTemplate.update(goodsTop);
-    }
-
-    /**
-     * 删除
-     */
-    public int delete(GoodsTop goodsTop) {
-        return talentTemplate.delete(goodsTop);
-    }
-
-    public <T> T getById(GoodsTop goodsTop) {
-        return (T) talentTemplate.getById(goodsTop);
-    }
-
     /**
      * 采集热门商品
      */
@@ -190,13 +52,14 @@ public class GoodsTopService {
             String sql = "select id from goods_top where id=?";
             if (null == talentTemplate.findBy(sql, 1, gt.getId())) {
                 gts.add(gt);
+                break;
             }
         }
         talentTemplate.insert(gts);
 
         //插入user_goods
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
-        String userSql = "select * from user where status=0";
+        String userSql = "select * from user where status=0 and pid=0";
         List<User> users = talentTemplate.find(User.class, userSql, processor);
         List<UserGoods> ugs = new ArrayList<>();
         for (GoodsTop gt : gts) {
@@ -219,15 +82,14 @@ public class GoodsTopService {
      */
     public void collectConver() {
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
-        String userSql = "select * from user where status=0";
+        String userSql = "select * from user where status=0 and pid=0";
         List<User> users = talentTemplate.find(User.class, userSql, processor);
         Map<Long, User> userMap = new HashMap<>();
         for (User u : users) {
             userMap.put(u.getUserId(), u);
         }
 
-
-        String userGoodsSql = "select * from user_goods where status=0";
+        String userGoodsSql = "select * from user_goods where status=0 and create_time > date_sub(now(), interval 3 hour)";
         List<UserGoods> userGoodses = talentTemplate.find(UserGoods.class, userGoodsSql, processor);
         for (UserGoods ug : userGoodses) {
             User u = userMap.get(ug.getUserId());
@@ -269,6 +131,22 @@ public class GoodsTopService {
             }
             talentTemplate.update(ug);
         }
+
+
+        //处理 单联盟 > 多达人
+        userSql = "select * from user where status=0 and pid>0";
+        String insertSql = "insert into user_goods (user_id, goods_id, gid, conver_link, conver_word, status) " +
+                "select ? user_id, goods_id, gid, conver_link, conver_word, 1 status from user_goods where user_id = ? and status = 1 ";
+        talentTemplate.find(User.class, userSql, processor)
+                .stream()
+                .forEach((u) ->
+                        talentTemplate.update(insertSql, new Object[]{
+                                u.getUserId(),
+                                u.getPid()
+                        })
+                );
+
+
     }
 
     /**

@@ -13,31 +13,6 @@
 		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd"
 	default-lazy-init="true">
 
-
-	<context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true" />
-
-	<!-- 定义数据源Bean-->
-	<bean id="yanerwuDataSource" class="com.yanerwu.common.DataSource" destroy-method="close">
-	    <property name="driverClassName" value="${database.driverClassName}" />
-	    <property name="url" value="${yanerwu.url}" />
-	    <property name="username" value="${yanerwu.username}" />
-	    <property name="password" value="${yanerwu.password}" />
-	    <property name="initialSize" value="50" />
-		<property name="maxActive" value="100" />
-		<property name="maxWait" value="1000" />
-		<property name="maxIdle" value="100" />
-		<property name="minIdle" value="0" />
-		<property name="removeAbandoned" value="true" />
-		<property name="removeAbandonedTimeout" value="60" />
-		<property name="logAbandoned" value="true" />
-		<property name="validationQuery" value="select 1 from dual" />
-		<property name="testOnBorrow" value="true" />
-	</bean>
-	<!-- 下面定义了DbUtils的一个模板操作Bean -->
-	<bean id="yanerwuTemplate" class="com.yanerwu.common.DbUtilsTemplate">
-	        <property name="dataSource" ref="yanerwuDataSource" />
-	</bean>
-
     <!-- book-->
     <bean id="bookDataSource" class="com.yanerwu.common.DataSource" destroy-method="close">
         <property name="driverClassName" value="${database.driverClassName}" />
@@ -59,27 +34,4 @@
     <bean id="bookTemplate" class="com.yanerwu.common.DbUtilsTemplate">
         <property name="dataSource" ref="bookDataSource" />
     </bean>
-
-    <!-- book-->
-    <bean id="RawDataSource" class="com.yanerwu.common.DataSource" destroy-method="close">
-        <property name="driverClassName" value="${database.driverClassName}" />
-        <property name="url" value="${raw.url}" />
-        <property name="username" value="${raw.username}" />
-        <property name="password" value="${raw.password}" />
-        <property name="initialSize" value="2" />
-        <property name="maxActive" value="100" />
-        <property name="maxWait" value="100" />
-        <property name="maxIdle" value="100" />
-        <property name="minIdle" value="0" />
-        <property name="removeAbandoned" value="true" />
-        <property name="removeAbandonedTimeout" value="60" />
-        <property name="logAbandoned" value="true" />
-        <property name="validationQuery" value="select 1 from dual" />
-        <property name="testOnBorrow" value="true" />
-    </bean>
-    <!-- 下面定义了DbUtils的一个模板操作Bean -->
-    <bean id="rawTemplate" class="com.yanerwu.common.DbUtilsTemplate">
-        <property name="dataSource" ref="RawDataSource" />
-    </bean>
-
 </beans>

@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:mvc="http://www.springframework.org/schema/mvc"
+        xmlns:context="http://www.springframework.org/schema/context"
+        xmlns:task="http://www.springframework.org/schema/task"
         xsi:schemaLocation="
 	http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
-	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd 
+	http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 	http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd
 	http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task.xsd
 	"
-        xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:mvc="http://www.springframework.org/schema/mvc"
-        xmlns:context="http://www.springframework.org/schema/context"
-        xmlns:task="http://www.springframework.org/schema/task">
+        xmlns="http://www.springframework.org/schema/beans">
+
+    <!-- 加载配置文件 -->
+    <context:property-placeholder location="classpath:jdbc.properties" ignore-unresolvable="true"/>
 
     <!-- 用于使用@ResponseBody后返回中文避免乱码 必须放在<mvc:annotation-driven>之前 -->
     <bean
@@ -51,16 +55,5 @@
         </property>
         <property name="order" value="99"/>
     </bean>
-
-
-    <!-- ES配置
-    <context:property-placeholder location="classpath:elasticsearch.properties" ignore-unresolvable="true"/>
-
-    <bean id="yanerwuhHelper" class="com.yanerwu.common.es.ElasticSearchHelper" scope="singleton">
-        <constructor-arg index="0" value="${elasticsearch.cluster.name}"/>
-        <constructor-arg index="1" value="${elasticsearch.cluster.nodes}"/>
-    </bean>
-    -->
-
 
 </beans>

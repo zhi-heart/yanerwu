@@ -14,8 +14,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,8 +32,8 @@ public class Crontab {
     private DbUtilsTemplate yanerwuTemplate;
 
     public static void main(String[] args) {
-        List<Integer> records = Arrays.asList(new Integer[]{
-                -4909,//moer
+        List<Integer> records = Arrays.asList(
+                -2500,//moer
                 206,//05
                 -1487,
                 -13181,
@@ -51,11 +49,15 @@ public class Crontab {
                 -16173,
                 30245,
                 22560,
-                46854
-        });
+                46854,
+                -6042,
+                2487
+        );
 
         //8月
-        int total = 285050 + 63657 + 9035;
+//        int total = 285050 + 63657 + 9035;
+        //11月
+        int total = 332320 + 51680 + 8600;
 
         //截止到8月份
         Integer sum = records.stream()
@@ -63,18 +65,40 @@ public class Crontab {
                 .sum();
 
         //主要负债 9.14
-        List<Integer> debts = Arrays.asList(new Integer[]{
-                50000,
-                73534,
-                48861,
-                66241,
-                8800
-        });
+//        List<Integer> debts = Arrays.asList(
+//                50000,
+//                73534,
+//                48861,
+//                66241,
+//                8800
+//        );
+        //主要负债 11.14
+        List<Integer> debts = Arrays.asList(
+                20368,//	e招贷
+                38544,//	招行信用卡
+                10000,//	京东金融
+                75611,//	浦发
+                47000,//	网商银行
+                73559,//	招联金融
+                16333,//	平安信用卡
+                36000,//	YG
+                1400//	花呗
+        );
+
         int debtSum = debts.stream()
                 .mapToInt(a -> a.intValue())
                 .sum();
         //归总
         System.out.println(String.format("总值:%s 成本:%s 盈利:%s 负债:%s 净值:%s", total, total - sum, sum, debtSum, total - debtSum));
+
+//        浦发			22428
+//        招行			24794
+//        平安			8862
+//        网商			4964
+//        招联			7273
+//        22428+20000+4964+7273=54665  8月要还的
+
+//        new Crontab().stock();
     }
 
     @Scheduled(cron = "0 0 6-23 * * ?")
@@ -95,42 +119,27 @@ public class Crontab {
     @Scheduled(cron = "0 0 15 ? * 1,2,3,4,5")
     public void stock() {
         double totalAmount = 320000.0;
-        int kdxf = 256343;
-        int ths = 63657;
         String subject = "";
         StringBuffer content = new StringBuffer();
         try {
             double nowAmount = 0, lastAmount = 0;
             Pattern pattern = Pattern.compile(".*=\"(.*)\";");
-            Matcher matcher = pattern.matcher(HttpClientUtil.doGet("http://hq.sinajs.cn/list=sz002230,sz300033"));
+            Matcher matcher = pattern.matcher(HttpClientUtil.doGet("http://hq.sinajs.cn/list=sz002230"));
             while (matcher.find()) {
                 String[] stock = matcher.group(1).split(",");
                 if (!DateUtils.getBackDate(0).equals(stock[stock.length - 3])) {
                     return;
                 }
-                String name = stock[0];
                 Double nowPrice = Double.valueOf(stock[3]);
                 Double lastPrice = Double.valueOf(stock[2]);
 
-                int dayAmount = 0;
-                int amount = 0;
-                switch (name) {
-                    case "科大讯飞":
-                        nowAmount += nowPrice * 5000;
-                        lastAmount += lastPrice * 5000;
-                        dayAmount = (int) ((nowPrice - lastPrice) * 5000);
-                        amount = (int) (nowPrice * 5000) - kdxf;
-                        break;
-                    case "同花顺":
-                        nowAmount += nowPrice * 1000;
-                        lastAmount += lastPrice * 1000;
-                        dayAmount = (int) ((nowPrice - lastPrice) * 1000);
-                        amount = (int) (nowPrice * 1000) - ths;
-                        break;
-                }
+                nowAmount += nowPrice * 6200;
+                lastAmount += lastPrice * 6200;
+                int dayAmount = (int) ((nowPrice - lastPrice) * 6200);
+                int amount = (int) (nowPrice * 6200 - totalAmount);
 
                 String c = String.format("%s -> %s %3.2f%% %s -> %+-5d -> %+-6d",
-                        "同花顺".equals(name) ? "T" : "K",
+                        "K",
                         nowPrice >= lastPrice ? "↑" : "↓",
                         (nowPrice - lastPrice) / lastPrice * 100,
                         nowPrice >= lastPrice ? "↑" : "↓",
@@ -148,12 +157,8 @@ public class Crontab {
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
-        try {
-            TimeUnit.MINUTES.sleep(new Random().nextInt(179) + 1);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         logger.info(subject);
+        logger.info(content.toString());
         String smtp = "smtp.163.com";
         String from = "zhi_heart@163.com";
         String to = "zhi_heart@aliyun.com";

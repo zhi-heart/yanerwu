@@ -26,6 +26,8 @@ import java.util.List;
  */
 public class QidianProcessor extends BaseProcessor implements PageProcessor {
 
+    private final String INIT_URL = "http://m.qidian.com/majax/rank/yuepiaolist?_csrfToken=CVvOKdS8H4MRhI0tR2URT6V3H9gzEn1jRy760prS&catId=-1&yearmonth=201710&gender=male";
+
     protected Logger logger = LoggerFactory.getLogger(getClass());
     private DbUtilsTemplate bookTemplate;
 
@@ -35,7 +37,16 @@ public class QidianProcessor extends BaseProcessor implements PageProcessor {
 
     @Override
     public void process(Page page) {
-        //&pageNum=1
+        String currentUrl = page.getUrl().toString();
+
+        if(currentUrl.endsWith("male")){
+            for (int i = 2; i < 10; i++) {
+                String url = String.format("%s&pageNum=%s", INIT_URL, i);
+                page.addTargetRequest(url);
+                System.out.println(url);
+            }
+        }
+
         QidianVo qidianVo = JSON.parseObject(page.getRawText(), QidianVo.class);
 
         List<BookSummary> bs = new ArrayList<>();
@@ -64,15 +75,12 @@ public class QidianProcessor extends BaseProcessor implements PageProcessor {
 
             if (bookSummaryList.size() > 0) {
                 bookTemplate.update(b);
-            }else {
+            } else {
                 b.setCreateTime(DateUtils.getNowTime());
                 bs.add(b);
             }
         }
         bookTemplate.insert(bs);
-        if (0 == qidianVo.getData().getIsLast()) {
-            page.addTargetRequest(String.format("%s&pageNum=%s", page.getUrl(), qidianVo.getData().getPageNum() + 1));
-        }
     }
 
     private Integer conver(String str) {
