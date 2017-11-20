@@ -106,11 +106,6 @@ public class Crontab {
         biqugeService.biqugeDetail(50);
     }
 
-//    @Scheduled(fixedDelay = 99999999999L, initialDelay = 1000 * 30)
-//    public void collectBiqugeAll() {
-//        biqugeService.biqugeDetail(9999);
-//    }
-
     @Scheduled(cron = "0 0 1 * * ?")
     public void collectBiqugeAll() {
         biqugeService.biqugeDetail(9999);
