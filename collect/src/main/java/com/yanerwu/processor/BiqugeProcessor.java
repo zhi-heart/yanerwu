@@ -14,7 +14,6 @@ import com.yanerwu.utils.Tools;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
-import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import us.codecraft.webmagic.Page;
@@ -111,29 +110,29 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
 
             //追加评论
             StringBuilder comment = new StringBuilder();
-            if (bookSummary.getRankCnt() > 20000) {
-                try {
-                    String s = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_LIST_URL, bookSummary.getQidianId(), 1));
-                    JSONArray jsonArray = JSON.parseObject(s).getJSONObject("data").getJSONArray("threadList");
-                    for (int i = 0; i < jsonArray.size(); i++) {
-                        JSONObject o = jsonArray.getJSONObject(i);
-                        String c = o.getString("content");
-                        if (c.length() >= 45) {
-                            String threadId = o.getString("threadId");
-                            String s1 = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_DETAIL_URL, bookSummary.getQidianId(), threadId));
-                            Html h = new Html(s1);
-                            String s2 = h.xpath("//*[@class='comm-content']/text()").get().trim();
-                            s2 = Tools.matcherReplace("(\\[.*\\])", s2);
-                            if (StringUtils.isNotBlank(s2)) {
-                                comment.append(String.format("<hr/><p>&nbsp;&nbsp;&nbsp;&nbsp;%s</p>", s2));
-                            }
-
-                        }
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
+//            if (bookSummary.getRankCnt() > 20000) {
+//                try {
+//                    String s = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_LIST_URL, bookSummary.getQidianId(), 1));
+//                    JSONArray jsonArray = JSON.parseObject(s).getJSONObject("data").getJSONArray("threadList");
+//                    for (int i = 0; i < jsonArray.size(); i++) {
+//                        JSONObject o = jsonArray.getJSONObject(i);
+//                        String c = o.getString("content");
+//                        if (c.length() >= 45) {
+//                            String threadId = o.getString("threadId");
+//                            String s1 = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_DETAIL_URL, bookSummary.getQidianId(), threadId));
+//                            Html h = new Html(s1);
+//                            String s2 = h.xpath("//*[@class='comm-content']/text()").get().trim();
+//                            s2 = Tools.matcherReplace("(\\[.*\\])", s2);
+//                            if (StringUtils.isNotBlank(s2)) {
+//                                comment.append(String.format("<hr/><p>&nbsp;&nbsp;&nbsp;&nbsp;%s</p>", s2));
+//                            }
+//
+//                        }
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
 
             String sql = "update book_detail set content=?,content_bytes=?,comment=? where title_md5=?";
             bookTemplate.update(sql, new Object[]{

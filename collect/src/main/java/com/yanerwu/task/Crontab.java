@@ -101,12 +101,12 @@ public class Crontab {
 //        new Crontab().stock();
     }
 
-    @Scheduled(cron = "0 0 6-23 * * ?")
+    @Scheduled(cron = "0 0 6-23 * 1 ?")
     public void collectBiqugeTop50() {
         biqugeService.biqugeDetail(50);
     }
 
-    @Scheduled(cron = "0 0 1 * * ?")
+    @Scheduled(cron = "0 0 1 * 1 ?")
     public void collectBiqugeAll() {
         biqugeService.biqugeDetail(9999);
     }
