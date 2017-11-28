@@ -111,7 +111,7 @@ public class Crontab {
         biqugeService.biqugeDetail(9999);
     }
 
-    @Scheduled(cron = "0 0 15 ? * 1,2,3,4,5")
+//    @Scheduled(cron = "0 0 15 ? * 1,2,3,4,5")
     public void stock() {
         double totalAmount = 320000.0;
         String subject = "";

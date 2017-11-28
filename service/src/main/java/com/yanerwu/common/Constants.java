@@ -8,7 +8,7 @@ package com.yanerwu.common;
 public class Constants {
     public final static String GOODS_TOP = "http://api.dataoke.com/index.php?r=Port/index&type=top100&appkey=tx07wo79m7&v=2&page=2";
     public final static String GOODS_PAOLIANG = "http://api.dataoke.com/index.php?r=Port/index&type=paoliang&appkey=tx07wo79m7&v=2&page=2";
-    public final static String PUBLISH_GOODS_URL = "https://daren.taobao.com/creation/post?template=post&from=draft";
+    public final static String PUBLISH_GOODS_URL = "https://we.taobao.com/creation/post?template=item&from=draft";
 
     public final static String BOOK_COMMENT_LIST_URL = "http://m.qidian.com/majax/forum/getBookForumList?_csrfToken=CVvOKdS8H4MRhI0tR2URT6V3H9gzEn1jRy760prS&bookId=%s&tab=commall&pageNum=%s";
     public final static String BOOK_COMMENT_DETAIL_URL = "http://m.qidian.com/book/%s/thread/%s";
