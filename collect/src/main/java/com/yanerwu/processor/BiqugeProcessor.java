@@ -134,11 +134,10 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
 //                }
 //            }
 
-            String sql = "update book_detail set content=?,content_bytes=?,comment=? where title_md5=?";
+            String sql = "update book_detail set content=?,content_bytes=? where title_md5=?";
             bookTemplate.update(sql, new Object[]{
                     content,
                     content.getBytes().length,
-                    comment.toString(),
                     Tools.encoderMd5(title)
             });
         }
