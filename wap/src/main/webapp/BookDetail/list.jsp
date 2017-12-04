@@ -120,8 +120,9 @@
     var _hmt = _hmt || [];
     (function() {
         var hm = document.createElement("script");
-        hm.src = "https://hm.baidu.com/hm.js?aa4ea6870943ce2e6c5ede5e9291ae72";
+        hm.src = "https://hm.baidu.com/hm.js?5e399d2db9d02e69dd72ebaa874fddc6";
         var s = document.getElementsByTagName("script")[0];
         s.parentNode.insertBefore(hm, s);
     })();
 </script>
+
