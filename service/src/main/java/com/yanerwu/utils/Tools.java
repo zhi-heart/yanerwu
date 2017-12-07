@@ -307,7 +307,7 @@ public class Tools {
     }
 
     public static void pushBaidu(String params) {
-        String url = "http://data.zz.baidu.com/urls?site=my.777kxs.com&token=ACwpz1Ik1EDlhcWc";
+        String url = "http://data.zz.baidu.com/urls?site=book.yanerwu.com&token=ACwpz1Ik1EDlhcWc";
         String s = HttpClientUtil.sendPostEntity(url, params, null, "utf-8");
         logger.info(String.format("推送百度:%s", params));
         logger.info(String.format("百度推送结果:%s", s));

@@ -1,8 +1,8 @@
 package com.yanerwu.task;
 
 
-import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.service.BiqugeService;
+import com.yanerwu.service.BlogService;
 import com.yanerwu.utils.DateUtils;
 import com.yanerwu.utils.HttpClientUtil;
 import com.yanerwu.utils.Mail;
@@ -27,9 +27,9 @@ public class Crontab {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
-    BiqugeService biqugeService;
+    private BiqugeService biqugeService;
     @Autowired
-    private DbUtilsTemplate yanerwuTemplate;
+    private BlogService blogService;
 
     public static void main(String[] args) {
         List<Integer> records = Arrays.asList(
@@ -109,6 +109,11 @@ public class Crontab {
     @Scheduled(cron = "0 0 1 * * ?")
     public void collectBiqugeAll() {
         biqugeService.biqugeDetail(9999);
+    }
+
+    @Scheduled(cron = "0 0 6 * * ?")
+    public void collectBlog(){
+        blogService.collect();
     }
 
 //    @Scheduled(cron = "0 0 15 ? * 1,2,3,4,5")

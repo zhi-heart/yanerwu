@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @Author Zuz
@@ -86,19 +87,19 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
             bookTemplate.insert(bds);
 
             //推送百度
-//            new Thread(() -> {
-//                try {
-//                    TimeUnit.MINUTES.sleep(1);
-//                    StringBuffer sb = new StringBuffer();
-//                    for (BookDetail b : bds) {
-//                        String s = String.format("http://my.777kxs.com/book/%s/%s.html\n", b.getBookId(), b.getNo());
-//                        sb.append(s);
-//                    }
-//                    Tools.pushBaidu(sb.toString());
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }).start();
+            new Thread(() -> {
+                try {
+                    TimeUnit.MINUTES.sleep(1);
+                    StringBuffer sb = new StringBuffer();
+                    for (BookDetail b : bds) {
+                        String s = String.format("http://my.777kxs.com/book/%s/%s.html\n", b.getBookId(), b.getNo());
+                        sb.append(s);
+                    }
+                    Tools.pushBaidu(sb.toString());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }).start();
 
 
         } else {
@@ -107,32 +108,6 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
 
             //广告
             content = Tools.matcherReplace("。(.*[八,一,中,文,Ｗ,．,８,１,Ｚ,Ｗ,Ｃ,Ｏ]+.*Ｍ)", content);
-
-            //追加评论
-            StringBuilder comment = new StringBuilder();
-//            if (bookSummary.getRankCnt() > 20000) {
-//                try {
-//                    String s = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_LIST_URL, bookSummary.getQidianId(), 1));
-//                    JSONArray jsonArray = JSON.parseObject(s).getJSONObject("data").getJSONArray("threadList");
-//                    for (int i = 0; i < jsonArray.size(); i++) {
-//                        JSONObject o = jsonArray.getJSONObject(i);
-//                        String c = o.getString("content");
-//                        if (c.length() >= 45) {
-//                            String threadId = o.getString("threadId");
-//                            String s1 = HttpClientUtil.doGet(String.format(Constants.BOOK_COMMENT_DETAIL_URL, bookSummary.getQidianId(), threadId));
-//                            Html h = new Html(s1);
-//                            String s2 = h.xpath("//*[@class='comm-content']/text()").get().trim();
-//                            s2 = Tools.matcherReplace("(\\[.*\\])", s2);
-//                            if (StringUtils.isNotBlank(s2)) {
-//                                comment.append(String.format("<hr/><p>&nbsp;&nbsp;&nbsp;&nbsp;%s</p>", s2));
-//                            }
-//
-//                        }
-//                    }
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
-//            }
 
             String sql = "update book_detail set content=?,content_bytes=? where title_md5=?";
             bookTemplate.update(sql, new Object[]{

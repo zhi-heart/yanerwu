@@ -2,7 +2,6 @@ package com.yanerwu.book;
 
 import com.yanerwu.base.BaseTest;
 import com.yanerwu.common.Constants;
-import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.entity.BookSummary;
 import com.yanerwu.processor.BiqugeIdProcessor;
 import com.yanerwu.processor.QidianProcessor;
@@ -10,7 +9,6 @@ import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import us.codecraft.webmagic.Spider;
 import us.codecraft.webmagic.downloader.HttpClientDownloader;
 import us.codecraft.webmagic.proxy.Proxy;
@@ -26,9 +24,6 @@ import java.util.List;
  */
 public class QidianTest extends BaseTest {
     static String initUrl = "http://m.qidian.com/majax/rank/yuepiaolist?_csrfToken=CVvOKdS8H4MRhI0tR2URT6V3H9gzEn1jRy760prS&catId=-1&yearmonth=201710&gender=male";
-
-    @Autowired
-    private DbUtilsTemplate bookTemplate;
 
     @Test
     public void getBookSummary() {
@@ -46,7 +41,7 @@ public class QidianTest extends BaseTest {
                 SimpleProxyProvider.from(new Proxy(Constants.BaseProxy.host, Constants.BaseProxy.port, Constants.BaseProxy.name, Constants.BaseProxy.pwd))
         );
 
-        String searchUrl = "http://zhannei.baidu.com/cse/search?s=15390153038627446418&q=%s";
+        String searchUrl = "http://zhannei.baidu.com/cse/search?params=15390153038627446418&q=%params";
         String sql = "select * from book_summary where collect_url is null limit 999";
         RowProcessor processor = new BasicRowProcessor(new GenerousBeanProcessor());
         List<BookSummary> bookSummaries = bookTemplate.find(BookSummary.class, sql, processor);

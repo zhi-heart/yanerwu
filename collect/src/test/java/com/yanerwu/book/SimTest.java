@@ -1,14 +1,12 @@
 package com.yanerwu.book;
 
 import com.yanerwu.base.BaseTest;
-import com.yanerwu.common.DbUtilsTemplate;
 import com.yanerwu.entity.BookDetail;
 import com.yanerwu.utils.Tools;
 import org.apache.commons.dbutils.BasicRowProcessor;
 import org.apache.commons.dbutils.GenerousBeanProcessor;
 import org.apache.commons.dbutils.RowProcessor;
 import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
@@ -18,9 +16,6 @@ import java.util.List;
  * @Description
  */
 public class SimTest extends BaseTest {
-
-    @Autowired
-    private DbUtilsTemplate bookTemplate;
 
     @Test
     public void sim() {
