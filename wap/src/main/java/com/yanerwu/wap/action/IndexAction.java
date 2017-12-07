@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.yanerwu.common.Page;
 import com.yanerwu.entity.BookDetail;
 import com.yanerwu.entity.BookSummary;
+import com.yanerwu.wap.service.BlogService;
 import com.yanerwu.wap.service.BookDetailService;
 import com.yanerwu.wap.service.BookSummaryService;
 import org.apache.commons.lang3.StringUtils;
@@ -12,8 +13,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.Cookie;
 
 /**
  * @Author Zuz
@@ -24,11 +23,12 @@ import javax.servlet.http.Cookie;
 public class IndexAction extends BaseAction {
 
     protected Logger logger = LoggerFactory.getLogger(getClass());
-
     @Autowired
     private BookSummaryService bookSummaryService;
     @Autowired
     private BookDetailService bookDetailService;
+    @Autowired
+    private BlogService blogService;
 
     /**
      * 首页
@@ -55,7 +55,7 @@ public class IndexAction extends BaseAction {
             Page page,
             @RequestParam(defaultValue = "no") String orderField,
             @RequestParam(defaultValue = "desc") String orderDirection
-            ) {
+    ) {
         attribute();
 
         BookDetail bd = new BookDetail();
@@ -125,15 +125,11 @@ public class IndexAction extends BaseAction {
         return "/BookDetail/info";
     }
 
-    @RequestMapping(value = "/t.html")
-    public String t(){
-        StringBuffer sb = new StringBuffer();
-        if (null != request.getCookies()) {
-            for (Cookie c : request.getCookies()) {
-                sb.append(c.getName() + "=" + c.getValue() + "</br>");
-            }
-        }
-        request.setAttribute("result", sb);
-        return "t";
+    @RequestMapping(value = "/blog/{uuid}.html")
+    public String info(
+            @PathVariable("uuid") String uuid
+    ) {
+        request.setAttribute("entity", blogService.getBlogByUuid(uuid));
+        return "/Blog/info";
     }
 }

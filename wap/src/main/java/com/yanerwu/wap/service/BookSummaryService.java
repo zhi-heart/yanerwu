@@ -23,7 +23,7 @@ public class BookSummaryService {
     private Logger logger = LoggerFactory.getLogger(getClass());
 
     @Autowired
-    private DbUtilsTemplate yanerwuTemplate;
+    private DbUtilsTemplate bookTemplate;
 
     public Page findPage(BookSummary query, Page page) {
         List<Object> params = new ArrayList<>();
@@ -81,11 +81,11 @@ public class BookSummaryService {
             params.add(query.getUpdateTime());
         }
         sql2.append("order by rank_cnt desc");
-        return yanerwuTemplate.findPage(page, sql2.toString(), params.toArray(), BookSummary.class);
+        return bookTemplate.findPage(page, sql2.toString(), params.toArray(), BookSummary.class);
     }
 
     public <T> T getById(BookSummary bookSummary) {
-        return (T) yanerwuTemplate.getById(bookSummary);
+        return (T) bookTemplate.getById(bookSummary);
     }
 
 

@@ -26,7 +26,7 @@ public class BookDetailService{
     private Logger logger = LoggerFactory.getLogger(getClass());
 	
 	@Autowired
-	private DbUtilsTemplate yanerwuTemplate;
+	private DbUtilsTemplate bookTemplate;
 
 	public Page findPage(BookDetail query,Page page) {
 		List<Object> params=new ArrayList<>();
@@ -42,7 +42,7 @@ public class BookDetailService{
         if (StringUtils.isNotBlank(page.getOrderField())) {
             sql2.append(String.format("order by %s %s",page.getOrderField(),page.getOrderDirection()));
         }
-        return yanerwuTemplate.findPage(page, sql2.toString(), params.toArray(), BookDetail.class);
+        return bookTemplate.findPage(page, sql2.toString(), params.toArray(), BookDetail.class);
 	}
 	
 	public BookDetail findBookDetail(BookDetail bookDetail){
@@ -63,7 +63,7 @@ public class BookDetailService{
             params.add(bookDetail.getNo());
         }
 
-        List<BookDetail> bookDetails = yanerwuTemplate.find(BookDetail.class, sql.toString(), params.toArray(), processor);
+        List<BookDetail> bookDetails = bookTemplate.find(BookDetail.class, sql.toString(), params.toArray(), processor);
         if(bookDetails.size()==1){
             return bookDetails.get(0);
         }
