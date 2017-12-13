@@ -92,7 +92,7 @@ public class BiqugeProcessor extends BaseProcessor implements PageProcessor {
                     TimeUnit.MINUTES.sleep(1);
                     StringBuffer sb = new StringBuffer();
                     for (BookDetail b : bds) {
-                        String s = String.format("http://my.777kxs.com/book/%s/%s.html\n", b.getBookId(), b.getNo());
+                        String s = String.format("http://book.yanerwu.com/book/%s/%s.html\n", b.getBookId(), b.getNo());
                         sb.append(s);
                     }
                     Tools.pushBaidu(sb.toString());

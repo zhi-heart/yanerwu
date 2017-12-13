@@ -29,6 +29,7 @@ public class BlogService {
     private DbUtilsTemplate bookTemplate;
 
     public void collect() {
+        long l = System.currentTimeMillis();
         String s = HttpClientUtil.sendPostEntity(url, params, null, "utf-8");
         JSONArray hits = JSON.parseObject(s).getJSONObject("hits").getJSONArray("hits");
         for (int i = 0; i < hits.size(); i++) {
@@ -45,5 +46,6 @@ public class BlogService {
                 Tools.pushBaidu(String.format("http://book.yanerwu.com/blog/%s.html", uuid));
             }
         }
+        logger.info("博客推送完毕,耗时%s", (System.currentTimeMillis() - l) / 1000);
     }
 }
