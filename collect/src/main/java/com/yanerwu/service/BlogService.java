@@ -22,7 +22,7 @@ import java.util.UUID;
 public class BlogService {
 
     static String sql = "insert into blog(uuid, title, content) values(?,?,?)";
-    static String url = "http://10.132.0.18:9200/yuqing/_search";
+    static String url = "http://121.40.190.46:9200/yuqing/_search";
     static String params = "{\"from\": 0, \"size\": 100, \"query\": {\"bool\": {\"must\": {\"bool\": {\"should\": [{\"match\": {\"type\": {\"query\": 0, \"type\": \"phrase\"} } }, {\"match\": {\"type\": {\"query\": 1, \"type\": \"phrase\"} } } ] } } } }, \"_source\": {\"includes\": [\"title\", \"content\"], \"excludes\": [] }, \"sort\": [{\"publishTime\": {\"order\": \"desc\"} } ] }";
     protected final Logger logger = LoggerFactory.getLogger(getClass());
     @Autowired
