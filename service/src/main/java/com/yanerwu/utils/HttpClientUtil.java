@@ -1,10 +1,7 @@
 package com.yanerwu.utils;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.ParseException;
+import org.apache.http.*;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
@@ -97,9 +94,18 @@ public abstract class HttpClientUtil {
     }
 
     public static String sendPostEntity(String url, String params, Map<String, String> headers, String charset) {
+        return sendPostEntity(url, params, headers, charset, null);
+    }
+
+    public static String sendPostEntity(String url, String params, Map<String, String> headers, String charset, HttpHost proxy) {
         String result = "";
         try {
-            CloseableHttpClient httpclient = HttpClientBuilder.create().build();
+            HttpClientBuilder httpClientBuilder = HttpClientBuilder.create();
+            if (null != proxy) {
+                httpClientBuilder.setProxy(proxy);
+            }
+
+            CloseableHttpClient httpclient = httpClientBuilder.build();
 
             HttpPost httppost = new HttpPost(url);
 

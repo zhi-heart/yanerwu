@@ -307,6 +307,9 @@ public class Tools {
     }
 
     public static void pushBaidu(String params) {
+        if (StringUtils.isBlank(params)) {
+            return;
+        }
         String url = "http://data.zz.baidu.com/urls?site=book.yanerwu.com&token=ACwpz1Ik1EDlhcWc";
         String s = HttpClientUtil.sendPostEntity(url, params, null, "utf-8");
         logger.info(String.format("推送百度:%s", params));

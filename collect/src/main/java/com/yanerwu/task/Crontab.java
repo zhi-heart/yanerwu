@@ -111,7 +111,7 @@ public class Crontab {
         biqugeService.biqugeDetail(9999);
     }
 
-    @Scheduled(cron = "0 42 11 * * ?")
+    @Scheduled(cron = "0 0 15 * * ?")
     public void collectBlog(){
         blogService.collect();
     }
