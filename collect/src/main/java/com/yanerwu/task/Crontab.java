@@ -31,10 +31,11 @@ public class Crontab {
         //银证流水
         //25000+376160.33-4841.93+6800-590+12-12-121424.62+209959.75=491063.53
 
-        //华泰12月迁移至平安,盈利71K
+        //2018 成本
+        double cost = 59.14 * 8000;
 
-        //2017-12-21 16:12:18
-        double total = 61.79 * 8000;
+        //2018-01 价格
+        double nowAmount = 59.14 * 8000;
 
         List<Integer> records = Arrays.asList(
                 -2500,  //moer
@@ -57,10 +58,10 @@ public class Crontab {
                 -6042,
                 2487,
                 76012,
-                -32171
+                -32171,//华泰12
+                -17920 //平安12
         );
 
-        //截止到8月份
         Integer sum = records.stream()
                 .mapToInt(a -> a.intValue())
                 .sum();
@@ -79,7 +80,7 @@ public class Crontab {
                 .mapToInt(a -> a.intValue())
                 .sum();
         //归总
-        System.out.println(String.format("总值:%s 成本:%s 盈利:%s 负债:%s 净值:%s", total, total - sum, sum, debtSum, total - debtSum));
+        System.out.println(String.format("总值:%s 成本:%s 历史盈利:%s 2018盈利:%s 负债:%s 净值:%s", nowAmount, cost, sum, nowAmount - cost, debtSum, nowAmount - debtSum));
     }
 
     @Scheduled(cron = "0 0 6-23 * * ?")
